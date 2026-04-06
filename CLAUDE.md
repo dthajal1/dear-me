@@ -13,6 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `bun run android` — run on Android emulator
 - `bun run web` — run in browser
 - `bun run lint` — run ESLint via `expo lint`
+- `bun run typecheck` — run TypeScript type checking
 - Package manager is **bun** (use `bun add` for dependencies)
 
 ## Architecture
@@ -21,6 +22,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Typed routes** are enabled — route params and paths are type-checked.
 - **Path alias:** `@/*` maps to the project root.
 - **Strict TypeScript** is enabled.
+
+## Verification
+
+After implementing any major feature, run both checks before considering the work complete:
+1. `bun run typecheck`
+2. `bun run lint`
 
 ## Framework Reference
 

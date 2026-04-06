@@ -38,6 +38,18 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Dear Me to access your camera to record memos.",
+          "microphonePermission": "Allow Dear Me to access your microphone to record memos.",
+          "recordAudioAndroid": {
+            "audioEncoder": "aac",
+            "outputFormat": "mpeg4"
+          }
+        }
       ]
     ],
     "experiments": {

@@ -29,6 +29,20 @@ After implementing any major feature, run both checks before considering the wor
 1. `bun run typecheck`
 2. `bun run lint`
 
+## Native UI Preference
+
+Always prefer native platform UI over custom implementations:
+- **Navigation headers:** Use native Stack headers (`headerShown: true`, `headerTransparent`, `headerBackButtonDisplayMode: "minimal"`) — never custom back buttons.
+- **Screen titles:** Use `Stack.Screen` options or `Stack.Screen.Title` for page titles — not inline `<Text>` elements.
+- **Search bars:** Use `headerSearchBarOptions` on Stack.Screen — not custom TextInput search bars.
+- **Modals/sheets:** Use `presentation: "formSheet"` with `sheetGrabberVisible` — not custom modal overlays.
+- **Segmented controls:** Use `@react-native-segmented-control/segmented-control` for mode selection — not custom pill toggles.
+- **ScrollViews:** Always set `contentInsetAdjustmentBehavior="automatic"` — never manual `paddingTop: insets.top`.
+- **Icons:** Use SF Symbols via `expo-image` (`source="sf:name"`) on iOS. Keep `lucide-react-native` as cross-platform fallback.
+- **Tab bar:** Custom design (glass pill with animated indicator) — this is intentional and should stay custom.
+
+Use the `expo:building-native-ui` skill when working on UI tasks.
+
 ## Framework Reference
 
 When working on Expo-related tasks, fetch up-to-date docs:

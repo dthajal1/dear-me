@@ -7,6 +7,7 @@ import { MoodChip } from "@/components/dear-me/mood-chip";
 import { FilterPill } from "@/components/dear-me/filter-pill";
 import { ChatInput } from "@/components/dear-me/chat-input";
 import { PrivacyNote } from "@/components/dear-me/privacy-note";
+import { MemoCard } from "@/components/dear-me/memo-card";
 import { Bookmark, MessageCircleHeart } from "lucide-react";
 
 export default function Sandbox() {
@@ -151,6 +152,36 @@ export default function Sandbox() {
         PrivacyNote preview
       </p>
       <PrivacyNote />
+
+      {/* ── MemoCard preview ── */}
+      <p className="mt-4 text-xs uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
+        MemoCard preview
+      </p>
+      <div className="flex flex-col gap-3">
+        <MemoCard
+          title="Morning walk thoughts"
+          preview="Felt really clear-headed after the rain last night..."
+          duration="2:34"
+          timestamp="2h ago"
+          mood="😌"
+          href="/memo/1"
+        />
+        <MemoCard
+          title="Late-night reflection"
+          preview="Been thinking about the conversation with Sam..."
+          duration="5:12"
+          timestamp="Yesterday"
+          mood="🤔"
+          href="/memo/2"
+        />
+        <MemoCard
+          title="Coffee break"
+          preview="Small win today — finished the thing I'd been avoiding."
+          duration="0:48"
+          timestamp="2d ago"
+          href="/memo/3"
+        />
+      </div>
 
     </div>
   );

@@ -3,6 +3,7 @@ import { BackPill } from "@/components/dear-me/back-pill";
 import { BackHeader } from "@/components/dear-me/back-header";
 import { GlassCard } from "@/components/dear-me/glass-card";
 import { EmptyState } from "@/components/dear-me/empty-state";
+import { MoodChip } from "@/components/dear-me/mood-chip";
 import { Bookmark, MessageCircleHeart } from "lucide-react";
 
 export default function Sandbox() {
@@ -111,6 +112,18 @@ export default function Sandbox() {
           title="What's on your mind?"
           subtitle="I'll look through your entries and reflections to help you see patterns and find perspective."
         />
+      </div>
+
+      {/* ── MoodChip preview ── */}
+      <p className="mt-4 text-xs uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
+        MoodChip preview
+      </p>
+      <div className="flex gap-2">
+        <MoodChip emoji="😊" label="Happy" />
+        <MoodChip emoji="😌" label="Calm" selected />
+        <MoodChip emoji="😢" label="Sad" />
+        <MoodChip emoji="😰" label="Anxious" />
+        <MoodChip emoji="🤩" label="Excited" />
       </div>
 
     </div>

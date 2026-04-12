@@ -8,6 +8,7 @@ import { FilterPill } from "@/components/dear-me/filter-pill";
 import { ChatInput } from "@/components/dear-me/chat-input";
 import { PrivacyNote } from "@/components/dear-me/privacy-note";
 import { MemoCard } from "@/components/dear-me/memo-card";
+import { RecordButton } from "@/components/dear-me/record-button";
 import { Bookmark, MessageCircleHeart } from "lucide-react";
 
 export default function Sandbox() {
@@ -181,6 +182,16 @@ export default function Sandbox() {
           timestamp="2d ago"
           href="/memo/3"
         />
+      </div>
+
+      {/* ── RecordButton preview ── */}
+      <p className="mt-4 text-xs uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
+        RecordButton preview
+      </p>
+      <div className="flex items-center gap-6">
+        <RecordButton state="idle" />
+        <RecordButton state="recording" />
+        <RecordButton state="idle" size="md" />
       </div>
 
     </div>

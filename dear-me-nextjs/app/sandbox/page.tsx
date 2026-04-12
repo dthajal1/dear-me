@@ -9,6 +9,7 @@ import { ChatInput } from "@/components/dear-me/chat-input";
 import { PrivacyNote } from "@/components/dear-me/privacy-note";
 import { MemoCard } from "@/components/dear-me/memo-card";
 import { RecordButton } from "@/components/dear-me/record-button";
+import { TabBar } from "@/components/dear-me/tab-bar";
 import { Bookmark, MessageCircleHeart } from "lucide-react";
 
 export default function Sandbox() {
@@ -193,6 +194,12 @@ export default function Sandbox() {
         <RecordButton state="recording" />
         <RecordButton state="idle" size="md" />
       </div>
+
+      {/* ── TabBar preview ── */}
+      <p className="mt-4 text-xs uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
+        TabBar preview (inactive — sandbox route isn&apos;t a tab)
+      </p>
+      <TabBar />
 
     </div>
   );

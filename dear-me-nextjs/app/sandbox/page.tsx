@@ -2,6 +2,8 @@ import { ScreenBackground } from "@/components/dear-me/screen-background";
 import { BackPill } from "@/components/dear-me/back-pill";
 import { BackHeader } from "@/components/dear-me/back-header";
 import { GlassCard } from "@/components/dear-me/glass-card";
+import { EmptyState } from "@/components/dear-me/empty-state";
+import { Bookmark, MessageCircleHeart } from "lucide-react";
 
 export default function Sandbox() {
   return (
@@ -82,6 +84,35 @@ export default function Sandbox() {
         </GlassCard>
 
       </div>
+
+      {/* ── EmptyState previews ── */}
+      <p className="mt-4 text-xs uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
+        EmptyState preview
+      </p>
+
+      {/* Memo Empty State — with CTA */}
+      <div className="rounded-3xl border border-[color:var(--color-glass-border)] bg-[var(--color-card)] p-6">
+        <EmptyState
+          icon={<Bookmark className="size-8" />}
+          title="No memos yet"
+          subtitle={"Record a video memo from Home —\nyour future self will find it here"}
+          cta={{
+            label: "Go to Home",
+            href: "/home",
+            icon: <MessageCircleHeart className="size-4" />,
+          }}
+        />
+      </div>
+
+      {/* Insights Empty State — no CTA */}
+      <div className="rounded-3xl border border-[color:var(--color-glass-border)] bg-[var(--color-card)] p-6">
+        <EmptyState
+          icon={<MessageCircleHeart className="size-10" />}
+          title="What's on your mind?"
+          subtitle="I'll look through your entries and reflections to help you see patterns and find perspective."
+        />
+      </div>
+
     </div>
   );
 }

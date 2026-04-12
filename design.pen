@@ -7652,7 +7652,8 @@
                   "fill": "#5C6B3AAA",
                   "content": "Anything you'd tell your future self?",
                   "fontFamily": "Geist",
-                  "fontSize": 14
+                  "fontSize": 14,
+                  "fontWeight": "normal"
                 }
               ]
             },
@@ -7911,7 +7912,8 @@
               "content": "Maybe later",
               "textAlign": "center",
               "fontFamily": "Geist",
-              "fontSize": 13
+              "fontSize": 13,
+              "fontWeight": "normal"
             }
           ]
         }
@@ -8792,958 +8794,8 @@
     },
     {
       "type": "frame",
-      "id": "KvYoA",
-      "x": 172,
-      "y": 7759,
-      "name": "Streak Progress V2",
-      "clip": true,
-      "width": 393,
-      "height": 852,
-      "fill": [
-        "#EFF2E6",
-        {
-          "type": "gradient",
-          "gradientType": "radial",
-          "enabled": true,
-          "opacity": 0.5,
-          "rotation": 0,
-          "size": {
-            "width": 1.4,
-            "height": 1
-          },
-          "colors": [
-            {
-              "color": "#D8E0C4",
-              "position": 0
-            },
-            {
-              "color": "#00000000",
-              "position": 1
-            }
-          ],
-          "center": {
-            "x": 0.25,
-            "y": 0.15
-          }
-        },
-        {
-          "type": "gradient",
-          "gradientType": "radial",
-          "enabled": true,
-          "opacity": 0.4,
-          "rotation": 0,
-          "size": {
-            "width": 1,
-            "height": 0.8
-          },
-          "colors": [
-            {
-              "color": "#D0DCC0",
-              "position": 0
-            },
-            {
-              "color": "#00000000",
-              "position": 1
-            }
-          ],
-          "center": {
-            "x": 0.8,
-            "y": 0.75
-          }
-        }
-      ],
-      "layout": "vertical",
-      "children": [
-        {
-          "type": "frame",
-          "id": "NSFzD",
-          "name": "Top Section",
-          "width": "fill_container",
-          "height": "fill_container",
-          "layout": "vertical",
-          "children": [
-            {
-              "id": "jr9MC",
-              "type": "ref",
-              "ref": "Nfd33",
-              "width": "fill_container",
-              "name": "statusBar",
-              "x": 0,
-              "y": 0,
-              "descendants": {
-                "PvUaC": {
-                  "x": 24,
-                  "y": 32.5
-                },
-                "rSlBX": {
-                  "width": "fit_content",
-                  "height": "fit_content",
-                  "x": 309,
-                  "y": 34
-                },
-                "dJlyC": {
-                  "x": 22
-                },
-                "Q0zzQ": {
-                  "x": 44
-                }
-              }
-            },
-            {
-              "type": "frame",
-              "id": "xx5zr",
-              "name": "contentWrap",
-              "width": "fill_container",
-              "layout": "vertical",
-              "gap": 10,
-              "padding": [
-                24,
-                20,
-                0,
-                20
-              ],
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "NcQKf",
-                  "name": "headerText",
-                  "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 4,
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "Wagin",
-                      "name": "headerTitle",
-                      "fill": "#2C331EDD",
-                      "content": "Your Progress",
-                      "fontFamily": "Geist",
-                      "fontSize": 28,
-                      "fontWeight": "700"
-                    },
-                    {
-                      "type": "text",
-                      "id": "fVJJ5",
-                      "name": "subtitle",
-                      "fill": "#6B7A48FF",
-                      "content": "Your journey, day by day",
-                      "fontFamily": "Geist",
-                      "fontSize": 14,
-                      "fontWeight": "normal"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "RNBWv",
-                  "name": "heroCard",
-                  "width": "fill_container",
-                  "fill": "#FFFFFFA0",
-                  "cornerRadius": 20,
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "#8A9A5B28"
-                  },
-                  "effect": [
-                    {
-                      "type": "background_blur",
-                      "radius": 40
-                    },
-                    {
-                      "type": "shadow",
-                      "shadowType": "outer",
-                      "color": "#2C331E10",
-                      "offset": {
-                        "x": 0,
-                        "y": 4
-                      },
-                      "blur": 24
-                    }
-                  ],
-                  "layout": "vertical",
-                  "gap": 10,
-                  "padding": 16,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "R7iCL",
-                      "name": "topRow",
-                      "layout": "vertical",
-                      "gap": 6,
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "3g8T7",
-                          "name": "flameCircle",
-                          "width": 48,
-                          "height": 48,
-                          "fill": "#8A9A5B18",
-                          "cornerRadius": 24,
-                          "stroke": {
-                            "align": "inside",
-                            "thickness": 1,
-                            "fill": "#8A9A5B30"
-                          },
-                          "layout": "vertical",
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon_font",
-                              "id": "0EO5B",
-                              "name": "flameIcon",
-                              "width": 24,
-                              "height": 24,
-                              "iconFontName": "flame",
-                              "iconFontFamily": "lucide",
-                              "fill": "#5C6B3AFF"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "EwBbX",
-                          "name": "textStack",
-                          "layout": "vertical",
-                          "gap": 2,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "lusr8",
-                              "name": "bigNum",
-                              "fill": "#2C331EDD",
-                              "content": "4",
-                              "lineHeight": 1,
-                              "fontFamily": "Geist",
-                              "fontSize": 48,
-                              "fontWeight": "700"
-                            },
-                            {
-                              "type": "text",
-                              "id": "lZqLY",
-                              "name": "dayStreak",
-                              "fill": "#6B7A48FF",
-                              "content": "day streak",
-                              "fontFamily": "Geist",
-                              "fontSize": 14,
-                              "fontWeight": "normal"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "0ZbP3",
-                      "name": "milestoneStack",
-                      "width": "fill_container",
-                      "layout": "vertical",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "BMCFI",
-                          "name": "progressBarBg",
-                          "width": "fill_container",
-                          "height": 8,
-                          "fill": "#8A9A5B20",
-                          "cornerRadius": 4,
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "agwU8",
-                              "name": "progressBarFill",
-                              "width": 114,
-                              "height": "fill_container",
-                              "fill": "#5C6B3ABB",
-                              "cornerRadius": 4
-                            }
-                          ]
-                        },
-                        {
-                          "type": "text",
-                          "id": "AtBXQ",
-                          "name": "milestoneText",
-                          "fill": "#6B7A48CC",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "3 more days to reach your 7-day streak",
-                          "textAlign": "center",
-                          "fontFamily": "Geist",
-                          "fontSize": 12,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "Onv7i",
-                  "name": "weekCard",
-                  "width": "fill_container",
-                  "fill": "#FFFFFFA0",
-                  "cornerRadius": 16,
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "#8A9A5B28"
-                  },
-                  "effect": [
-                    {
-                      "type": "background_blur",
-                      "radius": 40
-                    },
-                    {
-                      "type": "shadow",
-                      "shadowType": "outer",
-                      "color": "#2C331E10",
-                      "offset": {
-                        "x": 0,
-                        "y": 4
-                      },
-                      "blur": 24
-                    }
-                  ],
-                  "layout": "vertical",
-                  "gap": 12,
-                  "padding": 14,
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "sAuht",
-                      "name": "weekLabel",
-                      "fill": "#2C331EDD",
-                      "content": "This Week",
-                      "fontFamily": "Geist",
-                      "fontSize": 16,
-                      "fontWeight": "600"
-                    },
-                    {
-                      "type": "frame",
-                      "id": "8x2bG",
-                      "name": "daysRow",
-                      "width": "fill_container",
-                      "justifyContent": "space_between",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "9teqV",
-                          "name": "monCol",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "jDIU5",
-                              "name": "monCircle",
-                              "width": 36,
-                              "height": 36,
-                              "fill": "#5C6B3A30",
-                              "cornerRadius": 18,
-                              "layout": "vertical",
-                              "justifyContent": "center",
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "EVKYP",
-                                  "name": "monCheck",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "check",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "#5C6B3AFF"
-                                }
-                              ]
-                            },
-                            {
-                              "type": "text",
-                              "id": "x6Wcf",
-                              "name": "monLbl",
-                              "fill": "#6B7A4899",
-                              "content": "Mon",
-                              "fontFamily": "Geist",
-                              "fontSize": 12,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "z2zTe",
-                          "name": "tueCol",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "hC3ii",
-                              "name": "tueCircle",
-                              "width": 36,
-                              "height": 36,
-                              "fill": "#5C6B3A30",
-                              "cornerRadius": 18,
-                              "layout": "vertical",
-                              "justifyContent": "center",
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "mOAT0",
-                                  "name": "tueCheck",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "check",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "#5C6B3AFF"
-                                }
-                              ]
-                            },
-                            {
-                              "type": "text",
-                              "id": "U6vWi",
-                              "name": "tueLbl",
-                              "fill": "#6B7A4899",
-                              "content": "Tue",
-                              "fontFamily": "Geist",
-                              "fontSize": 12,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "s1wgY",
-                          "name": "wedCol",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "51FFR",
-                              "name": "wedCircle",
-                              "width": 36,
-                              "height": 36,
-                              "fill": "#5C6B3A30",
-                              "cornerRadius": 18,
-                              "layout": "vertical",
-                              "justifyContent": "center",
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "GnJj7",
-                                  "name": "wedCheck",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "check",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "#5C6B3AFF"
-                                }
-                              ]
-                            },
-                            {
-                              "type": "text",
-                              "id": "oKLth",
-                              "name": "wedLbl",
-                              "fill": "#6B7A4899",
-                              "content": "Wed",
-                              "fontFamily": "Geist",
-                              "fontSize": 12,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "PpgBP",
-                          "name": "thuCol",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "NvD6y",
-                              "name": "thuCircle",
-                              "width": 36,
-                              "height": 36,
-                              "fill": "#5C6B3A30",
-                              "cornerRadius": 18,
-                              "stroke": {
-                                "align": "outside",
-                                "thickness": 2,
-                                "fill": "#5C6B3A60"
-                              },
-                              "layout": "vertical",
-                              "justifyContent": "center",
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "Kr5h1",
-                                  "name": "thuCheck",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "check",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "#5C6B3AFF"
-                                }
-                              ]
-                            },
-                            {
-                              "type": "text",
-                              "id": "6c33X",
-                              "name": "thuLbl",
-                              "fill": "#2C331EDD",
-                              "content": "Thu",
-                              "fontFamily": "Geist",
-                              "fontSize": 12,
-                              "fontWeight": "700"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "rY24G",
-                          "name": "friCol",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "lJVTI",
-                              "name": "friCircle",
-                              "width": 36,
-                              "height": 36,
-                              "cornerRadius": 18,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "#8A9A5B30"
-                              },
-                              "layout": "vertical"
-                            },
-                            {
-                              "type": "text",
-                              "id": "hhAAC",
-                              "name": "friLbl",
-                              "fill": "#6B7A4899",
-                              "content": "Fri",
-                              "fontFamily": "Geist",
-                              "fontSize": 12,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "rnUXl",
-                          "name": "satCol",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "gJ0yl",
-                              "name": "satCircle",
-                              "width": 36,
-                              "height": 36,
-                              "cornerRadius": 18,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "#8A9A5B30"
-                              },
-                              "layout": "vertical"
-                            },
-                            {
-                              "type": "text",
-                              "id": "H46wK",
-                              "name": "satLbl",
-                              "fill": "#6B7A4899",
-                              "content": "Sat",
-                              "fontFamily": "Geist",
-                              "fontSize": 12,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "vxdMS",
-                          "name": "sunCol",
-                          "layout": "vertical",
-                          "gap": 6,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "tDawt",
-                              "name": "sunCircle",
-                              "width": 36,
-                              "height": 36,
-                              "cornerRadius": 18,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "#8A9A5B30"
-                              },
-                              "layout": "vertical"
-                            },
-                            {
-                              "type": "text",
-                              "id": "IBN5d",
-                              "name": "sunLbl",
-                              "fill": "#6B7A4899",
-                              "content": "Sun",
-                              "fontFamily": "Geist",
-                              "fontSize": 12,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "yrb6r",
-          "name": "Bottom Section",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 12,
-          "padding": [
-            0,
-            20,
-            16,
-            20
-          ],
-          "children": [
-            {
-              "type": "frame",
-              "id": "37k9s",
-              "name": "Stats Row",
-              "width": "fill_container",
-              "gap": 12,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "2rCkK",
-                  "name": "Longest Streak",
-                  "width": "fill_container",
-                  "fill": "#FFFFFFA0",
-                  "cornerRadius": 16,
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "#8A9A5B28"
-                  },
-                  "effect": [
-                    {
-                      "type": "background_blur",
-                      "radius": 20
-                    },
-                    {
-                      "type": "shadow",
-                      "shadowType": "outer",
-                      "color": "#00000015",
-                      "offset": {
-                        "x": 0,
-                        "y": 2
-                      },
-                      "blur": 8
-                    }
-                  ],
-                  "layout": "vertical",
-                  "gap": 8,
-                  "padding": [
-                    16,
-                    20
-                  ],
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "YTCK1",
-                      "name": "Icon Wrap",
-                      "width": 32,
-                      "height": 32,
-                      "fill": "#8A9A5B18",
-                      "cornerRadius": 14,
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "icon_font",
-                          "id": "1ZMeq",
-                          "width": 16,
-                          "height": 16,
-                          "iconFontName": "trophy",
-                          "iconFontFamily": "lucide",
-                          "fill": "#5C6B3AFF"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "auSJi",
-                      "fill": "#2C331EDD",
-                      "content": "12",
-                      "fontFamily": "Geist",
-                      "fontSize": 28,
-                      "fontWeight": "700"
-                    },
-                    {
-                      "type": "text",
-                      "id": "nGEys",
-                      "fill": "#6B7A48CC",
-                      "content": "Longest Streak",
-                      "fontFamily": "Geist",
-                      "fontSize": 12,
-                      "fontWeight": "500"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "xLisy",
-                  "name": "Total Entries",
-                  "width": "fill_container",
-                  "fill": "#FFFFFFA0",
-                  "cornerRadius": 16,
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "#8A9A5B28"
-                  },
-                  "effect": [
-                    {
-                      "type": "background_blur",
-                      "radius": 20
-                    },
-                    {
-                      "type": "shadow",
-                      "shadowType": "outer",
-                      "color": "#00000015",
-                      "offset": {
-                        "x": 0,
-                        "y": 2
-                      },
-                      "blur": 8
-                    }
-                  ],
-                  "layout": "vertical",
-                  "gap": 8,
-                  "padding": [
-                    16,
-                    20
-                  ],
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "nA53a",
-                      "name": "Icon Wrap",
-                      "width": 32,
-                      "height": 32,
-                      "fill": "#8A9A5B18",
-                      "cornerRadius": 14,
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "icon_font",
-                          "id": "Qs5IA",
-                          "width": 16,
-                          "height": 16,
-                          "iconFontName": "book-open",
-                          "iconFontFamily": "lucide",
-                          "fill": "#5C6B3AFF"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "4tENG",
-                      "fill": "#2C331EDD",
-                      "content": "23",
-                      "fontFamily": "Geist",
-                      "fontSize": 28,
-                      "fontWeight": "700"
-                    },
-                    {
-                      "type": "text",
-                      "id": "pR5VM",
-                      "fill": "#6B7A48CC",
-                      "content": "Total Entries",
-                      "fontFamily": "Geist",
-                      "fontSize": 12,
-                      "fontWeight": "500"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "gHa9l",
-              "name": "Insight",
-              "width": "fill_container",
-              "fill": "#2C331E18",
-              "cornerRadius": 16,
-              "stroke": {
-                "align": "inside",
-                "thickness": 1,
-                "fill": "#2C331E12"
-              },
-              "effect": {
-                "type": "background_blur",
-                "radius": 24
-              },
-              "layout": "vertical",
-              "gap": 12,
-              "padding": 16,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "qhKf4",
-                  "name": "Insight Label",
-                  "gap": 8,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon_font",
-                      "id": "WXR5h",
-                      "width": 18,
-                      "height": 18,
-                      "iconFontName": "sparkles",
-                      "iconFontFamily": "lucide",
-                      "fill": "#5C6B3AFF"
-                    },
-                    {
-                      "type": "text",
-                      "id": "ucTCv",
-                      "fill": "#2C331EDD",
-                      "content": "Insight",
-                      "fontFamily": "Geist",
-                      "fontSize": 14,
-                      "fontWeight": "600"
-                    }
-                  ]
-                },
-                {
-                  "type": "text",
-                  "id": "oldcU",
-                  "fill": "#4D5A35FF",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "You tend to feel most grounded mid-week. Your Wednesday entries are consistently calmer.",
-                  "lineHeight": 1.5,
-                  "fontFamily": "Geist",
-                  "fontSize": 13,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "isZnv",
-          "type": "ref",
-          "ref": "QBz0Q",
-          "name": "tabBar",
-          "x": 0,
-          "y": 757,
-          "height": "fit_content",
-          "descendants": {
-            "PV4qE": {
-              "width": "fill_container",
-              "x": 21,
-              "y": 12
-            },
-            "mVezu": {
-              "width": "fill_container",
-              "height": "fill_container",
-              "x": 4,
-              "y": 4
-            },
-            "lSyN5": {
-              "x": 33.875,
-              "y": 9.5
-            },
-            "wvPJO": {
-              "x": 26.875,
-              "y": 31.5
-            },
-            "lL5gt": {
-              "width": "fill_container",
-              "height": "fill_container",
-              "x": 89.75,
-              "y": 4
-            },
-            "WKeiF": {
-              "x": 33.875,
-              "y": 9.5
-            },
-            "sYesc": {
-              "x": 26.375,
-              "y": 31.5
-            },
-            "imLC0": {
-              "width": "fill_container",
-              "height": "fill_container",
-              "x": 175.5,
-              "y": 4
-            },
-            "heq32": {
-              "x": 33.875,
-              "y": 9.5
-            },
-            "xYQ6X": {
-              "x": 18.375,
-              "y": 31.5
-            },
-            "IvqRo": {
-              "fill": "#5C6B3AAA",
-              "width": "fill_container",
-              "height": "fill_container",
-              "x": 261.25,
-              "y": 4
-            },
-            "y4lCC": {
-              "fill": "#FFFFFF",
-              "x": 33.875,
-              "y": 9.5
-            },
-            "TOyX4": {
-              "fill": "#FFFFFF",
-              "fontWeight": "600",
-              "x": 13.375,
-              "y": 31.5
-            }
-          }
-        }
-      ]
-    },
-    {
-      "type": "frame",
       "id": "gnsrP",
-      "x": 1074,
+      "x": 146,
       "y": 7759,
       "name": "Streak Progress — Coming Soon",
       "clip": true,
@@ -9817,7 +8869,7 @@
           "id": "Evw2i",
           "name": "centerWrap",
           "width": "fill_container",
-          "height": "fill_container",
+          "height": 692,
           "layout": "vertical",
           "gap": 24,
           "padding": [
@@ -9886,68 +8938,86 @@
                   "lineHeight": 1.5,
                   "textAlign": "center",
                   "fontFamily": "Geist",
-                  "fontSize": 15
+                  "fontSize": 15,
+                  "fontWeight": "normal"
                 }
               ]
             }
           ]
         },
         {
-          "id": "xD3j6",
+          "id": "isZnv",
           "type": "ref",
-          "ref": "EeRbp",
+          "ref": "QBz0Q",
           "name": "tabBar",
-          "width": "fill_container",
           "x": 0,
-          "y": 757,
+          "y": 754,
+          "height": "fit_content",
           "descendants": {
-            "4mR2m": {
+            "PV4qE": {
               "width": "fill_container",
-              "x": 21
+              "x": 21,
+              "y": 12
             },
-            "y2SOi": {
-              "width": "fill_container"
-            },
-            "JJXrX": {
-              "x": 34.875
-            },
-            "D5Vex": {
-              "x": 26.875
-            },
-            "YPUlh": {
+            "mVezu": {
               "width": "fill_container",
-              "x": 89.75
+              "height": "fill_container",
+              "x": 4,
+              "y": 4
             },
-            "H9aAz": {
-              "x": 34.875
+            "lSyN5": {
+              "x": 33.875,
+              "y": 9.5
             },
-            "z4Eiy": {
-              "x": 26.375
+            "wvPJO": {
+              "x": 26.875,
+              "y": 31.5
             },
-            "aJFAo": {
+            "lL5gt": {
               "width": "fill_container",
-              "x": 175.5
+              "height": "fill_container",
+              "x": 89.75,
+              "y": 4
             },
-            "yggcd": {
-              "x": 34.875
+            "WKeiF": {
+              "x": 33.875,
+              "y": 9.5
             },
-            "OPXBy": {
-              "x": 18.375
+            "sYesc": {
+              "x": 26.375,
+              "y": 31.5
             },
-            "728dB": {
+            "imLC0": {
               "width": "fill_container",
+              "height": "fill_container",
+              "x": 175.5,
+              "y": 4
+            },
+            "heq32": {
+              "x": 33.875,
+              "y": 9.5
+            },
+            "xYQ6X": {
+              "x": 18.375,
+              "y": 31.5
+            },
+            "IvqRo": {
+              "fill": "#5C6B3AAA",
+              "width": "fill_container",
+              "height": "fill_container",
               "x": 261.25,
-              "fill": "#6B7A4818",
-              "cornerRadius": 26
+              "y": 4
             },
-            "ElOSa": {
-              "x": 34.875,
-              "fill": "#2C331EDD"
+            "y4lCC": {
+              "fill": "#FFFFFF",
+              "x": 33.875,
+              "y": 9.5
             },
-            "lLM4y": {
+            "TOyX4": {
+              "fill": "#FFFFFF",
+              "fontWeight": "600",
               "x": 13.375,
-              "fill": "#2C331EDD",
-              "fontWeight": "600"
+              "y": 31.5
             }
           }
         }
@@ -10226,7 +9296,8 @@
                   "content": "listening carefully",
                   "textAlign": "center",
                   "fontFamily": "Geist",
-                  "fontSize": 15
+                  "fontSize": 15,
+                  "fontWeight": "normal"
                 }
               ]
             },

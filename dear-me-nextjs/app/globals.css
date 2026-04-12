@@ -1,26 +1,78 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ---- Fonts (wired in Task 6 via next/font; these variables get filled there) ---- */
+  --font-display: var(--font-geist-sans);
+  --font-body: var(--font-geist-sans);
+
+  /* ---- Colors: shadcn-standard slots ---- */
+  --color-background: #EFF2E6;
+  --color-foreground: #2C331EDD;
+  --color-card: rgba(255,255,255,0.627);
+  --color-card-foreground: #2C331EDD;
+  --color-primary: #5C6B3ABB;
+  --color-primary-foreground: #FFFFFF;
+  --color-secondary: #8A9A5B12;
+  --color-secondary-foreground: #2C331EDD;
+  --color-accent: #6B7A48FF;
+  --color-accent-foreground: #FFFFFF;
+  --color-muted: #8A9A5B15;
+  --color-muted-foreground: #6B7A4888;
+  --color-border: #8A9A5B20;
+  --color-input: rgba(255,255,255,0.627);
+  --color-ring: #5C6B3ABB;
+  /* destructive omitted — not in the design */
+
+  /* ---- Colors: dear-me custom ---- */
+  --color-glass-surface: rgba(255,255,255,0.627);
+  --color-glass-border: rgba(138,154,91,0.125);
+  --color-mood-chip-bg: rgba(138,154,91,0.071);
+  --color-mood-chip-border: rgba(138,154,91,0.125);
+  --color-tag-chip-bg: rgba(138,154,91,0.082);
+  --color-tag-chip-border: rgba(138,154,91,0.125);
+  --color-encouragement-bg: rgba(138,154,91,0.082);
+  --color-encouragement-border: rgba(138,154,91,0.133);
+  --color-privacy-note-fg: rgba(107,122,72,0.400);
+  --color-tab-bar-bg: rgba(255,255,255,0.600);
+  --color-tab-bar-border: rgba(138,154,91,0.094);
+  --color-tab-icon-inactive: rgba(92,107,58,0.533);
+  --color-tab-label-inactive: rgba(92,107,58,0.600);
+  --color-status-bar-fg: rgba(44,51,30,0.867);
+  --color-status-bar-icon: rgba(44,51,30,0.800);
+
+  /* ---- Radii ---- */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  /* pill uses Tailwind default rounded-full */
+
+  /* ---- Shadows ---- */
+  --shadow-glass: 0 4px 10px rgba(92,107,58,0.071), 0 1px 2px rgba(92,107,58,0.031);
+  --shadow-elevated: 0 8px 20px rgba(0,0,0,0.094), 0 2px 6px rgba(0,0,0,0.063);
+  --shadow-floating: 0 4px 12px rgba(92,107,58,0.188);
+  --shadow-tab-bar: 0 -1px 12px rgba(0,0,0,0.063);
+  --shadow-transcript: 0 2px 8px rgba(0,0,0,0.063);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ---- Body background with radial-gradient overlays from the Home frame ---- */
+@layer base {
+  body {
+    background-color: var(--color-background);
+    background-image:
+      radial-gradient(
+        140% 100% at 25% 15%,
+        color-mix(in srgb, #D8E0C4 50%, transparent) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        100% 80% at 80% 75%,
+        color-mix(in srgb, #D0DCC0 40%, transparent) 0%,
+        transparent 100%
+      );
+    background-attachment: fixed;
+    color: var(--color-foreground);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }

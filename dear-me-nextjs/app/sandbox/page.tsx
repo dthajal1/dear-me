@@ -1,6 +1,7 @@
 import { ScreenBackground } from "@/components/dear-me/screen-background";
 import { BackPill } from "@/components/dear-me/back-pill";
 import { BackHeader } from "@/components/dear-me/back-header";
+import { GlassCard } from "@/components/dear-me/glass-card";
 
 export default function Sandbox() {
   return (
@@ -51,6 +52,34 @@ export default function Sandbox() {
             />
           </div>
         </div>
+
+      </div>
+
+      {/* ── GlassCard variants ── */}
+      <p className="mt-4 text-xs uppercase tracking-wide text-[color:var(--color-muted-foreground)]">GlassCard variants</p>
+      <div className="flex flex-col gap-4">
+
+        <GlassCard padding="sm">
+          <p className="text-sm font-medium">Small GlassCard</p>
+          <p className="mt-1 text-sm text-[color:var(--color-muted-foreground)]">
+            Compact padding — used for chips, mini-stats, etc.
+          </p>
+        </GlassCard>
+
+        <GlassCard padding="lg">
+          <h2 className="text-base font-semibold">Large GlassCard</h2>
+          <p className="mt-2 text-sm text-[color:var(--color-muted-foreground)]">
+            Spacious padding — used for hero cards like Start Recording, Daily Prompt, transcripts.
+          </p>
+          <div className="mt-4 flex gap-2">
+            <span className="rounded-full bg-[var(--color-mood-chip-bg)] px-3 py-1 text-xs">
+              chip one
+            </span>
+            <span className="rounded-full bg-[var(--color-mood-chip-bg)] px-3 py-1 text-xs">
+              chip two
+            </span>
+          </div>
+        </GlassCard>
 
       </div>
     </div>

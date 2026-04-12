@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/dear-me/empty-state";
 import { MoodChip } from "@/components/dear-me/mood-chip";
 import { FilterPill } from "@/components/dear-me/filter-pill";
 import { ChatInput } from "@/components/dear-me/chat-input";
+import { PrivacyNote } from "@/components/dear-me/privacy-note";
 import { Bookmark, MessageCircleHeart } from "lucide-react";
 
 export default function Sandbox() {
@@ -144,6 +145,12 @@ export default function Sandbox() {
         ChatInput preview
       </p>
       <ChatInput placeholder="Ask about your feelings..." />
+
+      {/* ── PrivacyNote preview ── */}
+      <p className="mt-4 text-xs uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
+        PrivacyNote preview
+      </p>
+      <PrivacyNote />
 
     </div>
   );

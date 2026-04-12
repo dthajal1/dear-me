@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Stand up a new Next.js 15 App Router project at `dear-me-nextjs/` (subfolder of the current repo) with every screen from `design.pen` built as static UI, pixel-close to the design.
+**Goal:** Stand up a new Next.js 16 App Router project at `dear-me-nextjs/` (subfolder of the current repo) with every screen from `design.pen` built as static UI, pixel-close to the design.
 
 **Architecture:** `design.pen` is the source of truth. Tokens are extracted and baked into `globals.css` before shadcn init so every primitive inherits the dear-me look. Mobile-first: full-bleed on real mobile, centered ~430px frame on desktop. Route groups `(tabs)` and `record` wrap screens that share chrome. No real data, no real audio, no real camera, no PWA service worker — pure static UI scaffolding. The existing Expo project is untouched.
 
-**Tech Stack:** Next.js 15 (App Router, TypeScript), bun, Tailwind CSS, shadcn/ui (themed), lucide-react, next/font. No service worker / PWA tooling in this pass.
+**Tech Stack:** Next.js 16 (App Router, TypeScript), bun, Tailwind CSS, shadcn/ui (themed), lucide-react, next/font. No service worker / PWA tooling in this pass.
 
 **Spec:** `docs/superpowers/specs/2026-04-12-nextjs-scaffold-design.md`
 
@@ -24,7 +24,7 @@
 
 5. **Commit style:** one commit per task. Conventional commit prefixes (`feat:`, `chore:`, `style:`). Scope `nextjs` so these are easy to filter against the Expo commits in the same repo (e.g., `feat(nextjs): add TabBar component`).
 
-6. **Do not modify anything outside `dear-me-nextjs/`.** The Expo project in `app/`, `components/`, `src/`, and the root `CLAUDE.md` are off-limits in this plan.
+6. **Do not modify anything outside `dear-me-nextjs/`.** The Expo project in `app/`, `components/`, `src/` at the repo root is off-limits. (The root `CLAUDE.md` was deleted by the controller before implementation resumed, so there is no root CLAUDE.md to preserve.)
 
 ---
 
@@ -41,62 +41,61 @@ dear-me-nextjs/
 ├── .gitignore
 ├── public/
 │   └── fonts/                               ← local font files if using next/font/local
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx                       ← root shell: fonts, <MobileFrame>, meta
-│   │   ├── globals.css                      ← tokens as CSS variables
-│   │   ├── page.tsx                         ← redirects to /home
-│   │   ├── (tabs)/
-│   │   │   ├── layout.tsx                   ← <TabBar/> + {children}
-│   │   │   ├── home/page.tsx
-│   │   │   ├── memo/page.tsx
-│   │   │   ├── insights/page.tsx
-│   │   │   └── progress/page.tsx
-│   │   ├── record/
-│   │   │   ├── layout.tsx                   ← <BackHeader/>, no tab bar
-│   │   │   ├── trigger/page.tsx
-│   │   │   ├── camera/page.tsx
-│   │   │   ├── recording/page.tsx
-│   │   │   ├── processing/page.tsx
-│   │   │   ├── review/page.tsx
-│   │   │   ├── add-notes/page.tsx
-│   │   │   └── saved/page.tsx
-│   │   ├── memo/
-│   │   │   └── [id]/
-│   │   │       ├── page.tsx
-│   │   │       └── playback/page.tsx
-│   │   ├── transcript/[id]/page.tsx
-│   │   └── streak/[day]/page.tsx
-│   ├── components/
-│   │   ├── ui/                              ← shadcn copies (themed)
-│   │   │   ├── button.tsx
-│   │   │   ├── sheet.tsx
-│   │   │   ├── dialog.tsx
-│   │   │   ├── drawer.tsx
-│   │   │   ├── scroll-area.tsx
-│   │   │   ├── separator.tsx
-│   │   │   ├── switch.tsx
-│   │   │   ├── input.tsx
-│   │   │   ├── textarea.tsx
-│   │   │   ├── avatar.tsx
-│   │   │   ├── skeleton.tsx
-│   │   │   └── sonner.tsx
-│   │   └── dear-me/                         ← hand-built custom
-│   │       ├── mobile-frame.tsx
-│   │       ├── screen-background.tsx
-│   │       ├── back-header.tsx
-│   │       ├── back-pill.tsx
-│   │       ├── glass-card.tsx
-│   │       ├── empty-state.tsx
-│   │       ├── tab-bar.tsx
-│   │       ├── memo-card.tsx
-│   │       ├── mood-chip.tsx
-│   │       ├── filter-pill.tsx
-│   │       ├── chat-input.tsx
-│   │       ├── privacy-note.tsx
-│   │       └── record-button.tsx
-│   └── lib/
-│       └── utils.ts                          ← shadcn's `cn` helper
+├── app/
+│   ├── layout.tsx                           ← root shell: fonts, <MobileFrame>, meta
+│   ├── globals.css                          ← tokens as CSS variables
+│   ├── page.tsx                             ← redirects to /home
+│   ├── (tabs)/
+│   │   ├── layout.tsx                       ← <TabBar/> + {children}
+│   │   ├── home/page.tsx
+│   │   ├── memo/page.tsx
+│   │   ├── insights/page.tsx
+│   │   └── progress/page.tsx
+│   ├── record/
+│   │   ├── layout.tsx                       ← <BackHeader/>, no tab bar
+│   │   ├── trigger/page.tsx
+│   │   ├── camera/page.tsx
+│   │   ├── recording/page.tsx
+│   │   ├── processing/page.tsx
+│   │   ├── review/page.tsx
+│   │   ├── add-notes/page.tsx
+│   │   └── saved/page.tsx
+│   ├── memo/
+│   │   └── [id]/
+│   │       ├── page.tsx
+│   │       └── playback/page.tsx
+│   ├── transcript/[id]/page.tsx
+│   └── streak/[day]/page.tsx
+├── components/
+│   ├── ui/                                  ← shadcn copies (themed)
+│   │   ├── button.tsx
+│   │   ├── sheet.tsx
+│   │   ├── dialog.tsx
+│   │   ├── drawer.tsx
+│   │   ├── scroll-area.tsx
+│   │   ├── separator.tsx
+│   │   ├── switch.tsx
+│   │   ├── input.tsx
+│   │   ├── textarea.tsx
+│   │   ├── avatar.tsx
+│   │   ├── skeleton.tsx
+│   │   └── sonner.tsx
+│   └── dear-me/                             ← hand-built custom
+│       ├── mobile-frame.tsx
+│       ├── screen-background.tsx
+│       ├── back-header.tsx
+│       ├── back-pill.tsx
+│       ├── glass-card.tsx
+│       ├── empty-state.tsx
+│       ├── tab-bar.tsx
+│       ├── memo-card.tsx
+│       ├── mood-chip.tsx
+│       ├── filter-pill.tsx
+│       ├── chat-input.tsx
+│       ├── privacy-note.tsx
+│       └── record-button.tsx
+└── lib/
+    └── utils.ts                              ← shadcn's `cn` helper
 ```
 
 ---
@@ -122,7 +121,7 @@ mkdir dear-me-nextjs
 cd dear-me-nextjs && bun create next-app@latest . --yes
 ```
 
-Expected: installer runs non-interactively, generates App Router + TypeScript + Tailwind + ESLint + `src/` directory + `@/*` import alias. No `CLAUDE.md` or `AGENTS.md` is generated (confirmed against upstream template).
+Expected: installer runs non-interactively, generates Next.js 16 App Router + TypeScript + Tailwind v4 + ESLint + `@/*` import alias pointing to `./*` (NO `src/` directory in Next.js 16's `--yes` defaults). Next.js 16 auto-generates `AGENTS.md` and a one-line `CLAUDE.md` (which `@imports` AGENTS.md) — keep both, they are the Next.js team's project-scoped agent conventions.
 
 - [ ] **Step 3: Verify the dev server boots**
 
@@ -149,18 +148,22 @@ git commit -m "chore(nextjs): scaffold Next.js 15 project via create-next-app"
 
 - [ ] **Step 1: Write `dear-me-nextjs/CLAUDE.md`**
 
-Content:
+**Note:** `dear-me-nextjs/CLAUDE.md` and `dear-me-nextjs/AGENTS.md` already exist — they were auto-generated by `create-next-app` in Task 1. `AGENTS.md` contains the Next.js team's "this is NOT the Next.js you know" warning about Next 16 breaking changes and should **not be modified**. `CLAUDE.md` is currently a one-line `@AGENTS.md` import — this task replaces it with our project-scoped content that still imports `AGENTS.md` at the top.
+
+Replace the contents of `dear-me-nextjs/CLAUDE.md` with:
 
 ```markdown
+@AGENTS.md
+
 # CLAUDE.md (dear-me-nextjs)
 
-This file provides guidance to Claude Code when working inside `dear-me-nextjs/`.
+This file provides guidance to Claude Code when working inside `dear-me-nextjs/`. The `@AGENTS.md` import above pulls in the Next.js team's Next 16 warnings — read them before writing any Next.js code in this tree.
 
 ## Project Overview
 
-`dear-me-nextjs` is the Next.js 15 (App Router) rebuild of the dear-me voice journaling app. The design source of truth is `../design.pen` (read via the `pencil` MCP server — never with Read/Grep). This project is a mobile-first PWA-in-progress: for now it's static UI, with real features landing incrementally.
+`dear-me-nextjs` is the Next.js 16 (App Router) rebuild of the dear-me voice journaling app. The design source of truth is `../design.pen` (read via the `pencil` MCP server — never with Read/Grep). This project is a mobile-first PWA-in-progress: for now it's static UI, with real features landing incrementally.
 
-The sibling `../app/`, `../components/`, and `../src/` directories belong to the original Expo project and must not be modified from inside this project.
+The sibling `../app/`, `../components/`, and `../src/` directories belong to the original Expo project and must not be modified from inside this project. (The root `CLAUDE.md` was removed when this project took over the repo.)
 
 ## Commands
 
@@ -181,7 +184,7 @@ After any change, both checks must pass:
 ## Conventions
 
 - **Routing:** App Router. Route groups `(tabs)` and `record/` wrap screens that share chrome.
-- **Styling:** Tailwind + shadcn/ui, heavily themed. Tokens live as CSS variables in `src/app/globals.css`. shadcn primitives are copied into `src/components/ui/` and customized there. Hand-built components live in `src/components/dear-me/`.
+- **Styling:** Tailwind v4 + shadcn/ui, heavily themed. Tokens live as CSS variables in `app/globals.css`. shadcn primitives are copied into `components/ui/` and customized there. Hand-built components live in `components/dear-me/`.
 - **Icons:** `lucide-react` only.
 - **Mobile frame:** full-bleed on mobile, centered ~430px column on desktop via `MobileFrame` in the root layout. No fake phone chrome.
 - **No TDD for UI scaffolding.** Verify by visual check in dev + build + lint. Tests are deferred until real behavior lands.
@@ -285,12 +288,12 @@ The scratch file is deleted at the end of Task 4 once the values land in `global
 ### Task 4: Bake tokens into globals.css
 
 **Files:**
-- Modify: `dear-me-nextjs/src/app/globals.css`
+- Modify: `dear-me-nextjs/app/globals.css`
 - Delete: `dear-me-nextjs/tmp-design-tokens.md`
 
 - [ ] **Step 1: Replace the scaffolded `globals.css` body with themed CSS variables**
 
-Open `dear-me-nextjs/src/app/globals.css`. Keep the Tailwind import directive at the top. Replace the default `:root` block with CSS variables using shadcn's naming convention (`--background`, `--foreground`, `--card`, `--primary`, `--primary-foreground`, `--accent`, `--muted`, `--muted-foreground`, `--border`, `--input`, `--ring`, `--destructive`, `--destructive-foreground`, `--radius`). Each value comes from `tmp-design-tokens.md`.
+Open `dear-me-nextjs/app/globals.css`. Keep the Tailwind import directive at the top. Replace the default `:root` block with CSS variables using shadcn's naming convention (`--background`, `--foreground`, `--card`, `--primary`, `--primary-foreground`, `--accent`, `--muted`, `--muted-foreground`, `--border`, `--input`, `--ring`, `--destructive`, `--destructive-foreground`, `--radius`). Each value comes from `tmp-design-tokens.md`.
 
 Add any dear-me-specific tokens as additional variables (`--mood-chip-bg`, `--glass-surface`, `--privacy-note-bg`, etc.) after the standard shadcn set.
 
@@ -315,7 +318,7 @@ rm dear-me-nextjs/tmp-design-tokens.md
 - [ ] **Step 4: Commit**
 
 ```bash
-git add dear-me-nextjs/src/app/globals.css dear-me-nextjs/tmp-design-tokens.md
+git add dear-me-nextjs/app/globals.css dear-me-nextjs/tmp-design-tokens.md
 git commit -m "feat(nextjs): bake design.pen tokens into globals.css"
 ```
 
@@ -325,7 +328,7 @@ git commit -m "feat(nextjs): bake design.pen tokens into globals.css"
 
 **Files:**
 - Create: `dear-me-nextjs/components.json`
-- Create: `dear-me-nextjs/src/lib/utils.ts`
+- Create: `dear-me-nextjs/lib/utils.ts`
 
 - [ ] **Step 1: Run shadcn init**
 
@@ -339,18 +342,18 @@ Answer prompts:
 - CSS variables: `Yes`
 - When asked whether to overwrite `globals.css`: **No** (keep our tokens). If init offers "use existing CSS variables," pick it. If init insists on writing, accept, then in Step 3 restore our token values from the previous commit.
 
-Expected: `components.json` created, `src/lib/utils.ts` created with the `cn` helper, `tailwind.config.ts` / `tailwind.config.js` updated if shadcn needs plugin entries.
+Expected: `components.json` created, `lib/utils.ts` created with the `cn` helper, `tailwind.config.ts` / `tailwind.config.js` updated if shadcn needs plugin entries.
 
 - [ ] **Step 2: If init overwrote `globals.css`, restore our tokens**
 
 ```bash
-git diff src/app/globals.css
+git diff app/globals.css
 ```
 
 If the diff shows our token values were replaced, run:
 
 ```bash
-git checkout HEAD -- src/app/globals.css
+git checkout HEAD -- app/globals.css
 ```
 
 Then manually re-add any new `@theme` or `@tailwind` directives shadcn expects (compare against a fresh shadcn-init'd project if unclear). The invariant: every value from `tmp-design-tokens.md` must be present in `globals.css` after this step.
@@ -375,7 +378,7 @@ git commit -m "chore(nextjs): initialize shadcn/ui preserving design tokens"
 ### Task 6: Configure fonts via next/font
 
 **Files:**
-- Modify: `dear-me-nextjs/src/app/layout.tsx`
+- Modify: `dear-me-nextjs/app/layout.tsx`
 - Possibly create: `dear-me-nextjs/public/fonts/*` (only if using `next/font/local`)
 
 - [ ] **Step 1: Determine the font source**
@@ -410,7 +413,7 @@ git commit -m "feat(nextjs): wire next/font with design.pen typography"
 ### Task 7: Add shadcn primitives
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/ui/{button,sheet,dialog,drawer,scroll-area,separator,switch,input,textarea,avatar,skeleton,sonner}.tsx`
+- Create: `dear-me-nextjs/components/ui/{button,sheet,dialog,drawer,scroll-area,separator,switch,input,textarea,avatar,skeleton,sonner}.tsx`
 
 - [ ] **Step 1: Install primitives in one command**
 
@@ -418,7 +421,7 @@ git commit -m "feat(nextjs): wire next/font with design.pen typography"
 cd dear-me-nextjs && bunx shadcn@latest add button sheet dialog drawer scroll-area separator switch input textarea avatar skeleton sonner
 ```
 
-Expected: each component is copied into `src/components/ui/`. Required peer packages (e.g., `@radix-ui/*`, `sonner`, `vaul`) are installed automatically.
+Expected: each component is copied into `components/ui/`. Required peer packages (e.g., `@radix-ui/*`, `sonner`, `vaul`) are installed automatically.
 
 - [ ] **Step 2: Verify build + lint pass**
 
@@ -440,13 +443,13 @@ git commit -m "chore(nextjs): add themed shadcn primitives"
 ### Task 8: Build MobileFrame wrapper and root layout
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/dear-me/mobile-frame.tsx`
-- Modify: `dear-me-nextjs/src/app/layout.tsx`
-- Modify: `dear-me-nextjs/src/app/page.tsx` (redirect to `/home`)
+- Create: `dear-me-nextjs/components/dear-me/mobile-frame.tsx`
+- Modify: `dear-me-nextjs/app/layout.tsx`
+- Modify: `dear-me-nextjs/app/page.tsx` (redirect to `/home`)
 
 - [ ] **Step 1: Create `MobileFrame`**
 
-Create `src/components/dear-me/mobile-frame.tsx`:
+Create `components/dear-me/mobile-frame.tsx`:
 
 ```tsx
 import { ReactNode } from "react";
@@ -527,7 +530,7 @@ export default function RootLayout({
 
 - [ ] **Step 3: Redirect `/` to `/home`**
 
-Replace `src/app/page.tsx` with:
+Replace `app/page.tsx` with:
 
 ```tsx
 import { redirect } from "next/navigation";
@@ -563,7 +566,7 @@ Every task in Phase B follows the same shape: create one component file, render 
 ### Task 9: Create the sandbox route for visual verification
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/sandbox/page.tsx`
+- Create: `dear-me-nextjs/app/sandbox/page.tsx`
 
 - [ ] **Step 1: Create an empty sandbox page**
 
@@ -589,7 +592,7 @@ Visit `localhost:3000/sandbox`. Expected: the "Sandbox" header renders inside th
 - [ ] **Step 3: Commit**
 
 ```bash
-git add dear-me-nextjs/src/app/sandbox
+git add dear-me-nextjs/app/sandbox
 git commit -m "chore(nextjs): add sandbox route for component previews"
 ```
 
@@ -598,8 +601,8 @@ git commit -m "chore(nextjs): add sandbox route for component previews"
 ### Task 10: ScreenBackground
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/dear-me/screen-background.tsx`
-- Modify: `dear-me-nextjs/src/app/sandbox/page.tsx`
+- Create: `dear-me-nextjs/components/dear-me/screen-background.tsx`
+- Modify: `dear-me-nextjs/app/sandbox/page.tsx`
 
 - [ ] **Step 1: Read `design.pen` for background treatment**
 
@@ -607,7 +610,7 @@ Call `mcp__pencil__batch_get` on the `Home` frame (resolve ID via `get_editor_st
 
 - [ ] **Step 2: Create `ScreenBackground`**
 
-Create `src/components/dear-me/screen-background.tsx` as an absolutely-positioned, pointer-events-none layer that paints the base color and radial gradients matching what Task 10 Step 1 found. It should be placed as the first child inside a relatively-positioned screen wrapper.
+Create `components/dear-me/screen-background.tsx` as an absolutely-positioned, pointer-events-none layer that paints the base color and radial gradients matching what Task 10 Step 1 found. It should be placed as the first child inside a relatively-positioned screen wrapper.
 
 Props: none (uses CSS variables from Task 4).
 
@@ -633,9 +636,9 @@ git commit -m "feat(nextjs): add ScreenBackground primitive"
 ### Task 11: BackHeader + BackPill
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/dear-me/back-pill.tsx`
-- Create: `dear-me-nextjs/src/components/dear-me/back-header.tsx`
-- Modify: `dear-me-nextjs/src/app/sandbox/page.tsx`
+- Create: `dear-me-nextjs/components/dear-me/back-pill.tsx`
+- Create: `dear-me-nextjs/components/dear-me/back-header.tsx`
+- Modify: `dear-me-nextjs/app/sandbox/page.tsx`
 
 - [ ] **Step 1: Read the reusable components**
 
@@ -671,8 +674,8 @@ git commit -m "feat(nextjs): add BackPill and BackHeader"
 ### Task 12: GlassCard
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/dear-me/glass-card.tsx`
-- Modify: `dear-me-nextjs/src/app/sandbox/page.tsx`
+- Create: `dear-me-nextjs/components/dear-me/glass-card.tsx`
+- Modify: `dear-me-nextjs/app/sandbox/page.tsx`
 
 - [ ] **Step 1: Read frames that use glass treatment**
 
@@ -700,8 +703,8 @@ git commit -m "feat(nextjs): add GlassCard primitive"
 ### Task 13: EmptyState
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/dear-me/empty-state.tsx`
-- Modify: `dear-me-nextjs/src/app/sandbox/page.tsx`
+- Create: `dear-me-nextjs/components/dear-me/empty-state.tsx`
+- Modify: `dear-me-nextjs/app/sandbox/page.tsx`
 
 - [ ] **Step 1: Read empty-state frames**
 
@@ -735,8 +738,8 @@ git commit -m "feat(nextjs): add EmptyState primitive"
 ### Task 14: MoodChip
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/dear-me/mood-chip.tsx`
-- Modify: `dear-me-nextjs/src/app/sandbox/page.tsx`
+- Create: `dear-me-nextjs/components/dear-me/mood-chip.tsx`
+- Modify: `dear-me-nextjs/app/sandbox/page.tsx`
 
 - [ ] **Step 1: Read the Quick Mood row**
 
@@ -762,8 +765,8 @@ git commit -m "feat(nextjs): add MoodChip"
 ### Task 15: FilterPill
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/dear-me/filter-pill.tsx`
-- Modify: `dear-me-nextjs/src/app/sandbox/page.tsx`
+- Create: `dear-me-nextjs/components/dear-me/filter-pill.tsx`
+- Modify: `dear-me-nextjs/app/sandbox/page.tsx`
 
 - [ ] **Step 1: Read filter pills from the Memo Tab frame**
 
@@ -789,8 +792,8 @@ git commit -m "feat(nextjs): add FilterPill"
 ### Task 16: ChatInput
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/dear-me/chat-input.tsx`
-- Modify: `dear-me-nextjs/src/app/sandbox/page.tsx`
+- Create: `dear-me-nextjs/components/dear-me/chat-input.tsx`
+- Modify: `dear-me-nextjs/app/sandbox/page.tsx`
 
 - [ ] **Step 1: Read the Chat Input reusable component**
 
@@ -818,8 +821,8 @@ git commit -m "feat(nextjs): add ChatInput"
 ### Task 17: PrivacyNote
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/dear-me/privacy-note.tsx`
-- Modify: `dear-me-nextjs/src/app/sandbox/page.tsx`
+- Create: `dear-me-nextjs/components/dear-me/privacy-note.tsx`
+- Modify: `dear-me-nextjs/app/sandbox/page.tsx`
 
 - [ ] **Step 1: Read the Privacy Note frame region on Home**
 
@@ -845,8 +848,8 @@ git commit -m "feat(nextjs): add PrivacyNote"
 ### Task 18: MemoCard
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/dear-me/memo-card.tsx`
-- Modify: `dear-me-nextjs/src/app/sandbox/page.tsx`
+- Create: `dear-me-nextjs/components/dear-me/memo-card.tsx`
+- Modify: `dear-me-nextjs/app/sandbox/page.tsx`
 
 - [ ] **Step 1: Read a memo row from the Memo Tab**
 
@@ -880,8 +883,8 @@ git commit -m "feat(nextjs): add MemoCard"
 ### Task 19: RecordButton
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/dear-me/record-button.tsx`
-- Modify: `dear-me-nextjs/src/app/sandbox/page.tsx`
+- Create: `dear-me-nextjs/components/dear-me/record-button.tsx`
+- Modify: `dear-me-nextjs/app/sandbox/page.tsx`
 
 - [ ] **Step 1: Read the Memo Trigger v2 and recording frames**
 
@@ -907,8 +910,8 @@ git commit -m "feat(nextjs): add RecordButton"
 ### Task 20: TabBar
 
 **Files:**
-- Create: `dear-me-nextjs/src/components/dear-me/tab-bar.tsx`
-- Modify: `dear-me-nextjs/src/app/sandbox/page.tsx`
+- Create: `dear-me-nextjs/components/dear-me/tab-bar.tsx`
+- Modify: `dear-me-nextjs/app/sandbox/page.tsx`
 
 - [ ] **Step 1: Read the Tab Bar reusable component**
 
@@ -949,12 +952,12 @@ git commit -m "feat(nextjs): add TabBar with animated indicator"
 ### Task 21: End of Phase B — remove the sandbox
 
 **Files:**
-- Delete: `dear-me-nextjs/src/app/sandbox/`
+- Delete: `dear-me-nextjs/app/sandbox/`
 
 - [ ] **Step 1: Delete the sandbox route**
 
 ```bash
-rm -rf dear-me-nextjs/src/app/sandbox
+rm -rf dear-me-nextjs/app/sandbox
 ```
 
 - [ ] **Step 2: Verify build + lint pass**
@@ -977,7 +980,7 @@ git commit -m "chore(nextjs): remove sandbox route, primitives done"
 ### Task 22: (tabs) layout
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/(tabs)/layout.tsx`
+- Create: `dear-me-nextjs/app/(tabs)/layout.tsx`
 
 - [ ] **Step 1: Create the layout**
 
@@ -1002,7 +1005,7 @@ export default function TabsLayout({ children }: { children: ReactNode }) {
 - [ ] **Step 2: Commit**
 
 ```bash
-git add dear-me-nextjs/src/app/\(tabs\)
+git add dear-me-nextjs/app/\(tabs\)
 git commit -m "feat(nextjs): add (tabs) layout with TabBar"
 ```
 
@@ -1011,7 +1014,7 @@ git commit -m "feat(nextjs): add (tabs) layout with TabBar"
 ### Task 23: Home screen (populated + empty state)
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/(tabs)/home/page.tsx`
+- Create: `dear-me-nextjs/app/(tabs)/home/page.tsx`
 
 - [ ] **Step 1: Read the Home and Home Empty State frames**
 
@@ -1019,7 +1022,7 @@ Call `mcp__pencil__get_editor_state`, find the IDs for `Home` (`YUuPo`) and `Hom
 
 - [ ] **Step 2: Implement the page**
 
-Create `src/app/(tabs)/home/page.tsx` with:
+Create `app/(tabs)/home/page.tsx` with:
 
 ```tsx
 const HAS_DATA = true; // flip to false to preview the empty state
@@ -1057,7 +1060,7 @@ git commit -m "feat(nextjs): add Home screen (populated + empty)"
 ### Task 24: Memo tab screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/(tabs)/memo/page.tsx`
+- Create: `dear-me-nextjs/app/(tabs)/memo/page.tsx`
 
 - [ ] **Step 1: Read the Memo Tab and Memo Empty State frames**
 
@@ -1086,7 +1089,7 @@ git commit -m "feat(nextjs): add Memo tab screen (populated + empty)"
 ### Task 25: Insights tab screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/(tabs)/insights/page.tsx`
+- Create: `dear-me-nextjs/app/(tabs)/insights/page.tsx`
 
 - [ ] **Step 1: Read the Insights Tab and Insights Empty State frames**
 
@@ -1112,7 +1115,7 @@ git commit -m "feat(nextjs): add Insights tab screen (populated + empty)"
 ### Task 26: Progress tab screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/(tabs)/progress/page.tsx`
+- Create: `dear-me-nextjs/app/(tabs)/progress/page.tsx`
 
 - [ ] **Step 1: Read the Progress frame**
 
@@ -1140,7 +1143,7 @@ git commit -m "feat(nextjs): add Progress tab screen"
 ### Task 27: record/ layout
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/record/layout.tsx`
+- Create: `dear-me-nextjs/app/record/layout.tsx`
 
 - [ ] **Step 1: Create the layout**
 
@@ -1172,7 +1175,7 @@ git commit -m "feat(nextjs): add record/ layout"
 ### Task 28: record/trigger screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/record/trigger/page.tsx`
+- Create: `dear-me-nextjs/app/record/trigger/page.tsx`
 
 - [ ] **Step 1: Read the Memo Trigger v2 frame**
 
@@ -1200,7 +1203,7 @@ git commit -m "feat(nextjs): add record/trigger screen"
 ### Task 29: record/camera screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/record/camera/page.tsx`
+- Create: `dear-me-nextjs/app/record/camera/page.tsx`
 
 - [ ] **Step 1: Read the camera frame from design.pen**
 
@@ -1226,7 +1229,7 @@ git commit -m "feat(nextjs): add record/camera screen"
 ### Task 30: record/recording screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/record/recording/page.tsx`
+- Create: `dear-me-nextjs/app/record/recording/page.tsx`
 
 - [ ] **Step 1: Read the recording frame**
 
@@ -1252,7 +1255,7 @@ git commit -m "feat(nextjs): add record/recording screen"
 ### Task 31: record/processing screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/record/processing/page.tsx`
+- Create: `dear-me-nextjs/app/record/processing/page.tsx`
 
 - [ ] **Step 1: Read the Processing State v2 frame**
 
@@ -1278,7 +1281,7 @@ git commit -m "feat(nextjs): add record/processing screen"
 ### Task 32: record/review screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/record/review/page.tsx`
+- Create: `dear-me-nextjs/app/record/review/page.tsx`
 
 - [ ] **Step 1: Read the review frame**
 
@@ -1304,7 +1307,7 @@ git commit -m "feat(nextjs): add record/review screen"
 ### Task 33: record/add-notes screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/record/add-notes/page.tsx`
+- Create: `dear-me-nextjs/app/record/add-notes/page.tsx`
 
 - [ ] **Step 1: Read the add-notes frame**
 
@@ -1332,7 +1335,7 @@ git commit -m "feat(nextjs): add record/add-notes screen"
 ### Task 34: record/saved screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/record/saved/page.tsx`
+- Create: `dear-me-nextjs/app/record/saved/page.tsx`
 
 - [ ] **Step 1: Read the Memo Saved frame**
 
@@ -1360,7 +1363,7 @@ git commit -m "feat(nextjs): add record/saved screen"
 ### Task 35: memo/[id] detail screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/memo/[id]/page.tsx`
+- Create: `dear-me-nextjs/app/memo/[id]/page.tsx`
 
 - [ ] **Step 1: Read the memo detail frame**
 
@@ -1388,7 +1391,7 @@ git commit -m "feat(nextjs): add memo/[id] detail screen"
 ### Task 36: memo/[id]/playback screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/memo/[id]/playback/page.tsx`
+- Create: `dear-me-nextjs/app/memo/[id]/playback/page.tsx`
 
 - [ ] **Step 1: Read the Memo Playback v2 frame**
 
@@ -1414,7 +1417,7 @@ git commit -m "feat(nextjs): add memo/[id]/playback screen"
 ### Task 37: transcript/[id] screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/transcript/[id]/page.tsx`
+- Create: `dear-me-nextjs/app/transcript/[id]/page.tsx`
 
 - [ ] **Step 1: Read the transcript frame**
 
@@ -1440,7 +1443,7 @@ git commit -m "feat(nextjs): add transcript/[id] screen"
 ### Task 38: streak/[day] screen
 
 **Files:**
-- Create: `dear-me-nextjs/src/app/streak/[day]/page.tsx`
+- Create: `dear-me-nextjs/app/streak/[day]/page.tsx`
 
 - [ ] **Step 1: Read the streak day frame**
 
@@ -1513,10 +1516,10 @@ For any route that does not match `design.pen`, open an issue in notes (do not f
 
 ```bash
 cd /Users/dirajthajali/work/projects/dear-me
-git log --oneline app/ components/ src/ CLAUDE.md
+git log --oneline --since="2026-04-12" -- app/ components/ src/
 ```
 
-Expected: no commits in this plan's history touch those paths. If they do, stop and ask the user how to handle it.
+Expected: no commits in this plan's history touch the Expo project directories (`app/`, `components/`, `src/` at the repo root). If any do, stop and ask the user how to handle it. (Note: the root `CLAUDE.md` was intentionally deleted early in this plan per the owner's instructions — that deletion is expected and not a violation.)
 
 - [ ] **Step 5: Commit a marker**
 

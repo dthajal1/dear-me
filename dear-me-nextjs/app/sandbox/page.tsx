@@ -4,6 +4,7 @@ import { BackHeader } from "@/components/dear-me/back-header";
 import { GlassCard } from "@/components/dear-me/glass-card";
 import { EmptyState } from "@/components/dear-me/empty-state";
 import { MoodChip } from "@/components/dear-me/mood-chip";
+import { FilterPill } from "@/components/dear-me/filter-pill";
 import { Bookmark, MessageCircleHeart } from "lucide-react";
 
 export default function Sandbox() {
@@ -124,6 +125,17 @@ export default function Sandbox() {
         <MoodChip emoji="😢" label="Sad" />
         <MoodChip emoji="😰" label="Anxious" />
         <MoodChip emoji="🤩" label="Excited" />
+      </div>
+
+      {/* ── FilterPill preview ── */}
+      <p className="mt-4 text-xs uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
+        FilterPill preview
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <FilterPill label="This Week" active />
+        <FilterPill label="This Month" />
+        <FilterPill label="3 Months" />
+        <FilterPill label="All Time" />
       </div>
 
     </div>

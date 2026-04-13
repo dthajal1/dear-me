@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { MobileFrame } from "@/components/dear-me/mobile-frame";
+import { AppBootstrap } from "@/lib/bootstrap/app-bootstrap";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -38,6 +39,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
       <body className="font-body antialiased">
+        <AppBootstrap />
         <MobileFrame>{children}</MobileFrame>
       </body>
     </html>

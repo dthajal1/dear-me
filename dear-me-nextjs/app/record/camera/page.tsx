@@ -1,68 +1,97 @@
-import Link from "next/link";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { X, RefreshCw, ZapOff } from "lucide-react";
 import { RecordButton } from "@/components/dear-me/record-button";
+import { requestCameraAccess, type CameraAccessResult } from "@/lib/recording/permissions";
+import { setStream } from "@/lib/recording/session";
 
-/**
- * Record Camera screen — "Camera Ready v3" (Rjvwy)
- *
- * Full-bleed dark viewport simulating a live camera feed with glass-morphic
- * overlay controls. Layout mirrors the design exactly:
- *
- *   • Absolute-positioned white status bar (top)
- *   • Top controls row (y≈56): Close pill (left) | Flip pill (right)
- *   • Bottom bar (y≈724): Timer pill | Record button | Flash pill
- *
- * Tapping the Record button navigates to /record/recording.
- *
- * Route: /record/camera
- * Layout: record/layout.tsx provides ScreenBackground (covered by the black fill here)
- */
+type FacingMode = "user" | "environment";
+
 export default function RecordCameraPage() {
+  const router = useRouter();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [facingMode, setFacingMode] = useState<FacingMode>("user");
+  const [retryKey, setRetryKey] = useState(0);
+  const [result, setResult] = useState<CameraAccessResult | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const navigatedToRecord = useRef(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setResult(null);
+    requestCameraAccess({
+      video: { facingMode },
+      audio: true,
+    }).then((r) => {
+      if (cancelled) {
+        if (r.ok) r.stream.getTracks().forEach((t) => t.stop());
+        return;
+      }
+      setResult(r);
+      if (r.ok) {
+        streamRef.current = r.stream;
+        if (videoRef.current) videoRef.current.srcObject = r.stream;
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [facingMode, retryKey]);
+
+  useEffect(() => {
+    return () => {
+      if (navigatedToRecord.current) return;
+      streamRef.current?.getTracks().forEach((t) => t.stop());
+    };
+  }, []);
+
+  function handleRecord() {
+    if (!streamRef.current) return;
+    setStream(streamRef.current);
+    navigatedToRecord.current = true;
+    router.push("/record/recording");
+  }
+
+  function handleFlip() {
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
+    setFacingMode((m) => (m === "user" ? "environment" : "user"));
+  }
+
+  function handleClose() {
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
+    router.push("/record/trigger");
+  }
+
   return (
-    /* Full-bleed black viewport — covers the ScreenBackground from layout */
     <div className="relative min-h-dvh overflow-hidden bg-black">
-      {/* ── Simulated camera feed ─────────────────────────────────────────── */}
-      {/* In production this would be a <video> element. For now: dark gradient. */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 30% 40%, #1a2010 0%, #000000 70%)",
-        }}
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        playsInline
+        className="absolute inset-0 size-full object-cover"
         aria-hidden
       />
 
-      {/* ── Status bar overlay ────────────────────────────────────────────── */}
-      <div className="absolute left-0 right-0 top-0 flex h-[54px] items-end justify-between px-6 pb-0 pt-[22px]">
-        <span className="text-base font-semibold text-white/87">9:41</span>
-        <div className="flex items-center gap-1.5">
-          {/* Signal, Wifi, Battery — decorative */}
-          <span className="h-4 w-4 rounded-sm bg-white/80" aria-hidden />
-          <span className="h-4 w-4 rounded-sm bg-white/80" aria-hidden />
-          <span className="h-4 w-4 rounded-sm bg-white/80" aria-hidden />
-        </div>
-      </div>
-
-      {/* ── Top controls (Close + Flip) ───────────────────────────────────── */}
-      {/*
-        Design: absolute, y=56, full-width row, justify-between, px-5
-        Close: 36×36 circle, fill #FFFFFF88, stroke #8A9A5B18, backdrop-blur-md
-        Flip:  same shape, refresh-cw icon
-      */}
       <div className="absolute left-0 right-0 top-14 flex items-center justify-between px-5">
-        {/* Close — returns to trigger */}
-        <Link
-          href="/record/trigger"
+        <button
+          type="button"
+          onClick={handleClose}
           aria-label="Close camera"
           className="flex size-9 items-center justify-center rounded-full bg-white/53 backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B18] transition-opacity active:opacity-70"
           style={{ boxShadow: "0 2px 6px rgba(92,107,58,0.031)" }}
         >
           <X size={16} strokeWidth={2.5} className="text-[#2C331EBB]" aria-hidden />
-        </Link>
+        </button>
 
-        {/* Flip camera */}
         <button
           type="button"
+          onClick={handleFlip}
           aria-label="Flip camera"
           className="flex size-9 items-center justify-center rounded-full bg-white/53 backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B18] transition-opacity active:opacity-70"
           style={{ boxShadow: "0 2px 6px rgba(92,107,58,0.031)" }}
@@ -71,29 +100,20 @@ export default function RecordCameraPage() {
         </button>
       </div>
 
-      {/* ── Bottom bar ────────────────────────────────────────────────────── */}
-      {/*
-        Design: absolute, y=724, h≈128, full-width, layout vertical, gap 20, px-6 pb-10 pt-4
-        Inner Controls row: Timer | Record button | Flash, gap 48, justify-center
-      */}
       <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center gap-5 px-6 pb-10 pt-4">
-        {/* Controls row */}
         <div className="flex w-full items-center justify-center gap-12">
-          {/* Timer pill */}
           <div
             className="flex size-11 items-center justify-center rounded-[22px] bg-white/53 backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B20]"
             style={{ boxShadow: "0 2px 6px rgba(92,107,58,0.039)" }}
-            aria-label="Recording timer"
+            aria-label="Max duration"
           >
             <span className="font-['Geist',sans-serif] text-[13px] font-semibold text-[#2C331EBB]">
-              2m
+              1m
             </span>
           </div>
 
-          {/* Record button — navigates to /record/recording */}
-          <RecordButton href="/record/recording" state="idle" size="lg" />
+          <RecordButton onPress={handleRecord} state="idle" size="lg" />
 
-          {/* Flash toggle */}
           <button
             type="button"
             aria-label="Toggle flash"
@@ -104,6 +124,24 @@ export default function RecordCameraPage() {
           </button>
         </div>
       </div>
+
+      {result && !result.ok && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/70 px-8">
+          <div className="flex flex-col items-center gap-4 rounded-2xl bg-[var(--color-glass-surface)] p-6 text-center text-foreground backdrop-blur">
+            <h2 className="text-base font-semibold">Camera access needed</h2>
+            <p className="text-sm text-[color:var(--color-muted-foreground)]">
+              {result.message}
+            </p>
+            <button
+              type="button"
+              onClick={() => setRetryKey((k) => k + 1)}
+              className="rounded-full bg-[var(--color-primary)] px-5 py-2 text-sm font-semibold text-[color:var(--color-primary-foreground)]"
+            >
+              Try again
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

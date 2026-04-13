@@ -18,10 +18,16 @@ export default function RecordRecordingPage() {
   const streamRef = useRef<MediaStream | null>(null);
   const [elapsedMs, setElapsedMs] = useState(0);
   const stoppedRef = useRef(false);
+  const startedRef = useRef(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const handleStop = useCallback(async () => {
     if (stoppedRef.current) return;
     stoppedRef.current = true;
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
     const recorder = recorderRef.current;
     if (!recorder) {
       router.replace("/record/camera");
@@ -42,6 +48,9 @@ export default function RecordRecordingPage() {
   }, [router]);
 
   useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+
     const stream = getStream();
     if (!stream) {
       router.replace("/record/camera");
@@ -56,29 +65,28 @@ export default function RecordRecordingPage() {
     recorder.start();
 
     const startedAt = Date.now();
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       const elapsed = Date.now() - startedAt;
       setElapsedMs(elapsed);
       if (elapsed >= MAX_DURATION_MS) {
-        clearInterval(interval);
         void handleStop();
       }
     }, 100);
-
-    return () => {
-      clearInterval(interval);
-      if (!stoppedRef.current) {
-        try {
-          if (recorder.isRecording()) void recorder.stop().catch(() => {});
-        } catch {}
-        streamRef.current?.getTracks().forEach((t) => t.stop());
-        clearStream();
-      }
-    };
   }, [router, handleStop]);
 
   function handleClose() {
+    if (stoppedRef.current) return;
     stoppedRef.current = true;
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    const recorder = recorderRef.current;
+    if (recorder) {
+      try {
+        if (recorder.isRecording()) void recorder.stop().catch(() => {});
+      } catch {}
+    }
     streamRef.current?.getTracks().forEach((t) => t.stop());
     clearStream();
     router.push("/record/trigger");

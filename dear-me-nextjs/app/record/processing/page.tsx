@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Leaf } from "lucide-react";
 import { createDraft } from "@/lib/db/memos";
@@ -15,8 +15,11 @@ type State =
 export default function RecordProcessingPage() {
   const router = useRouter();
   const [state, setState] = useState<State>({ kind: "writing" });
+  const startedRef = useRef(false);
 
   useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
     const recording = getRecording();
     if (!recording) {
       router.replace("/record/camera");

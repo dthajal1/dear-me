@@ -9,31 +9,25 @@ import {
   Heart,
   Lock,
   PencilLine,
-  Plus,
-  Sparkles,
-  X,
 } from "lucide-react";
 
 import { BackHeader } from "@/components/dear-me/back-header";
 import { GlassCard } from "@/components/dear-me/glass-card";
+import { MoodTagsEditor } from "@/components/dear-me/mood-tags-editor";
 import { useRecordSession } from "@/lib/hooks/useRecordSession";
 import { useBlobUrl } from "@/lib/hooks/useBlobUrl";
 import { readBlob } from "@/lib/db/opfs";
 import { deleteMemo } from "@/lib/db/memos";
 import { formatDuration } from "@/lib/format/time";
 
-const STATIC_TAGS = [
-  { label: "overwhelmed", aiSuggested: true },
-  { label: "anxious", aiSuggested: true },
-  { label: "sad", aiSuggested: true },
-  { label: "stressed", aiSuggested: false },
-];
+const POLL_INTERVAL_MS = 1500;
 
 function ReviewContent() {
   const router = useRouter();
-  const { state, id } = useRecordSession();
+  const { state, refresh, update, finalize, id } = useRecordSession();
   const [blob, setBlob] = useState<Blob | null>(null);
   const blobUrl = useBlobUrl(blob);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (state.status !== "ready") return;
@@ -45,6 +39,19 @@ function ReviewContent() {
       cancelled = true;
     };
   }, [state]);
+
+  useEffect(() => {
+    if (state.status !== "ready") return;
+    const tStatus = state.memo.transcriptStatus;
+    const aStatus = state.memo.analysisStatus;
+    const transcriptPending = tStatus === undefined || tStatus === "pending";
+    const analysisPending = aStatus === undefined || aStatus === "pending";
+    if (!transcriptPending && !analysisPending) return;
+    const timer = setInterval(() => {
+      void refresh();
+    }, POLL_INTERVAL_MS);
+    return () => clearInterval(timer);
+  }, [state, refresh]);
 
   if (state.status === "loading") {
     return (
@@ -69,9 +76,21 @@ function ReviewContent() {
     router.replace("/record/camera");
   }
 
+  async function handleSave() {
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      await finalize();
+      router.push("/record/saved");
+    } catch (err) {
+      console.error("[dear-me] finalize failed", err);
+      setSubmitting(false);
+    }
+  }
+
   return (
     <div className="flex min-h-dvh flex-col">
-      <BackHeader backHref="/record/processing" title="" />
+      <BackHeader backHref={`/record/add-notes?id=${id}`} title="" />
 
       <div className="flex flex-1 flex-col gap-4 px-5 pb-8 pt-0">
         <div className="flex flex-col gap-1 px-1">
@@ -150,70 +169,42 @@ function ReviewContent() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <Heart className="size-3.5 text-[#5C6B3ABB]" aria-hidden />
-              <span
-                className="text-[14px] font-semibold text-[#2C331EDD]"
-                style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-              >
-                Moods
-              </span>
-            </div>
+          <div className="flex items-center gap-1.5">
+            <Heart className="size-3.5 text-[#5C6B3ABB]" aria-hidden />
             <span
-              className="text-[11px] text-[#6B7A48AA]"
+              className="text-[14px] font-semibold text-[#2C331EDD]"
               style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
             >
-              Tap × to remove
+              Moods &amp; tags
             </span>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            {STATIC_TAGS.map((tag) => (
-              <div
-                key={tag.label}
-                className="flex items-center gap-1 rounded-full border px-2.5 py-1.5"
-                style={
-                  tag.aiSuggested
-                    ? {
-                        background: "rgba(92,107,58,0.082)",
-                        borderColor: "rgba(92,107,58,0.133)",
-                      }
-                    : {
-                        background: "transparent",
-                        borderColor: "rgba(92,107,58,0.188)",
-                      }
-                }
-              >
-                {tag.aiSuggested && (
-                  <Sparkles className="size-2 text-[#5C6B3A77]" aria-hidden />
-                )}
-                <span
-                  className="text-[12px] font-medium text-[#2C331EDD]"
-                  style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-                >
-                  {tag.label}
-                </span>
-                <X className="size-2.5 text-[#6B7A48AA]" aria-hidden />
-              </div>
-            ))}
-
-            <div
-              className="flex items-center gap-1 rounded-full border px-2.5 py-1.5"
-              style={{
-                background: "transparent",
-                borderColor: "rgba(92,107,58,0.188)",
+          {memo.analysisStatus === "ready" ? (
+            <MoodTagsEditor
+              moods={memo.moods ?? []}
+              tags={memo.tags}
+              onChange={(next) => {
+                void update({ moods: next.moods, tags: next.tags });
               }}
+            />
+          ) : memo.analysisStatus === "failed" ? (
+            <p
+              className="text-[12px] text-[#B44]"
+              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
             >
-              <Plus className="size-2.5 text-[#5C6B3AAA]" aria-hidden />
-              <span
-                className="text-[12px] font-medium text-[#5C6B3AAA]"
-                style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-              >
-                Add
-              </span>
-            </div>
-          </div>
+              Couldn&apos;t analyze this memo.
+              {memo.analysisError ? ` ${memo.analysisError}` : ""}
+            </p>
+          ) : (
+            <p
+              className="text-[12px] italic text-[#6B7A48AA]"
+              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
+            >
+              {memo.transcriptStatus === "ready"
+                ? "Analyzing…"
+                : "Waiting for transcript…"}
+            </p>
+          )}
         </div>
 
         <GlassCard className="flex flex-col gap-3 !rounded-2xl">
@@ -226,19 +217,28 @@ function ReviewContent() {
               Transcript
             </span>
           </div>
-          <p
-            className="text-[13px] italic leading-relaxed text-[#4D5A35FF]"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
-            &ldquo;Work has been really overwhelming lately. I feel like I
-            can&apos;t keep up with everything...&rdquo;
-          </p>
-          <span
-            className="text-[13px] font-semibold text-[#5C6B3AFF]"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
-            View full transcript
-          </span>
+          {memo.transcriptStatus === "ready" && memo.transcript ? (
+            <p
+              className="text-[13px] italic leading-relaxed text-[#4D5A35FF]"
+              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
+            >
+              &ldquo;{memo.transcript}&rdquo;
+            </p>
+          ) : memo.transcriptStatus === "failed" ? (
+            <p
+              className="text-[13px] leading-relaxed text-[#B44]"
+              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
+            >
+              Couldn&apos;t transcribe this memo. {memo.transcriptError ?? ""}
+            </p>
+          ) : (
+            <p
+              className="text-[13px] italic leading-relaxed text-[#6B7A48AA]"
+              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
+            >
+              Transcribing…
+            </p>
+          )}
         </GlassCard>
 
         <GlassCard className="flex flex-col gap-3 !rounded-2xl">
@@ -268,13 +268,15 @@ function ReviewContent() {
         </GlassCard>
 
         <div className="mt-2 flex flex-col items-center gap-3">
-          <Link
-            href={`/record/add-notes?id=${id}`}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3.5 text-[15px] font-semibold text-[color:var(--color-primary-foreground)] shadow-[var(--shadow-floating)] transition-opacity active:opacity-80"
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={submitting}
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3.5 text-[15px] font-semibold text-[color:var(--color-primary-foreground)] shadow-[var(--shadow-floating)] transition-opacity active:opacity-80 disabled:opacity-60"
           >
             <CheckCircle className="size-4" aria-hidden />
-            Save Memo
-          </Link>
+            {submitting ? "Saving…" : "Save Memo"}
+          </button>
           <button
             type="button"
             onClick={handleStartOver}

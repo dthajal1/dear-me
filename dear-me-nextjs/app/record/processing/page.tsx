@@ -56,7 +56,7 @@ export default function RecordProcessingPage() {
           updatedAt: now,
         });
         clearRecording();
-        router.replace(`/record/review?id=${id}`);
+        router.replace(`/record/add-notes?id=${id}`);
       } catch (err) {
         const e = err as DOMException;
         const isQuota =

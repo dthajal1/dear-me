@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Type } from "lucide-react";
 
@@ -10,13 +10,76 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useRecordSession } from "@/lib/hooks/useRecordSession";
 import { formatClockTime, formatDuration } from "@/lib/format/time";
+import { readBlob } from "@/lib/db/opfs";
+import { setAnalysisStatus, setTranscriptStatus } from "@/lib/db/memos";
+import { transcribeBlob } from "@/lib/transcription/transcribe";
+import { analyzeTranscript } from "@/lib/analysis/analyze";
 
 function AddNotesContent() {
   const router = useRouter();
-  const { state, finalize, id } = useRecordSession();
+  const { state, update, id } = useRecordSession();
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const transcribeStartedRef = useRef(false);
+
+  useEffect(() => {
+    if (state.status !== "ready") return;
+    if (transcribeStartedRef.current) return;
+    if (state.memo.transcriptStatus === "ready") return;
+    if (state.memo.transcriptStatus === "pending") return;
+    transcribeStartedRef.current = true;
+    const memo = state.memo;
+    (async () => {
+      let transcript: string | null = null;
+      try {
+        await setTranscriptStatus(memo.id, "pending");
+        const blob = await readBlob(memo.filename);
+        const result = await transcribeBlob(blob, memo.filename);
+        if (result.ok) {
+          transcript = result.text;
+          await setTranscriptStatus(memo.id, "ready", { transcript: result.text });
+        } else {
+          await setTranscriptStatus(memo.id, "failed", {
+            transcriptError: result.error,
+          });
+          console.error("[dear-me] transcription failed", result.error);
+        }
+      } catch (err) {
+        console.error("[dear-me] transcription threw", err);
+        try {
+          await setTranscriptStatus(memo.id, "failed", {
+            transcriptError: (err as Error).message,
+          });
+        } catch {}
+      }
+
+      if (transcript === null) return;
+
+      try {
+        await setAnalysisStatus(memo.id, "pending");
+        const analysis = await analyzeTranscript(transcript);
+        if (analysis.ok) {
+          await setAnalysisStatus(memo.id, "ready", {
+            moods: analysis.moods,
+            tags: analysis.tags,
+          });
+        } else {
+          await setAnalysisStatus(memo.id, "failed", {
+            analysisError: analysis.error,
+          });
+          console.error("[dear-me] analysis failed", analysis.error);
+        }
+      } catch (err) {
+        console.error("[dear-me] analysis threw", err);
+        try {
+          await setAnalysisStatus(memo.id, "failed", {
+            analysisError: (err as Error).message,
+          });
+        } catch {}
+      }
+    })();
+  }, [state]);
 
   if (state.status === "loading") {
     return (
@@ -36,15 +99,15 @@ function AddNotesContent() {
 
   const memo = state.memo;
 
-  async function handleSave() {
+  async function handleContinue() {
     if (submitting) return;
     setSubmitting(true);
     const finalTitle = title.trim() || `Memo · ${formatClockTime(memo.createdAt)}`;
     try {
-      await finalize({ title: finalTitle, notes, tags: [] });
-      router.push("/record/saved");
+      await update({ title: finalTitle, notes });
+      router.push(`/record/review?id=${id}`);
     } catch (err) {
-      console.error("[dear-me] finalize failed", err);
+      console.error("[dear-me] updateDraft failed", err);
       setSubmitting(false);
     }
   }
@@ -143,7 +206,7 @@ function AddNotesContent() {
 
         <button
           type="button"
-          onClick={handleSave}
+          onClick={handleContinue}
           disabled={submitting}
           className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3.5 text-[15px] font-semibold text-[color:var(--color-primary-foreground)] shadow-[var(--shadow-floating)] transition-opacity active:opacity-80 disabled:opacity-60"
           style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
@@ -154,7 +217,7 @@ function AddNotesContent() {
 
         <button
           type="button"
-          onClick={handleSave}
+          onClick={handleContinue}
           disabled={submitting}
           className="text-center text-[13px] text-[#6B7A48AA] transition-opacity active:opacity-60"
           style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}

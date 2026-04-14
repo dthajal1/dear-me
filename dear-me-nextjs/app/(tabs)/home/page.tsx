@@ -23,7 +23,7 @@ export default function HomePage() {
         icon={<Video className="size-8" />}
         title="Dear Me"
         subtitle="Record video memos to your future self"
-        cta={{ label: "Record a Memo", href: "/record/trigger" }}
+        cta={{ label: "Record a Memo", href: "/record/camera" }}
       />
     );
   }
@@ -54,7 +54,7 @@ export default function HomePage() {
       </section>
 
       {/* Start Recording Card — big hero CTA */}
-      <Link href="/record/trigger" className="block">
+      <Link href="/record/camera" className="block">
         <GlassCard className="flex flex-col items-center gap-3 text-center">
           <div className="flex size-14 items-center justify-center rounded-full text-[color:var(--color-primary)]">
             <Video className="size-8" />

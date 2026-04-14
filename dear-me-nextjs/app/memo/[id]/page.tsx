@@ -6,8 +6,17 @@ import { useRouter } from "next/navigation";
 import { FileText, Leaf, Sparkles, Trash2, Play } from "lucide-react";
 import { BackHeader } from "@/components/dear-me/back-header";
 import { GlassCard } from "@/components/dear-me/glass-card";
+import { MoodTagsEditor } from "@/components/dear-me/mood-tags-editor";
 import { ScreenBackground } from "@/components/dear-me/screen-background";
-import { getMemo } from "@/lib/db/memos";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { getMemo, updateMoodsAndTags } from "@/lib/db/memos";
 import { readBlob } from "@/lib/db/opfs";
 import { useBlobUrl } from "@/lib/hooks/useBlobUrl";
 import { formatDuration, formatRelativeTime } from "@/lib/format/time";
@@ -109,18 +118,16 @@ export default function MemoDetailPage({
           </div>
         </Link>
 
-        {memo.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {memo.tags.map((t) => (
-              <span
-                key={t}
-                className="rounded-full border border-[color:var(--color-glass-border)] bg-[var(--color-tag-chip-bg)] px-3 py-1 text-xs font-medium"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-        )}
+        <MoodTagsEditor
+          moods={memo.moods ?? []}
+          tags={memo.tags}
+          onChange={(next) => {
+            setMemo({ ...memo, moods: next.moods, tags: next.tags });
+            void updateMoodsAndTags(memo.id, next).catch((err) => {
+              console.error("[dear-me] updateMoodsAndTags failed", err);
+            });
+          }}
+        />
 
         {memo.notes.trim().length > 0 && (
           <GlassCard className="flex flex-col gap-2">
@@ -132,23 +139,54 @@ export default function MemoDetailPage({
           </GlassCard>
         )}
 
-        <GlassCard className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <p className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
-              <FileText className="size-3.5" />
-              Transcript
-            </p>
-            <Link
-              href={`/transcript/${memo.id}`}
-              className="text-xs font-semibold text-[color:var(--color-primary)]"
-            >
-              View full
-            </Link>
-          </div>
-          <p className="text-sm leading-relaxed text-foreground">
-            Transcripts will appear here when transcript support lands.
-          </p>
-        </GlassCard>
+        <Drawer>
+          <GlassCard className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <p className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
+                <FileText className="size-3.5" />
+                Transcript
+              </p>
+              {memo.transcriptStatus === "ready" && memo.transcript && (
+                <DrawerTrigger className="text-xs font-semibold text-[color:var(--color-primary)] transition-opacity active:opacity-60">
+                  View full
+                </DrawerTrigger>
+              )}
+            </div>
+            {memo.transcriptStatus === "ready" && memo.transcript ? (
+              <p className="line-clamp-4 text-sm leading-relaxed text-foreground">
+                {memo.transcript}
+              </p>
+            ) : memo.transcriptStatus === "failed" ? (
+              <p className="text-sm leading-relaxed text-[#B44]">
+                Couldn&apos;t transcribe this memo.
+                {memo.transcriptError ? ` ${memo.transcriptError}` : ""}
+              </p>
+            ) : (
+              <p className="text-sm italic leading-relaxed text-[color:var(--color-muted-foreground)]">
+                {memo.transcriptStatus === "pending"
+                  ? "Transcribing…"
+                  : "No transcript available."}
+              </p>
+            )}
+          </GlassCard>
+
+          <DrawerContent className="left-1/2! right-auto! -translate-x-1/2 w-full max-w-[430px] bg-[var(--color-glass-surface)] backdrop-blur-xl">
+            <DrawerHeader className="px-6 pt-2">
+              <DrawerTitle className="flex items-center gap-2 text-[15px] font-semibold text-[#2C331EDD]">
+                <FileText className="size-4 text-[#5C6B3ABB]" />
+                Transcript
+              </DrawerTitle>
+              <p className="text-[11px] font-medium uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
+                {formatDuration(memo.durationMs)} recording
+              </p>
+            </DrawerHeader>
+            <ScrollArea className="max-h-[60vh] px-6 pb-8">
+              <p className="whitespace-pre-wrap text-[15px] leading-[1.7] text-[#4D5A35FF]">
+                {memo.transcript}
+              </p>
+            </ScrollArea>
+          </DrawerContent>
+        </Drawer>
 
         <GlassCard className="border-[color:var(--color-encouragement-border)] bg-[var(--color-encouragement-bg)]">
           <p className="flex items-center gap-2 text-[13px] font-semibold text-[color:var(--color-accent)]">

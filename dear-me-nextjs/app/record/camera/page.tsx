@@ -22,10 +22,14 @@ export default function RecordCameraPage() {
     let cancelled = false;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setResult(null);
-    requestCameraAccess({
-      video: { facingMode },
-      audio: true,
-    }).then((r) => {
+    (async () => {
+      let r = await requestCameraAccess({
+        video: { facingMode },
+        audio: true,
+      });
+      if (!r.ok && r.reason === "no-device") {
+        r = await requestCameraAccess({ video: true, audio: true });
+      }
       if (cancelled) {
         if (r.ok) r.stream.getTracks().forEach((t) => t.stop());
         return;
@@ -35,7 +39,7 @@ export default function RecordCameraPage() {
         streamRef.current = r.stream;
         if (videoRef.current) videoRef.current.srcObject = r.stream;
       }
-    });
+    })();
     return () => {
       cancelled = true;
     };

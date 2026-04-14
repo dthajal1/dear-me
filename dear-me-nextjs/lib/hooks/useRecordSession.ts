@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { getMemo, finalizeDraft } from "@/lib/db/memos";
+import { getMemo, updateDraft, finalizeDraft } from "@/lib/db/memos";
 import type { Memo } from "@/lib/db/schema";
 
 type State =
@@ -33,20 +33,27 @@ export function useRecordSession() {
     void refresh();
   }, [refresh]);
 
-  const finalize = useCallback(
-    async (patch: { title: string; notes: string; tags: string[] }) => {
+  const update = useCallback(
+    async (patch: Parameters<typeof updateDraft>[1]) => {
       if (!id) throw new Error("No memo id in URL");
-      const updated = await finalizeDraft(id, patch);
+      const updated = await updateDraft(id, patch);
       setState({ status: "ready", memo: updated });
-      if (typeof BroadcastChannel !== "undefined") {
-        const bc = new BroadcastChannel("dear-me-memos");
-        bc.postMessage({ type: "memo-finalized", id });
-        bc.close();
-      }
       return updated;
     },
     [id],
   );
 
-  return { state, refresh, finalize, id } as const;
+  const finalize = useCallback(async () => {
+    if (!id) throw new Error("No memo id in URL");
+    const finalized = await finalizeDraft(id);
+    setState({ status: "ready", memo: finalized });
+    if (typeof BroadcastChannel !== "undefined") {
+      const bc = new BroadcastChannel("dear-me-memos");
+      bc.postMessage({ type: "memo-finalized", id });
+      bc.close();
+    }
+    return finalized;
+  }, [id]);
+
+  return { state, refresh, update, finalize, id } as const;
 }

@@ -4,6 +4,9 @@ export const STORE_MEMOS = "memos";
 
 export type MemoStatus = "draft" | "final";
 
+export type TranscriptStatus = "pending" | "ready" | "failed";
+export type AnalysisStatus = "pending" | "ready" | "failed";
+
 export type Memo = {
   id: string;
   filename: string;
@@ -14,6 +17,12 @@ export type Memo = {
   notes: string;
   tags: string[];
   status: MemoStatus;
+  transcript?: string;
+  transcriptStatus?: TranscriptStatus;
+  transcriptError?: string;
+  moods?: string[];
+  analysisStatus?: AnalysisStatus;
+  analysisError?: string;
   createdAt: number;
   updatedAt: number;
 };

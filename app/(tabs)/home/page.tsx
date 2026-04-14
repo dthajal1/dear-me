@@ -1,9 +1,13 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Video } from "lucide-react";
 import { GlassCard } from "@/components/dear-me/glass-card";
 import { MoodChip } from "@/components/dear-me/mood-chip";
 import { PrivacyNote } from "@/components/dear-me/privacy-note";
 import { EmptyState } from "@/components/dear-me/empty-state";
+import { createCheckIn, getTodayCheckIns } from "@/lib/db/checkIns";
 
 // Toggle this to preview the empty state in dev.
 const HAS_DATA = true;
@@ -17,6 +21,32 @@ const MOODS = [
 ];
 
 export default function HomePage() {
+  const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [justCheckedIn, setJustCheckedIn] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    void getTodayCheckIns().then((entries) => {
+      if (cancelled) return;
+      if (entries.length > 0) {
+        setSelectedMood(entries[0].mood);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function handleMoodTap(mood: string) {
+    setSelectedMood(mood);
+    setJustCheckedIn(true);
+    try {
+      await createCheckIn({ mood, source: "chip" });
+    } catch (err) {
+      console.error("[dear-me] check-in failed", err);
+    }
+  }
+
   if (!HAS_DATA) {
     return (
       <EmptyState
@@ -48,9 +78,24 @@ export default function HomePage() {
         </h2>
         <div className="flex justify-between gap-2">
           {MOODS.map((m) => (
-            <MoodChip key={m.label} emoji={m.emoji} label={m.label} />
+            <MoodChip
+              key={m.label}
+              emoji={m.emoji}
+              label={m.label}
+              selected={selectedMood === m.label}
+              onClick={() => void handleMoodTap(m.label)}
+            />
           ))}
         </div>
+        {justCheckedIn ? (
+          <p
+            className="animate-in fade-in text-center text-[11px] text-[color:var(--color-muted-foreground)]"
+            role="status"
+            aria-live="polite"
+          >
+            Checked in just now
+          </p>
+        ) : null}
       </section>
 
       {/* Start Recording Card — big hero CTA */}

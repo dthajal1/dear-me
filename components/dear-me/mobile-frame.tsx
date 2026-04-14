@@ -13,6 +13,7 @@ export function MobileFrame({ children }: MobileFrameProps) {
   return (
     <div className="min-h-dvh w-full md:flex md:items-center md:justify-center md:py-6">
       <div
+        id="mobile-frame-root"
         className="
           relative mx-auto flex min-h-dvh w-full flex-col
           bg-background text-foreground

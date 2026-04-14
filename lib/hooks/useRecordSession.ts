@@ -2,8 +2,16 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { getMemo, updateDraft, finalizeDraft } from "@/lib/db/memos";
+import {
+  getMemo,
+  updateDraft,
+  updateMoodsAndTags,
+  finalizeDraft,
+} from "@/lib/db/memos";
+import { findRecentChipCheckIn } from "@/lib/db/checkIns";
 import type { Memo } from "@/lib/db/schema";
+
+const RECENT_CHECK_IN_WINDOW_MS = 10 * 60 * 1000;
 
 type State =
   | { status: "loading" }
@@ -45,6 +53,27 @@ export function useRecordSession() {
 
   const finalize = useCallback(async () => {
     if (!id) throw new Error("No memo id in URL");
+
+    // If the user tapped a mood chip on Home recently, auto-inherit it
+    // onto this memo — but don't overwrite any mood the AI analyzer
+    // already assigned.
+    try {
+      const recent = await findRecentChipCheckIn(RECENT_CHECK_IN_WINDOW_MS);
+      if (recent) {
+        const current = await getMemo(id);
+        if (current && current.status === "draft") {
+          const existing = current.moods ?? [];
+          if (!existing.includes(recent.mood)) {
+            await updateMoodsAndTags(id, {
+              moods: [...existing, recent.mood],
+            });
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("[dear-me] auto check-in mood apply failed", err);
+    }
+
     const finalized = await finalizeDraft(id);
     setState({ status: "ready", memo: finalized });
     if (typeof BroadcastChannel !== "undefined") {

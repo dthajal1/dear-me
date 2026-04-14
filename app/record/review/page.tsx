@@ -53,19 +53,22 @@ function ReviewContent() {
     return () => clearInterval(timer);
   }, [state, refresh]);
 
-  if (state.status === "loading") {
+  useEffect(() => {
+    if (state.status === "not-found") {
+      router.replace("/home");
+    } else if (state.status === "ready" && state.memo.status === "final") {
+      router.replace(`/memo/${state.memo.id}`);
+    }
+  }, [state, router]);
+
+  if (state.status === "loading" || state.status === "not-found") {
     return (
       <div className="flex min-h-dvh items-center justify-center text-sm text-[color:var(--color-muted-foreground)]">
         Loading…
       </div>
     );
   }
-  if (state.status === "not-found") {
-    router.replace("/home");
-    return null;
-  }
   if (state.memo.status === "final") {
-    router.replace(`/memo/${state.memo.id}`);
     return null;
   }
 

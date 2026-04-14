@@ -1,8 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { MessageCircleHeart, CloudSun, Sun, TrendingUp, Heart } from "lucide-react";
+import { MessageCircleHeart, CloudSun, Sun, TrendingUp, Heart, History } from "lucide-react";
 import { ChatInput } from "@/components/dear-me/chat-input";
+import { GlassIconButton } from "@/components/dear-me/glass-icon-button";
+import { InsightsHistorySheet } from "@/components/dear-me/insights-history-sheet";
 import { InsightsPromptCard } from "@/components/dear-me/insights-prompt-card";
 import { createThreadWithFirstMessage } from "@/lib/db/insightThreads";
 
@@ -32,9 +34,16 @@ export default function InsightsPage() {
     <div className="flex min-h-full flex-col">
       <div className="flex flex-1 flex-col gap-6 px-5 pt-6 pb-4">
         {/* Header */}
-        <header className="flex flex-col gap-1">
-          <h1 className="text-[length:var(--text-display)] font-bold text-foreground">Insights</h1>
-          <p className="text-sm text-[color:var(--color-accent)]">Ask about your emotional journey</p>
+        <header className="flex items-start justify-between gap-3">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-[length:var(--text-display)] font-bold text-foreground">Insights</h1>
+            <p className="text-sm text-[color:var(--color-accent)]">Ask about your emotional journey</p>
+          </div>
+          <InsightsHistorySheet>
+            <GlassIconButton aria-label="Open conversation history">
+              <History className="size-[18px] text-[color:var(--color-primary)]" />
+            </GlassIconButton>
+          </InsightsHistorySheet>
         </header>
 
         {/* Centered illustration + prompts grid */}

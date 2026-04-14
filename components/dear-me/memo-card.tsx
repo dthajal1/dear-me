@@ -52,16 +52,13 @@ export function MemoCard({
       )}
     >
       {/* Thumbnail with play button overlay */}
-      <div
-        className="relative shrink-0 overflow-hidden rounded-xl"
-        style={{ width: 90, height: 110 }}
-      >
+      <div className="relative h-[110px] w-[90px] shrink-0 overflow-hidden rounded-xl">
         {/* Waveform placeholder background */}
-        <div className="absolute inset-0 flex items-end justify-center gap-[2px] bg-[#8A9A5B18] px-2 pb-3">
+        <div className="absolute inset-0 flex items-end justify-center gap-[2px] bg-[color:var(--color-mood-chip-bg)] px-2 pb-3">
           {[18, 32, 48, 36, 54, 40, 26, 44, 30, 20].map((h, i) => (
             <div
               key={i}
-              className="w-[3px] rounded-full bg-[#5C6B3A55]"
+              className="w-[3px] rounded-full bg-[color:var(--color-primary)]/35"
               style={{ height: h }}
             />
           ))}
@@ -69,13 +66,9 @@ export function MemoCard({
 
         {/* Play button overlay */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className="flex items-center justify-center rounded-full"
-            style={{ width: 28, height: 28, background: "#5C6B3ABB" }}
-          >
+          <div className="flex size-7 items-center justify-center rounded-full bg-[color:var(--color-primary)]">
             <Play
-              className="translate-x-[1px]"
-              style={{ width: 14, height: 14, color: "#FFFFFF" }}
+              className="size-3.5 translate-x-[1px] text-white"
               fill="currentColor"
             />
           </div>
@@ -86,56 +79,36 @@ export function MemoCard({
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         {/* Top row: title + duration badge */}
         <div className="flex items-center justify-between gap-2">
-          <span
-            className="truncate font-semibold"
-            style={{ fontSize: 14, color: "#2C331EDD" }}
-          >
+          <span className="truncate text-sm font-semibold text-foreground">
             {title}
           </span>
-          <div
-            className="flex shrink-0 items-center gap-1 rounded-lg"
-            style={{ background: "#8A9A5B12", padding: "4px 10px" }}
-          >
-            <Timer style={{ width: 14, height: 14, color: "#5C6B3AAA" }} />
-            <span
-              className="font-medium"
-              style={{ fontSize: 12, color: "#5C6B3AAA" }}
-            >
+          <div className="flex shrink-0 items-center gap-1 rounded-lg bg-[color:var(--color-muted)] px-2.5 py-1">
+            <Timer className="size-3.5 text-[color:var(--color-muted-foreground)]" />
+            <span className="text-xs font-medium text-[color:var(--color-muted-foreground)]">
               {duration}
             </span>
           </div>
         </div>
 
         {/* Preview text */}
-        <p
-          className="line-clamp-2"
-          style={{ fontSize: 12, color: "#4D5A35", lineHeight: 1.5 }}
-        >
+        <p className="line-clamp-2 text-xs leading-relaxed text-foreground/80">
           {preview}
         </p>
 
         {/* Bottom row: mood chip + timestamp */}
         <div className="mt-auto flex items-center justify-between">
           {mood ? (
-            <div
-              className="flex items-center rounded-full border"
-              style={{
-                background: "#8A9A5B15",
-                borderColor: "#8A9A5B20",
-                padding: "4px 10px",
-              }}
-            >
-              <span
-                className="font-medium"
-                style={{ fontSize: 10, color: "#5C6B3AAA" }}
-              >
+            <div className="flex items-center rounded-full border border-[color:var(--color-glass-border)] bg-[color:var(--color-muted)] px-2.5 py-1">
+              <span className="text-[10px] font-medium text-[color:var(--color-muted-foreground)]">
                 {mood}
               </span>
             </div>
           ) : (
             <span />
           )}
-          <span style={{ fontSize: 10, color: "#5C6B3AAA" }}>{timestamp}</span>
+          <span className="text-[10px] text-[color:var(--color-muted-foreground)]">
+            {timestamp}
+          </span>
         </div>
       </div>
     </Link>

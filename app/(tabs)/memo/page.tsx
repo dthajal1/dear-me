@@ -43,7 +43,7 @@ export default function MemoPage() {
         icon={<AudioLines className="size-8" />}
         title="No memos yet"
         subtitle="Record a video memo from Home — your future self will find it here."
-        cta={{ label: "Go to Home", href: "/home" }}
+        cta={{ label: "Go to Home", href: "/" }}
       />
     );
   }

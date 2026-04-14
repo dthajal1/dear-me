@@ -99,7 +99,7 @@ function AddNotesContent() {
 
   useEffect(() => {
     if (state.status === "not-found") {
-      router.replace("/home");
+      router.replace("/");
     } else if (state.status === "ready" && state.memo.status === "final") {
       router.replace(`/memo/${state.memo.id}`);
     }

@@ -18,7 +18,7 @@ export default function RecordTriggerPage() {
     <div className="flex min-h-dvh flex-col px-5 pt-6 pb-10">
       {/* Back pill — top-left */}
       <div className="flex justify-start">
-        <BackPill href="/home" />
+        <BackPill href="/" />
       </div>
 
       {/* Hero content — vertically centered */}
@@ -62,7 +62,7 @@ export default function RecordTriggerPage() {
 
         {/* Skip link */}
         <Link
-          href="/home"
+          href="/"
           className="text-sm font-medium text-[color:var(--color-muted-foreground)] transition-opacity hover:opacity-80"
         >
           Not now

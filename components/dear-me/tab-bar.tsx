@@ -12,7 +12,7 @@ interface TabDef {
 }
 
 const TABS: readonly TabDef[] = [
-  { href: "/home", label: "Home", Icon: House },
+  { href: "/", label: "Home", Icon: House },
   { href: "/memo", label: "Memo", Icon: Bookmark },
   { href: "/insights", label: "Insights", Icon: MessageCircle },
   { href: "/progress", label: "Progress", Icon: TrendingUp },
@@ -32,9 +32,10 @@ const TABS: readonly TabDef[] = [
 export function TabBar() {
   const pathname = usePathname();
 
-  const activeIndex = TABS.findIndex(
-    (tab) => pathname === tab.href || pathname.startsWith(`${tab.href}/`),
-  );
+  const activeIndex = TABS.findIndex((tab) => {
+    if (tab.href === "/") return pathname === "/";
+    return pathname === tab.href || pathname.startsWith(`${tab.href}/`);
+  });
 
   return (
     <nav

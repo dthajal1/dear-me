@@ -79,7 +79,7 @@ export default function RecordProcessingPage() {
 
   function handleDiscard() {
     clearRecording();
-    router.replace("/home");
+    router.replace("/");
   }
 
   if (state.kind === "error") {

@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
+  Check,
   CheckCircle,
   FileText,
   Heart,
@@ -28,6 +29,7 @@ function ReviewContent() {
   const [blob, setBlob] = useState<Blob | null>(null);
   const blobUrl = useBlobUrl(blob);
   const [submitting, setSubmitting] = useState(false);
+  const [savedOverlay, setSavedOverlay] = useState(false);
 
   useEffect(() => {
     if (state.status !== "ready") return;
@@ -55,7 +57,7 @@ function ReviewContent() {
 
   useEffect(() => {
     if (state.status === "not-found") {
-      router.replace("/home");
+      router.replace("/");
     } else if (state.status === "ready" && state.memo.status === "final") {
       router.replace(`/memo/${state.memo.id}`);
     }
@@ -89,7 +91,13 @@ function ReviewContent() {
         await update({ title: memo.suggestedTitle.trim() });
       }
       await finalize();
-      router.push("/record/saved");
+      // Show a brief confirmation before handing the user back to Home.
+      // 800ms matches the spec — long enough to register, short enough
+      // not to feel like a blocking screen.
+      setSavedOverlay(true);
+      setTimeout(() => {
+        router.replace("/");
+      }, 800);
     } catch (err) {
       console.error("[dear-me] finalize failed", err);
       setSubmitting(false);
@@ -97,7 +105,23 @@ function ReviewContent() {
   }
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div className="relative flex min-h-dvh flex-col">
+      {savedOverlay ? (
+        <div
+          className="pointer-events-none absolute inset-0 z-50 flex items-center justify-center bg-[var(--color-background)]/80 backdrop-blur-sm animate-in fade-in duration-200"
+          role="status"
+          aria-live="polite"
+        >
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex size-14 items-center justify-center rounded-full bg-[var(--color-primary)] text-[color:var(--color-primary-foreground)] shadow-[var(--shadow-floating)]">
+              <Check className="size-7" strokeWidth={2.5} aria-hidden />
+            </div>
+            <p className="text-[length:var(--text-body)] font-semibold text-foreground">
+              Memo saved
+            </p>
+          </div>
+        </div>
+      ) : null}
       <BackHeader backHref={`/record/add-notes?id=${id}`} title="" />
 
       <div className="flex flex-1 flex-col gap-4 px-5 pb-8 pt-0">

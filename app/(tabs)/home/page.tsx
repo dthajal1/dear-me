@@ -70,15 +70,10 @@ export default function HomePage() {
         </GlassCard>
       </Link>
 
-      {/* Daily Prompt */}
-      <GlassCard>
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-[color:var(--color-muted-foreground)]/50">
-          Not sure what to say?
-        </p>
-        <p className="mt-2 text-[14px] italic leading-relaxed text-[color:var(--color-muted-foreground)]">
-          What are you grateful for right now?
-        </p>
-      </GlassCard>
+      {/* Daily Prompt — quiet inspirational line, not a tappable surface */}
+      <p className="px-1 text-center text-[13px] italic leading-relaxed text-[color:var(--color-muted-foreground)]/70">
+        Not sure what to say? Try: “What are you grateful for right now?”
+      </p>
 
       {/* Privacy note */}
       <div className="flex justify-center">

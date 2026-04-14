@@ -254,13 +254,21 @@ function ReviewContent() {
               Your note
             </span>
           </div>
-          <p
-            className="text-[13px] leading-relaxed text-[#4D5A35FF]"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
-            {memo.notes ||
-              "Work has been a lot lately. Need to remember this feeling so I can appreciate when things get better."}
-          </p>
+          {memo.notes ? (
+            <p
+              className="text-[13px] leading-relaxed text-[#4D5A35FF]"
+              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
+            >
+              {memo.notes}
+            </p>
+          ) : (
+            <p
+              className="text-[13px] italic leading-relaxed text-[#6B7A48AA]"
+              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
+            >
+              No note yet — tap Edit to add one.
+            </p>
+          )}
           <Link
             href={`/record/add-notes?id=${id}`}
             className="text-[13px] font-semibold text-[#5C6B3AFF]"

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Play, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { glassSurfaceClasses } from "@/components/dear-me/glass-card";
 
 interface MemoCardProps {
   title: string;
@@ -42,11 +43,8 @@ export function MemoCard({
     <Link
       href={href}
       className={cn(
-        "flex items-stretch gap-3 rounded-2xl border p-3",
-        "border-[color:var(--color-glass-border)]",
-        "bg-[var(--color-glass-surface)]",
-        "shadow-[var(--shadow-glass)]",
-        "backdrop-blur",
+        glassSurfaceClasses,
+        "flex items-stretch gap-3 p-3",
         "transition-colors hover:bg-[color-mix(in_srgb,var(--color-glass-surface)_90%,var(--color-primary)_10%)]",
         className,
       )}

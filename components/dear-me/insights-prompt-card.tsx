@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { glassSurfaceClasses } from "@/components/dear-me/glass-card";
 
 interface InsightsPromptCardProps {
   icon: ReactNode;
@@ -21,8 +22,8 @@ export function InsightsPromptCard({
       type="button"
       onClick={onClick}
       className={cn(
-        "flex flex-1 flex-col gap-2 rounded-[var(--radius-md)] p-3.5 text-left",
-        "border border-[color:var(--color-glass-border)] bg-[color:var(--color-glass-surface)] backdrop-blur-[12px]",
+        glassSurfaceClasses,
+        "flex flex-1 flex-col gap-2 p-3.5 text-left",
         "transition-opacity active:opacity-70",
         className,
       )}

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronRight, Leaf } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { glassSurfaceClasses } from "@/components/dear-me/glass-card";
 import { getMemo } from "@/lib/db/memos";
 import { formatClockTime, formatRelativeTime } from "@/lib/format/time";
 import type { Memo } from "@/lib/db/schema";
@@ -44,8 +45,10 @@ export function InsightsCitedMemoCard({
     };
   }, [memoId]);
 
-  const surfaceClasses =
-    "flex w-full items-center gap-3 rounded-[var(--radius-md)] border border-[color:var(--color-glass-border)] bg-[color:var(--color-glass-surface)] p-3 backdrop-blur-[20px] shadow-[var(--shadow-transcript)]";
+  const surfaceClasses = cn(
+    glassSurfaceClasses,
+    "flex w-full items-center gap-3 p-3",
+  );
 
   if (memo === undefined) {
     return (

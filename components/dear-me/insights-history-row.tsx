@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ChevronRight, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { glassSurfaceClasses } from "@/components/dear-me/glass-card";
 import { formatRelativeTime } from "@/lib/format/time";
 import type { InsightThread } from "@/lib/db/schema";
 
@@ -43,10 +44,8 @@ export function InsightsHistoryRow({
       <Link
         href={`/insights/${thread.id}`}
         className={cn(
-          "flex flex-1 items-center gap-3 rounded-[var(--radius-md)] p-3.5",
-          "bg-[color:var(--color-glass-surface)] backdrop-blur-[20px]",
-          "border border-[color:var(--color-glass-border)]",
-          "shadow-[var(--shadow-transcript)]",
+          glassSurfaceClasses,
+          "flex flex-1 items-center gap-3 p-3.5",
           "transition-opacity active:opacity-80",
         )}
       >
@@ -71,8 +70,8 @@ export function InsightsHistoryRow({
         onClick={handleDelete}
         aria-label={`Delete ${thread.title}`}
         className={cn(
-          "flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-md)]",
-          "border border-[color:var(--color-glass-border)] bg-[color:var(--color-glass-surface)] backdrop-blur-[12px]",
+          glassSurfaceClasses,
+          "flex size-11 shrink-0 items-center justify-center",
           "transition-opacity active:opacity-60",
         )}
       >

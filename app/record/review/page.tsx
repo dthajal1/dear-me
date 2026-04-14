@@ -97,19 +97,16 @@ function ReviewContent() {
 
       <div className="flex flex-1 flex-col gap-4 px-5 pb-8 pt-0">
         <div className="flex flex-col gap-1 px-1">
-          <h1
-            className="text-[26px] font-bold leading-tight text-[#2C331EDD]"          >
+          <h1 className="text-[length:var(--text-title)] font-bold leading-tight text-foreground">
             Review &amp; Save
           </h1>
-          <p
-            className="text-[13px] text-[#6B7A48AA]"          >
+          <p className="text-[length:var(--text-small)] text-[color:var(--color-muted-foreground)]">
             Here&apos;s what we captured
           </p>
         </div>
 
         <div
-          className="relative h-56 w-full overflow-hidden rounded-[20px] border bg-black"
-          style={{ borderColor: "rgba(138,154,91,0.125)" }}
+          className="relative h-56 w-full overflow-hidden rounded-[var(--radius-xl)] border border-[color:var(--color-glass-border)] bg-black"
           aria-label="Memo video thumbnail"
         >
           {blobUrl ? (
@@ -125,49 +122,31 @@ function ReviewContent() {
             </div>
           )}
 
-          <div
-            className="absolute left-3 top-3 flex items-center gap-1.5 rounded-[6px] px-2 py-1"
-            style={{ background: "rgba(0,0,0,0.4)" }}
-          >
+          <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-md bg-black/40 px-2 py-1">
             <span className="size-2 rounded-full bg-[#E53E3E]" aria-hidden />
-            <span
-              className="text-[10px] font-bold text-white"            >
-              REC
-            </span>
+            <span className="text-[10px] font-bold text-white">REC</span>
           </div>
 
-          <div
-            className="absolute right-3 top-3 rounded-[6px] px-2 py-1"
-            style={{ background: "rgba(0,0,0,0.4)" }}
-          >
-            <span
-              className="text-[11px] font-semibold text-white"            >
+          <div className="absolute right-3 top-3 rounded-md bg-black/40 px-2 py-1">
+            <span className="text-[length:var(--text-caption)] font-semibold text-white">
               {formatDuration(memo.durationMs)}
             </span>
           </div>
         </div>
 
-        <div
-          className="flex items-center gap-2 rounded-[10px] border px-3 py-2"
-          style={{
-            background: "rgba(92,107,58,0.082)",
-            borderColor: "rgba(92,107,58,0.125)",
-          }}
-        >
-          <CheckCircle className="size-4 shrink-0 text-[#5C6B3ABB]" aria-hidden />
-          <p
-            className="text-[12px] font-medium text-[#4D5A35FF]"          >
+        <div className="flex items-center gap-2 rounded-[var(--radius-sm)] border border-[color:var(--color-encouragement-border)] bg-[color:var(--color-encouragement-bg)] px-3 py-2">
+          <CheckCircle className="size-4 shrink-0 text-[color:var(--color-primary)]" aria-hidden />
+          <p className="text-xs font-medium text-foreground/80">
             We heard you — here&apos;s what stood out
           </p>
         </div>
 
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-1.5">
-            <Heart className="size-3.5 text-[#5C6B3ABB]" aria-hidden />
-            <span
-              className="text-[14px] font-semibold text-[#2C331EDD]"            >
+            <Heart className="size-3.5 text-[color:var(--color-primary)]" aria-hidden />
+            <h2 className="text-sm font-semibold text-foreground">
               Moods &amp; tags
-            </span>
+            </h2>
           </div>
 
           {memo.analysisStatus === "ready" ? (
@@ -179,14 +158,12 @@ function ReviewContent() {
               }}
             />
           ) : memo.analysisStatus === "failed" ? (
-            <p
-              className="text-[12px] text-[#B44]"            >
+            <p className="text-xs text-[#B44]">
               Couldn&apos;t analyze this memo.
               {memo.analysisError ? ` ${memo.analysisError}` : ""}
             </p>
           ) : (
-            <p
-              className="text-[12px] italic text-[#6B7A48AA]"            >
+            <p className="text-xs italic text-[color:var(--color-muted-foreground)]">
               {memo.transcriptStatus === "ready"
                 ? "Analyzing…"
                 : "Waiting for transcript…"}
@@ -196,25 +173,21 @@ function ReviewContent() {
 
         <GlassCard className="flex flex-col gap-3 !rounded-2xl">
           <div className="flex items-center gap-1.5">
-            <FileText className="size-3.5 text-[#5C6B3ABB]" aria-hidden />
-            <span
-              className="text-[14px] font-semibold text-[#2C331EDD]"            >
+            <FileText className="size-3.5 text-[color:var(--color-primary)]" aria-hidden />
+            <h2 className="text-sm font-semibold text-foreground">
               Transcript
-            </span>
+            </h2>
           </div>
           {memo.transcriptStatus === "ready" && memo.transcript ? (
-            <p
-              className="text-[13px] italic leading-relaxed text-[#4D5A35FF]"            >
+            <p className="text-[length:var(--text-small)] italic leading-relaxed text-foreground/80">
               &ldquo;{memo.transcript}&rdquo;
             </p>
           ) : memo.transcriptStatus === "failed" ? (
-            <p
-              className="text-[13px] leading-relaxed text-[#B44]"            >
+            <p className="text-[length:var(--text-small)] leading-relaxed text-[#B44]">
               Couldn&apos;t transcribe this memo. {memo.transcriptError ?? ""}
             </p>
           ) : (
-            <p
-              className="text-[13px] italic leading-relaxed text-[#6B7A48AA]"            >
+            <p className="text-[length:var(--text-small)] italic leading-relaxed text-[color:var(--color-muted-foreground)]">
               Transcribing…
             </p>
           )}
@@ -222,26 +195,24 @@ function ReviewContent() {
 
         <GlassCard className="flex flex-col gap-3 !rounded-2xl">
           <div className="flex items-center gap-1.5">
-            <PencilLine className="size-3.5 text-[#5C6B3ABB]" aria-hidden />
-            <span
-              className="text-[14px] font-semibold text-[#2C331EDD]"            >
+            <PencilLine className="size-3.5 text-[color:var(--color-primary)]" aria-hidden />
+            <h2 className="text-sm font-semibold text-foreground">
               Your note
-            </span>
+            </h2>
           </div>
           {memo.notes ? (
-            <p
-              className="text-[13px] leading-relaxed text-[#4D5A35FF]"            >
+            <p className="text-[length:var(--text-small)] leading-relaxed text-foreground/80">
               {memo.notes}
             </p>
           ) : (
-            <p
-              className="text-[13px] italic leading-relaxed text-[#6B7A48AA]"            >
+            <p className="text-[length:var(--text-small)] italic leading-relaxed text-[color:var(--color-muted-foreground)]">
               No note yet — tap Edit to add one.
             </p>
           )}
           <Link
             href={`/record/add-notes?id=${id}`}
-            className="text-[13px] font-semibold text-[#5C6B3AFF]"          >
+            className="text-[length:var(--text-small)] font-semibold text-[color:var(--color-primary)]"
+          >
             Edit note
           </Link>
         </GlassCard>
@@ -259,15 +230,15 @@ function ReviewContent() {
           <button
             type="button"
             onClick={handleStartOver}
-            className="text-[13px] font-medium text-[#6B7A48AA] transition-opacity active:opacity-60"          >
+            className="text-[length:var(--text-small)] font-medium text-[color:var(--color-muted-foreground)] transition-opacity active:opacity-60"
+          >
             Start over
           </button>
         </div>
 
         <div className="flex items-center justify-center gap-1.5">
-          <Lock className="size-3 text-[#8A9A5B55]" aria-hidden />
-          <span
-            className="text-[11px] text-[#8A9A5B55]"          >
+          <Lock className="size-3 text-[color:var(--color-privacy-note-fg)]" aria-hidden />
+          <span className="text-[length:var(--text-caption)] text-[color:var(--color-privacy-note-fg)]">
             Only you can see these — always
           </span>
         </div>

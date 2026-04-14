@@ -39,9 +39,9 @@ export function ChatInput({
       <div
         className={cn(
           "flex flex-1 items-center",
-          "h-11 rounded-[22px]",
-          "border border-[color:#8A9A5B28]",
-          "bg-white/63 backdrop-blur-[12px]",
+          "h-11 rounded-[var(--radius-xl)]",
+          "border border-[color:var(--color-glass-border)]",
+          "bg-[color:var(--color-glass-surface)] backdrop-blur-[12px]",
           "px-4",
         )}
       >
@@ -54,7 +54,7 @@ export function ChatInput({
           className="
             min-w-0 flex-1 bg-transparent
             text-sm text-foreground
-            placeholder:text-[color:#2C331E55]
+            placeholder:text-[color:var(--color-muted-foreground)]
             outline-none
           "
         />

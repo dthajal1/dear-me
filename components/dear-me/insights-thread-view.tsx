@@ -12,9 +12,9 @@ interface InsightsThreadViewProps {
 function TypingDots() {
   return (
     <div className="flex items-center gap-1.5 py-1" aria-label="Thinking">
-      <span className="size-1.5 animate-pulse rounded-full bg-[#5C6B3A88] [animation-delay:0ms]" />
-      <span className="size-1.5 animate-pulse rounded-full bg-[#5C6B3A88] [animation-delay:200ms]" />
-      <span className="size-1.5 animate-pulse rounded-full bg-[#5C6B3A88] [animation-delay:400ms]" />
+      <span className="size-1.5 animate-pulse rounded-full bg-[color:var(--color-primary)] [animation-delay:0ms]" />
+      <span className="size-1.5 animate-pulse rounded-full bg-[color:var(--color-primary)] [animation-delay:200ms]" />
+      <span className="size-1.5 animate-pulse rounded-full bg-[color:var(--color-primary)] [animation-delay:400ms]" />
     </div>
   );
 }
@@ -31,9 +31,9 @@ export function InsightsThreadView({
             <div key={msg.id} className="flex justify-end">
               <div
                 className={cn(
-                  "max-w-[80%] px-4 py-3 text-sm font-[500]",
-                  "bg-[#5C6B3ABB] text-white",
-                  "rounded-[16px] rounded-br-[4px]",
+                  "max-w-[80%] px-4 py-3 text-sm font-medium",
+                  "bg-[var(--color-primary)] text-[color:var(--color-primary-foreground)]",
+                  "rounded-[var(--radius-lg)] rounded-br-[4px]",
                   "backdrop-blur-[12px]",
                   "whitespace-pre-wrap",
                 )}
@@ -55,14 +55,14 @@ export function InsightsThreadView({
               <TypingDots />
             ) : (
               hasText && (
-                <p className="whitespace-pre-wrap text-sm leading-[1.5] text-[#4D5A35FF]">
+                <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/80">
                   {msg.text}
                 </p>
               )
             )}
 
             {isError && msg.errorNote && (
-              <p className="text-[12px] italic leading-[1.5] text-[#B4554488]">
+              <p className="text-xs italic leading-relaxed text-[#B45544]/55">
                 {msg.errorNote}
               </p>
             )}

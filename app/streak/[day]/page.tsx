@@ -49,16 +49,10 @@ export default async function StreakDayPage({
       <div className="relative flex flex-1 flex-col gap-5 px-5 pt-2 pb-6">
         {/* Date heading + memo count — from design frame 4SYRl > dateBlock */}
         <header className="flex flex-col gap-1">
-          <h1
-            className="font-bold leading-tight text-foreground"
-            style={{ fontSize: 26 }}
-          >
+          <h1 className="text-[length:var(--text-title)] font-bold leading-tight text-foreground">
             Wednesday, March 26
           </h1>
-          <p
-            className="text-sm"
-            style={{ color: "#5C6B3AAA" }}
-          >
+          <p className="text-sm text-[color:var(--color-muted-foreground)]">
             {MEMOS.length} memos recorded
           </p>
         </header>

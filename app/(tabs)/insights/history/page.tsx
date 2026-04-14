@@ -47,9 +47,9 @@ export default function InsightsHistoryPage() {
           <Link
             href="/insights"
             aria-label="New conversation"
-            className="flex size-[42px] items-center justify-center rounded-full border border-[#8A9A5B28] bg-white/63 backdrop-blur-[12px] transition-opacity active:opacity-70"
+            className="flex size-11 items-center justify-center rounded-full border border-[color:var(--color-glass-border)] bg-[color:var(--color-glass-surface)] backdrop-blur-[12px] transition-opacity active:opacity-70"
           >
-            <Plus className="size-[18px] text-[#5C6B3ABB]" />
+            <Plus className="size-[18px] text-[color:var(--color-primary)]" />
           </Link>
         }
       />
@@ -61,14 +61,14 @@ export default function InsightsHistoryPage() {
           </div>
         ) : threads.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
-            <div className="flex size-[104px] items-center justify-center rounded-full bg-[#8A9A5B15]">
-              <MessageCircleHeart className="size-11 text-[#5C6B3A55]" />
+            <div className="flex size-[104px] items-center justify-center rounded-full bg-[color:var(--color-muted)]">
+              <MessageCircleHeart className="size-11 text-[color:var(--color-tab-icon-inactive)]" />
             </div>
             <div className="flex w-[280px] flex-col items-center gap-2">
-              <p className="text-[19px] font-semibold text-[#2C331EDD]">
+              <h2 className="text-[length:var(--text-subtitle)] font-semibold text-foreground">
                 No conversations yet
-              </p>
-              <p className="text-sm leading-relaxed text-[#6B7A48FF]">
+              </h2>
+              <p className="text-sm leading-relaxed text-[color:var(--color-accent)]">
                 Ask your journal a question and it&apos;ll show up here.
               </p>
             </div>

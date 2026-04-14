@@ -12,7 +12,7 @@ export function PrivacyNote({ text, className }: PrivacyNoteProps) {
     <div
       className={cn(
         "flex items-center gap-1.5",
-        "text-[11px] text-[#6B7A48]/40",
+        "text-[length:var(--text-caption)] text-[color:var(--color-privacy-note-fg)]",
         className,
       )}
     >

@@ -31,8 +31,8 @@ export function FilterPill({ label, active, onClick, className }: FilterPillProp
         "rounded-[var(--radius-lg)] border px-4 py-2",
         "text-[13px] transition-colors",
         active
-          ? "border-transparent bg-[#5C6B3AAA] font-semibold text-white shadow-[var(--shadow-floating)]"
-          : "border-[#8A9A5B25] bg-[#8A9A5B15] font-normal text-[#2C331EDD]",
+          ? "border-transparent bg-[var(--color-primary)] font-semibold text-[color:var(--color-primary-foreground)] shadow-[var(--shadow-floating)]"
+          : "border-[color:var(--color-glass-border)] bg-[color:var(--color-muted)] font-normal text-foreground",
         className,
       )}
     >

@@ -170,18 +170,18 @@ export default function MemoDetailPage({
             )}
           </GlassCard>
 
-          <DrawerContent className="left-1/2! right-auto! -translate-x-1/2 w-full max-w-[430px] bg-[var(--color-glass-surface)] backdrop-blur-xl">
+          <DrawerContent className="left-1/2! right-auto! -translate-x-1/2 w-full max-w-[var(--width-mobile-frame)] bg-[var(--color-glass-surface)] backdrop-blur-xl">
             <DrawerHeader className="px-6 pt-2">
-              <DrawerTitle className="flex items-center gap-2 text-[15px] font-semibold text-[#2C331EDD]">
-                <FileText className="size-4 text-[#5C6B3ABB]" />
+              <DrawerTitle className="flex items-center gap-2 text-[15px] font-semibold text-foreground">
+                <FileText className="size-4 text-[color:var(--color-primary)]" />
                 Transcript
               </DrawerTitle>
-              <p className="text-[11px] font-medium uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
+              <p className="text-[length:var(--text-caption)] font-medium uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
                 {formatDuration(memo.durationMs)} recording
               </p>
             </DrawerHeader>
             <ScrollArea className="max-h-[60vh] px-6 pb-8">
-              <p className="whitespace-pre-wrap text-[15px] leading-[1.7] text-[#4D5A35FF]">
+              <p className="whitespace-pre-wrap text-[length:var(--text-body)] leading-loose text-foreground/80">
                 {memo.transcript}
               </p>
             </ScrollArea>

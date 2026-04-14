@@ -145,28 +145,21 @@ export default function RecordProcessingPage() {
           aria-hidden
         />
         <div className="absolute inset-0 flex items-center justify-center">
-          <Leaf size={28} strokeWidth={1.5} className="text-[#EFF2E6DD]" aria-hidden />
+          <Leaf size={28} strokeWidth={1.5} className="text-background/85" aria-hidden />
         </div>
       </div>
 
       <div className="flex flex-col gap-4">
-        <h1
-          className="text-2xl font-bold text-[#2C331EDD]"
-          style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-        >
+        <h1 className="text-2xl font-bold text-foreground">
           Sitting with your words...
         </h1>
-        <p
-          className="text-[15px] text-[#5C6B3A99]"
-          style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-        >
+        <p className="text-[length:var(--text-body)] text-[color:var(--color-muted-foreground)]">
           listening carefully
         </p>
       </div>
 
       <div
-        className="relative h-[3px] w-[120px] overflow-hidden rounded-full"
-        style={{ background: "rgba(138,154,91,0.133)" }}
+        className="relative h-[3px] w-[120px] overflow-hidden rounded-full bg-[color:var(--color-encouragement-border)]"
         role="progressbar"
         aria-label="Processing your memo"
         aria-busy="true"

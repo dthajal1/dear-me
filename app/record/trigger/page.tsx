@@ -28,7 +28,7 @@ export default function RecordTriggerPage() {
           <h1 className="text-[22px] font-bold leading-snug text-foreground">
             Hey, it sounds like things are heavy right now.
           </h1>
-          <p className="text-[15px] font-medium leading-[1.4] text-[#4D5A35]">
+          <p className="text-[length:var(--text-body)] font-medium leading-snug text-foreground/80">
             You&apos;ve been here before.
           </p>
         </div>
@@ -36,7 +36,7 @@ export default function RecordTriggerPage() {
         {/* Past-memo glass card */}
         <GlassCard className="w-full max-w-sm text-left" padding="sm">
           {/* Thumbnail placeholder */}
-          <div className="relative mb-3.5 h-[180px] w-full overflow-hidden rounded-2xl bg-[#D0DCC0]/60">
+          <div className="relative mb-3.5 h-[180px] w-full overflow-hidden rounded-2xl bg-[color:var(--color-primary)]/15">
             {/* Play overlay */}
             <div className="absolute inset-0 flex items-end justify-start bg-gradient-to-b from-transparent to-black/27 p-4">
               <div className="flex size-12 items-center justify-center rounded-full bg-white/80">
@@ -46,14 +46,14 @@ export default function RecordTriggerPage() {
           </div>
 
           {/* Meta row */}
-          <p className="mb-3 text-[13px] font-medium text-[#6B7A48]">
+          <p className="mb-3 text-[length:var(--text-small)] font-medium text-[color:var(--color-muted-foreground)]">
             You, 2 weeks ago
           </p>
 
           {/* Listen CTA */}
           <Link
             href="/record/recording"
-            className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#5C6B3ABB] px-8 py-3.5 text-sm font-medium text-white backdrop-blur-md transition-opacity hover:opacity-90 active:opacity-75"
+            className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-[var(--color-primary)] px-8 py-3.5 text-sm font-medium text-[color:var(--color-primary-foreground)] backdrop-blur-md transition-opacity hover:opacity-90 active:opacity-75"
           >
             <Play className="size-4 fill-white" aria-hidden />
             Listen to yourself then
@@ -63,7 +63,7 @@ export default function RecordTriggerPage() {
         {/* Skip link */}
         <Link
           href="/home"
-          className="text-[14px] font-medium text-[#5C6B3A]/53 transition-opacity hover:opacity-80"
+          className="text-sm font-medium text-[color:var(--color-muted-foreground)] transition-opacity hover:opacity-80"
         >
           Not now
         </Link>

@@ -21,14 +21,14 @@ export function InsightsPromptCard({
       type="button"
       onClick={onClick}
       className={cn(
-        "flex flex-1 flex-col gap-2 rounded-[14px] p-3.5 text-left",
-        "border border-[#8A9A5B28] bg-white/63 backdrop-blur-[12px]",
+        "flex flex-1 flex-col gap-2 rounded-[var(--radius-md)] p-3.5 text-left",
+        "border border-[color:var(--color-glass-border)] bg-[color:var(--color-glass-surface)] backdrop-blur-[12px]",
         "transition-opacity active:opacity-70",
         className,
       )}
     >
       {icon}
-      <span className="text-[13px] font-medium leading-[1.4] text-[#2C331EDD]">
+      <span className="text-[length:var(--text-small)] font-medium leading-snug text-foreground">
         {text}
       </span>
     </button>

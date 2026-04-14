@@ -89,9 +89,9 @@ export default function InsightsThreadPage({
           <Link
             href="/insights/history"
             aria-label="Conversation history"
-            className="flex size-[42px] items-center justify-center rounded-full border border-[#8A9A5B28] bg-white/63 backdrop-blur-[12px] transition-opacity active:opacity-70"
+            className="flex size-11 items-center justify-center rounded-full border border-[color:var(--color-glass-border)] bg-[color:var(--color-glass-surface)] backdrop-blur-[12px] transition-opacity active:opacity-70"
           >
-            <Clock className="size-[18px] text-[#5C6B3ABB]" />
+            <Clock className="size-[18px] text-[color:var(--color-primary)]" />
           </Link>
         }
       />

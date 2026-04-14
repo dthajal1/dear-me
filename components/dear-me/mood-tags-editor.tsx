@@ -64,20 +64,11 @@ export function MoodTagsEditor({ moods, tags, onChange }: Props) {
           type="button"
           onClick={() => removeMood(m)}
           aria-label={`Remove mood ${m}`}
-          className="flex min-h-11 items-center gap-1 rounded-full border px-2.5 py-1.5 transition-opacity active:opacity-60"
-          style={{
-            background: "rgba(92,107,58,0.082)",
-            borderColor: "rgba(92,107,58,0.133)",
-          }}
+          className="flex min-h-11 items-center gap-1 rounded-full border border-[color:var(--color-encouragement-border)] bg-[color:var(--color-encouragement-bg)] px-2.5 py-1.5 transition-opacity active:opacity-60"
         >
-          <Sparkles className="size-2 text-[#5C6B3A77]" aria-hidden />
-          <span
-            className="text-[12px] font-medium text-[#2C331EDD]"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
-            {m}
-          </span>
-          <X className="size-2.5 text-[#6B7A48AA]" aria-hidden />
+          <Sparkles className="size-2 text-[color:var(--color-primary)]/55" aria-hidden />
+          <span className="text-xs font-medium text-foreground">{m}</span>
+          <X className="size-2.5 text-[color:var(--color-muted-foreground)]" aria-hidden />
         </button>
       ))}
 
@@ -87,47 +78,31 @@ export function MoodTagsEditor({ moods, tags, onChange }: Props) {
           type="button"
           onClick={() => removeTag(t)}
           aria-label={`Remove tag ${t}`}
-          className="flex min-h-11 items-center gap-1 rounded-full border px-2.5 py-1.5 transition-opacity active:opacity-60"
-          style={{
-            background: "transparent",
-            borderColor: "rgba(92,107,58,0.188)",
-          }}
+          className="flex min-h-11 items-center gap-1 rounded-full border border-[color:var(--color-tag-chip-border)] bg-transparent px-2.5 py-1.5 transition-opacity active:opacity-60"
         >
-          <span
-            className="text-[12px] font-medium text-[#2C331EDD]"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
-            #{t}
-          </span>
-          <X className="size-2.5 text-[#6B7A48AA]" aria-hidden />
+          <span className="text-xs font-medium text-foreground">#{t}</span>
+          <X className="size-2.5 text-[color:var(--color-muted-foreground)]" aria-hidden />
         </button>
       ))}
 
       <Drawer>
         <DrawerTrigger
           disabled={moodsAtCap}
-          className="flex min-h-11 items-center gap-1 rounded-full border border-dashed px-2.5 py-1.5 transition-opacity active:opacity-60 disabled:opacity-40"
-          style={{
-            background: "transparent",
-            borderColor: "rgba(92,107,58,0.3)",
-          }}
+          className="flex min-h-11 items-center gap-1 rounded-full border border-dashed border-[color:var(--color-primary)]/40 bg-transparent px-2.5 py-1.5 transition-opacity active:opacity-60 disabled:opacity-40"
           aria-label="Add mood"
         >
-          <Plus className="size-2.5 text-[#5C6B3AAA]" aria-hidden />
-          <span
-            className="text-[12px] font-medium text-[#5C6B3AAA]"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
+          <Plus className="size-2.5 text-[color:var(--color-muted-foreground)]" aria-hidden />
+          <span className="text-xs font-medium text-[color:var(--color-muted-foreground)]">
             mood
           </span>
         </DrawerTrigger>
-        <DrawerContent className="left-1/2! right-auto! -translate-x-1/2 w-full max-w-[430px] bg-[var(--color-glass-surface)] backdrop-blur-xl">
+        <DrawerContent className="left-1/2! right-auto! -translate-x-1/2 w-full max-w-[var(--width-mobile-frame)] bg-[var(--color-glass-surface)] backdrop-blur-xl">
           <DrawerHeader className="px-6 pt-2">
-            <DrawerTitle className="flex items-center gap-2 text-[15px] font-semibold text-[#2C331EDD]">
-              <Sparkles className="size-4 text-[#5C6B3ABB]" />
+            <DrawerTitle className="flex items-center gap-2 text-[15px] font-semibold text-foreground">
+              <Sparkles className="size-4 text-[color:var(--color-primary)]" />
               Pick moods
             </DrawerTitle>
-            <p className="text-[11px] font-medium text-[color:var(--color-muted-foreground)]">
+            <p className="text-[length:var(--text-caption)] font-medium text-[color:var(--color-muted-foreground)]">
               Up to {MAX_MOODS} — tap to toggle
             </p>
           </DrawerHeader>
@@ -141,26 +116,17 @@ export function MoodTagsEditor({ moods, tags, onChange }: Props) {
                   type="button"
                   disabled={disabled}
                   onClick={() => toggleMood(m)}
-                  className="flex min-h-11 items-center gap-1 rounded-full border px-3 py-2 transition-opacity active:opacity-60 disabled:opacity-30"
-                  style={
-                    selected
-                      ? {
-                          background: "rgba(92,107,58,0.2)",
-                          borderColor: "rgba(92,107,58,0.4)",
-                        }
-                      : {
-                          background: "transparent",
-                          borderColor: "rgba(92,107,58,0.188)",
-                        }
+                  className={
+                    "flex min-h-11 items-center gap-1 rounded-full border px-3 py-2 transition-opacity active:opacity-60 disabled:opacity-30 " +
+                    (selected
+                      ? "border-[color:var(--color-primary)]/60 bg-[color:var(--color-primary)]/20"
+                      : "border-[color:var(--color-tag-chip-border)] bg-transparent")
                   }
                 >
                   {selected && (
-                    <Sparkles className="size-2.5 text-[#5C6B3A]" aria-hidden />
+                    <Sparkles className="size-2.5 text-[color:var(--color-primary)]" aria-hidden />
                   )}
-                  <span
-                    className="text-[13px] font-medium text-[#2C331EDD]"
-                    style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-                  >
+                  <span className="text-[length:var(--text-small)] font-medium text-foreground">
                     {m}
                   </span>
                 </button>
@@ -173,27 +139,20 @@ export function MoodTagsEditor({ moods, tags, onChange }: Props) {
       <Drawer open={tagOpen} onOpenChange={setTagOpen}>
         <DrawerTrigger
           disabled={tagsAtCap}
-          className="flex min-h-11 items-center gap-1 rounded-full border border-dashed px-2.5 py-1.5 transition-opacity active:opacity-60 disabled:opacity-40"
-          style={{
-            background: "transparent",
-            borderColor: "rgba(92,107,58,0.3)",
-          }}
+          className="flex min-h-11 items-center gap-1 rounded-full border border-dashed border-[color:var(--color-primary)]/40 bg-transparent px-2.5 py-1.5 transition-opacity active:opacity-60 disabled:opacity-40"
           aria-label="Add tag"
         >
-          <Plus className="size-2.5 text-[#5C6B3AAA]" aria-hidden />
-          <span
-            className="text-[12px] font-medium text-[#5C6B3AAA]"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
+          <Plus className="size-2.5 text-[color:var(--color-muted-foreground)]" aria-hidden />
+          <span className="text-xs font-medium text-[color:var(--color-muted-foreground)]">
             tag
           </span>
         </DrawerTrigger>
-        <DrawerContent className="left-1/2! right-auto! -translate-x-1/2 w-full max-w-[430px] bg-[var(--color-glass-surface)] backdrop-blur-xl">
+        <DrawerContent className="left-1/2! right-auto! -translate-x-1/2 w-full max-w-[var(--width-mobile-frame)] bg-[var(--color-glass-surface)] backdrop-blur-xl">
           <DrawerHeader className="px-6 pt-2">
-            <DrawerTitle className="text-[15px] font-semibold text-[#2C331EDD]">
+            <DrawerTitle className="text-[15px] font-semibold text-foreground">
               Add a tag
             </DrawerTitle>
-            <p className="text-[11px] font-medium text-[color:var(--color-muted-foreground)]">
+            <p className="text-[length:var(--text-caption)] font-medium text-[color:var(--color-muted-foreground)]">
               Up to {MAX_TAGS} — short topic words like work, family, sleep
             </p>
           </DrawerHeader>
@@ -210,17 +169,12 @@ export function MoodTagsEditor({ moods, tags, onChange }: Props) {
               onChange={(e) => setTagInput(e.target.value)}
               maxLength={MAX_TAG_LENGTH}
               placeholder="e.g. work"
-              className="flex-1 rounded-full border px-4 py-2.5 text-[14px] text-[#2C331EDD] outline-none"
-              style={{
-                background: "rgba(255,255,255,0.5)",
-                borderColor: "rgba(92,107,58,0.2)",
-                fontFamily: "var(--font-geist-sans, Geist, sans-serif)",
-              }}
+              className="flex-1 rounded-full border border-[color:var(--color-tag-chip-border)] bg-white/50 px-4 py-2.5 text-sm text-foreground outline-none"
             />
             <button
               type="submit"
               disabled={!tagInput.trim()}
-              className="rounded-full bg-[var(--color-primary)] px-4 py-2.5 text-[13px] font-semibold text-[color:var(--color-primary-foreground)] transition-opacity active:opacity-80 disabled:opacity-40"
+              className="rounded-full bg-[var(--color-primary)] px-4 py-2.5 text-[length:var(--text-small)] font-semibold text-[color:var(--color-primary-foreground)] transition-opacity active:opacity-80 disabled:opacity-40"
             >
               Add
             </button>

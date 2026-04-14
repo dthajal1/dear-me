@@ -83,6 +83,11 @@ function ReviewContent() {
     if (submitting) return;
     setSubmitting(true);
     try {
+      // Defensive: if the user arrived here without typing a title (or
+      // skipped add-notes entirely), backfill from the analyzer suggestion.
+      if (!memo.title.trim() && memo.suggestedTitle?.trim()) {
+        await update({ title: memo.suggestedTitle.trim() });
+      }
       await finalize();
       router.push("/record/saved");
     } catch (err) {

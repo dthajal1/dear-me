@@ -45,6 +45,12 @@ export type Memo = {
    * by a background worker after finalize — optional until then.
    */
   thumbnailFilename?: string;
+  /**
+   * AI-generated 3-6 word title suggestion from the analyzer. Used as the
+   * default for the title input and as a fallback when saving if the user
+   * hasn't typed their own title.
+   */
+  suggestedTitle?: string;
   createdAt: number;
   updatedAt: number;
 };

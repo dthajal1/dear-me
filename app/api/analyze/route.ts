@@ -10,15 +10,20 @@ const MODEL = "llama-3.3-70b-versatile";
 const SYSTEM_PROMPT = `You analyze short voice journal transcripts and extract structured emotional metadata.
 
 You MUST respond with valid JSON matching this exact shape:
-{"moods": string[], "tags": string[]}
+{"moods": string[], "tags": string[], "suggestedTitle": string}
 
 Rules:
 - "moods": 1 to 3 items, chosen ONLY from this fixed list: ${MOODS.join(", ")}. Pick the ones that best describe the speaker's emotional tone. Do not invent new moods.
 - "tags": 1 to 5 short topic tags describing what the memo is about (e.g. "work", "sleep", "family", "deadline"). Lowercase, 1-2 words each. No emotions — those go in moods.
-- If the transcript is empty, silent, or unintelligible, return {"moods": [], "tags": []}.
+- "suggestedTitle": a short, evocative 3-6 word title that captures the emotional core of the entry (e.g. "Tired but hopeful", "Late night worry spiral", "Small win at work"). Use sentence case, no quotes, no trailing punctuation. Keep it specific and warm — not a generic label.
+- If the transcript is empty, silent, or unintelligible, return {"moods": [], "tags": [], "suggestedTitle": ""}.
 - Return JSON only. No prose, no markdown fences.`;
 
-type AnalyzeResult = { moods: string[]; tags: string[] };
+type AnalyzeResult = {
+  moods: string[];
+  tags: string[];
+  suggestedTitle: string;
+};
 
 export async function POST(request: Request): Promise<Response> {
   const apiKey = process.env.GROQ_API_KEY;
@@ -39,7 +44,11 @@ export async function POST(request: Request): Promise<Response> {
   const transcript =
     typeof body.transcript === "string" ? body.transcript.trim() : "";
   if (!transcript) {
-    return NextResponse.json({ moods: [], tags: [] } satisfies AnalyzeResult);
+    return NextResponse.json({
+      moods: [],
+      tags: [],
+      suggestedTitle: "",
+    } satisfies AnalyzeResult);
   }
 
   let groqRes: Response;
@@ -82,7 +91,11 @@ export async function POST(request: Request): Promise<Response> {
   };
   const content = data.choices?.[0]?.message?.content ?? "";
 
-  let parsed: { moods?: unknown; tags?: unknown };
+  let parsed: {
+    moods?: unknown;
+    tags?: unknown;
+    suggestedTitle?: unknown;
+  };
   try {
     parsed = JSON.parse(content);
   } catch {
@@ -114,5 +127,15 @@ export async function POST(request: Request): Promise<Response> {
     ),
   ).slice(0, 5);
 
-  return NextResponse.json({ moods, tags } satisfies AnalyzeResult);
+  const rawTitle =
+    typeof parsed.suggestedTitle === "string" ? parsed.suggestedTitle : "";
+  const suggestedTitle = rawTitle
+    .replace(/^["'“”‘’\s]+|["'“”‘’\s.!?,]+$/g, "")
+    .slice(0, 80);
+
+  return NextResponse.json({
+    moods,
+    tags,
+    suggestedTitle,
+  } satisfies AnalyzeResult);
 }

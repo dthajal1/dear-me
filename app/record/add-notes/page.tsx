@@ -21,6 +21,11 @@ function AddNotesContent() {
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  // True once the user has actively edited the title input. While this is
+  // false we mirror the analyzer's suggested title into the input so the
+  // user sees a live default. As soon as they type (or backspace), we lock
+  // the input to their value.
+  const titleDirtyRef = useRef(false);
   const transcribeStartedRef = useRef(false);
 
   useEffect(() => {
@@ -63,6 +68,7 @@ function AddNotesContent() {
           await setAnalysisStatus(memo.id, "ready", {
             moods: analysis.moods,
             tags: analysis.tags,
+            suggestedTitle: analysis.suggestedTitle,
           });
         } else {
           await setAnalysisStatus(memo.id, "failed", {
@@ -79,6 +85,16 @@ function AddNotesContent() {
         } catch {}
       }
     })();
+  }, [state]);
+
+  // Mirror the analyzer's suggested title into the input whenever a newer
+  // one arrives, so long as the user hasn't started typing their own.
+  useEffect(() => {
+    if (state.status !== "ready") return;
+    if (titleDirtyRef.current) return;
+    const suggested = state.memo.suggestedTitle ?? "";
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTitle((prev) => (prev === suggested ? prev : suggested));
   }, [state]);
 
   useEffect(() => {
@@ -105,7 +121,10 @@ function AddNotesContent() {
   async function handleContinue() {
     if (submitting) return;
     setSubmitting(true);
-    const finalTitle = title.trim() || `Memo · ${formatClockTime(memo.createdAt)}`;
+    const finalTitle =
+      title.trim() ||
+      memo.suggestedTitle?.trim() ||
+      `Memo · ${formatClockTime(memo.createdAt)}`;
     try {
       await update({ title: finalTitle, notes });
       router.push(`/record/review?id=${id}`);
@@ -174,8 +193,15 @@ function AddNotesContent() {
           <Input
             id="title-input"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Add a title (optional)"
+            onChange={(e) => {
+              titleDirtyRef.current = true;
+              setTitle(e.target.value);
+            }}
+            placeholder={
+              memo.analysisStatus === "ready"
+                ? "Add a title (optional)"
+                : "Writing a title for you…"
+            }
             className="border-0 bg-transparent p-0 text-sm text-foreground shadow-none focus-visible:ring-0"
           />
         </div>

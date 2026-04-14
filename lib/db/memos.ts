@@ -36,6 +36,7 @@ export async function updateDraft(
       | "analysisStatus"
       | "analysisError"
       | "thumbnailFilename"
+      | "suggestedTitle"
     >
   >,
 ): Promise<Memo> {
@@ -74,6 +75,7 @@ export async function setAnalysisStatus(
   extra?: {
     moods?: string[];
     tags?: string[];
+    suggestedTitle?: string;
     analysisError?: string;
   },
 ): Promise<Memo> {
@@ -88,6 +90,9 @@ export async function setAnalysisStatus(
     ...(extra?.moods !== undefined ? { moods: extra.moods } : {}),
     ...(moodSources !== undefined ? { moodSources } : {}),
     ...(extra?.tags !== undefined ? { tags: extra.tags } : {}),
+    ...(extra?.suggestedTitle !== undefined
+      ? { suggestedTitle: extra.suggestedTitle }
+      : {}),
     ...(extra?.analysisError !== undefined
       ? { analysisError: extra.analysisError }
       : {}),

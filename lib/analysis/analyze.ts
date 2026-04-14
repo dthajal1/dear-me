@@ -1,5 +1,10 @@
 export type AnalyzeResult =
-  | { ok: true; moods: string[]; tags: string[] }
+  | {
+      ok: true;
+      moods: string[];
+      tags: string[];
+      suggestedTitle: string;
+    }
   | { ok: false; error: string };
 
 export async function analyzeTranscript(
@@ -21,10 +26,16 @@ export async function analyzeTranscript(
     return { ok: false, error: data.error ?? `HTTP ${res.status}` };
   }
 
-  const data = (await res.json()) as { moods?: string[]; tags?: string[] };
+  const data = (await res.json()) as {
+    moods?: string[];
+    tags?: string[];
+    suggestedTitle?: string;
+  };
   return {
     ok: true,
     moods: Array.isArray(data.moods) ? data.moods : [],
     tags: Array.isArray(data.tags) ? data.tags : [],
+    suggestedTitle:
+      typeof data.suggestedTitle === "string" ? data.suggestedTitle : "",
   };
 }

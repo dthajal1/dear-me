@@ -21,7 +21,7 @@
   --color-accent: #6B7A48FF;
   --color-accent-foreground: #FFFFFF;
   --color-muted: #8A9A5B15;
-  --color-muted-foreground: #6B7A4888;
+  --color-muted-foreground: #4D5A35;
   --color-border: #8A9A5B20;
   --color-input: rgba(255,255,255,0.627);
   --color-ring: #5C6B3ABB;
@@ -36,11 +36,11 @@
   --color-tag-chip-border: rgba(138,154,91,0.125);
   --color-encouragement-bg: rgba(138,154,91,0.082);
   --color-encouragement-border: rgba(138,154,91,0.133);
-  --color-privacy-note-fg: rgba(107,122,72,0.400);
+  --color-privacy-note-fg: #4D5A35;
   --color-tab-bar-bg: rgba(255,255,255,0.600);
   --color-tab-bar-border: rgba(138,154,91,0.094);
-  --color-tab-icon-inactive: rgba(92,107,58,0.533);
-  --color-tab-label-inactive: rgba(92,107,58,0.600);
+  --color-tab-icon-inactive: #5C6B3A;
+  --color-tab-label-inactive: #5C6B3A;
   --color-status-bar-fg: rgba(44,51,30,0.867);
   --color-status-bar-icon: rgba(44,51,30,0.800);
 

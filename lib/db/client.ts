@@ -2,8 +2,10 @@ import { openDB, type IDBPDatabase, type DBSchema } from "idb";
 import {
   DB_NAME,
   SCHEMA_VERSION,
+  STORE_CHECK_INS,
   STORE_INSIGHT_THREADS,
   STORE_MEMOS,
+  type CheckIn,
   type InsightThread,
   type Memo,
 } from "./schema";
@@ -22,6 +24,14 @@ interface DearMeDB extends DBSchema {
     value: InsightThread;
     indexes: {
       "by-updatedAt": number;
+    };
+  };
+  [STORE_CHECK_INS]: {
+    key: string;
+    value: CheckIn;
+    indexes: {
+      "by-createdAt": number;
+      "by-source": string;
     };
   };
 }
@@ -45,6 +55,13 @@ export function getDb(): Promise<IDBPDatabase<DearMeDB>> {
             keyPath: "id",
           });
           threads.createIndex("by-updatedAt", "updatedAt");
+        }
+        if (oldVersion < 3) {
+          const checkIns = db.createObjectStore(STORE_CHECK_INS, {
+            keyPath: "id",
+          });
+          checkIns.createIndex("by-createdAt", "createdAt");
+          checkIns.createIndex("by-source", "source");
         }
       },
       blocked() {

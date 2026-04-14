@@ -1,7 +1,8 @@
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 export const DB_NAME = "dear-me";
 export const STORE_MEMOS = "memos";
 export const STORE_INSIGHT_THREADS = "insight_threads";
+export const STORE_CHECK_INS = "check_ins";
 
 export type MemoStatus = "draft" | "final";
 
@@ -48,4 +49,13 @@ export type InsightThread = {
   messages: InsightMessage[];
   createdAt: number;
   updatedAt: number;
+};
+
+export type CheckInSource = "chip" | "memo";
+
+export type CheckIn = {
+  id: string;
+  mood: string;
+  createdAt: number;
+  source: CheckInSource;
 };

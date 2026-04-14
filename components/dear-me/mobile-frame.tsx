@@ -17,9 +17,9 @@ export function MobileFrame({ children }: MobileFrameProps) {
           relative mx-auto flex min-h-dvh w-full flex-col
           bg-background text-foreground
           md:min-h-[min(900px,calc(100dvh-3rem))]
-          md:max-w-[430px]
-          md:overflow-hidden md:rounded-[32px]
-          md:shadow-[0_40px_120px_-30px_rgba(0,0,0,0.25)]
+          md:max-w-[var(--width-mobile-frame)]
+          md:overflow-hidden md:rounded-[var(--radius-mobile-frame)]
+          md:shadow-[var(--shadow-mobile-frame)]
         "
         style={{
           paddingTop: "env(safe-area-inset-top)",

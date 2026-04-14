@@ -74,6 +74,7 @@ export default function MemoPage() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search memos…"
+          aria-label="Search memos"
           className="flex-1 bg-transparent text-sm text-foreground placeholder:text-[color:var(--color-muted-foreground)] focus:outline-none"
         />
       </label>

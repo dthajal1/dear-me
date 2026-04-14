@@ -50,6 +50,7 @@ export function ChatInput({
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder={placeholder}
+          aria-label={placeholder}
           className="
             min-w-0 flex-1 bg-transparent
             text-sm text-foreground

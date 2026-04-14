@@ -7,6 +7,7 @@ import { createDraft } from "@/lib/db/memos";
 import { writeBlob, isOpfsSupported } from "@/lib/db/opfs";
 import { extensionForMimeType } from "@/lib/recording/mime";
 import { getRecording, clearRecording } from "@/lib/recording/session";
+import { extractVideoThumbnail } from "@/lib/recording/thumbnail";
 
 type State =
   | { kind: "writing" }
@@ -42,6 +43,19 @@ export default function RecordProcessingPage() {
     (async () => {
       try {
         await writeBlob(filename, recording.blob);
+
+        // Thumbnail extraction is best-effort: if it fails we still save
+        // the memo and fall back to the waveform placeholder on the card.
+        let thumbnailFilename: string | undefined;
+        try {
+          const thumbBlob = await extractVideoThumbnail(recording.blob);
+          thumbnailFilename = `thumb-${id}.jpg`;
+          await writeBlob(thumbnailFilename, thumbBlob);
+        } catch (err) {
+          console.error("[dear-me] thumbnail extraction failed", err);
+          thumbnailFilename = undefined;
+        }
+
         await createDraft({
           id,
           filename,
@@ -52,6 +66,7 @@ export default function RecordProcessingPage() {
           notes: "",
           tags: [],
           status: "draft",
+          ...(thumbnailFilename ? { thumbnailFilename } : {}),
           createdAt: now,
           updatedAt: now,
         });

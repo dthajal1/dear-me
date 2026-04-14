@@ -42,10 +42,10 @@ export default function HomePage() {
       </header>
 
       {/* Quick Mood */}
-      <section className="flex flex-col gap-3">
-        <p className="text-[13px] font-semibold text-foreground/70">
+      <section aria-labelledby="quick-checkin-heading" className="flex flex-col gap-3">
+        <h2 id="quick-checkin-heading" className="text-[13px] font-semibold text-foreground/70">
           Quick check-in
-        </p>
+        </h2>
         <div className="flex justify-between gap-2">
           {MOODS.map((m) => (
             <MoodChip key={m.label} emoji={m.emoji} label={m.label} />
@@ -60,9 +60,9 @@ export default function HomePage() {
             <Video className="size-8" />
           </div>
           <div>
-            <p className="text-base font-semibold text-foreground">
+            <h2 className="text-base font-semibold text-foreground">
               Record a Memo
-            </p>
+            </h2>
             <p className="mt-1 text-[13px] text-[color:var(--color-muted-foreground)]">
               A message to your future self
             </p>

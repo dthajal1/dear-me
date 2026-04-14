@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Sparkles, X } from "lucide-react";
+import { Check, Plus, Sparkles, X } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
@@ -86,19 +86,26 @@ export function MoodTagsEditor({
 
   return (
     <div className="flex flex-wrap gap-2">
-      {moods.map((m) => (
-        <button
-          key={`mood-${m}`}
-          type="button"
-          onClick={() => removeMood(m)}
-          aria-label={`Remove mood ${m}`}
-          className="flex min-h-11 items-center gap-1 rounded-full border border-[color:var(--color-encouragement-border)] bg-[color:var(--color-encouragement-bg)] px-2.5 py-1.5 transition-opacity active:opacity-60"
-        >
-          <Sparkles className="size-2 text-[color:var(--color-primary)]/55" aria-hidden />
-          <span className="text-xs font-medium text-foreground">{m}</span>
-          <X className="size-2.5 text-[color:var(--color-muted-foreground)]" aria-hidden />
-        </button>
-      ))}
+      {moods.map((m) => {
+        // Legacy memos predate the moodSources map — treat missing entries
+        // as "ai" to match the getMoodSource() helper in lib/db/memos.ts.
+        const source = currentSources[m] ?? "ai";
+        return (
+          <button
+            key={`mood-${m}`}
+            type="button"
+            onClick={() => removeMood(m)}
+            aria-label={`Remove mood ${m}`}
+            className="flex min-h-11 items-center gap-1 rounded-full border border-[color:var(--color-encouragement-border)] bg-[color:var(--color-encouragement-bg)] px-2.5 py-1.5 transition-opacity active:opacity-60"
+          >
+            {source === "ai" && (
+              <Sparkles className="size-2 text-[color:var(--color-primary)]/55" aria-hidden />
+            )}
+            <span className="text-xs font-medium text-foreground">{m}</span>
+            <X className="size-2.5 text-[color:var(--color-muted-foreground)]" aria-hidden />
+          </button>
+        );
+      })}
 
       {tags.map((t) => (
         <button
@@ -152,7 +159,7 @@ export function MoodTagsEditor({
                   }
                 >
                   {selected && (
-                    <Sparkles className="size-2.5 text-[color:var(--color-primary)]" aria-hidden />
+                    <Check className="size-2.5 text-[color:var(--color-primary)]" aria-hidden />
                   )}
                   <span className="text-[length:var(--text-small)] font-medium text-foreground">
                     {m}

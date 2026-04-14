@@ -1,5 +1,12 @@
 import { openDB, type IDBPDatabase, type DBSchema } from "idb";
-import { DB_NAME, SCHEMA_VERSION, STORE_MEMOS, type Memo } from "./schema";
+import {
+  DB_NAME,
+  SCHEMA_VERSION,
+  STORE_INSIGHT_THREADS,
+  STORE_MEMOS,
+  type InsightThread,
+  type Memo,
+} from "./schema";
 
 interface DearMeDB extends DBSchema {
   [STORE_MEMOS]: {
@@ -8,6 +15,13 @@ interface DearMeDB extends DBSchema {
     indexes: {
       "by-createdAt": number;
       "by-status": string;
+    };
+  };
+  [STORE_INSIGHT_THREADS]: {
+    key: string;
+    value: InsightThread;
+    indexes: {
+      "by-updatedAt": number;
     };
   };
 }
@@ -22,10 +36,29 @@ export function getDb(): Promise<IDBPDatabase<DearMeDB>> {
     dbPromise = openDB<DearMeDB>(DB_NAME, SCHEMA_VERSION, {
       upgrade(db, oldVersion) {
         if (oldVersion < 1) {
-          const store = db.createObjectStore(STORE_MEMOS, { keyPath: "id" });
-          store.createIndex("by-createdAt", "createdAt");
-          store.createIndex("by-status", "status");
+          const memos = db.createObjectStore(STORE_MEMOS, { keyPath: "id" });
+          memos.createIndex("by-createdAt", "createdAt");
+          memos.createIndex("by-status", "status");
         }
+        if (oldVersion < 2) {
+          const threads = db.createObjectStore(STORE_INSIGHT_THREADS, {
+            keyPath: "id",
+          });
+          threads.createIndex("by-updatedAt", "updatedAt");
+        }
+      },
+      blocked() {
+        console.warn(
+          "[dear-me] insights schema upgrade blocked by another tab holding the old version",
+        );
+      },
+      blocking() {
+        // We're the old-version holder while another tab tries to upgrade.
+        // Close our connection AND null the cached promise so the next getDb()
+        // call re-invokes openDB at the new version instead of handing back a
+        // closed connection.
+        dbPromise?.then((db) => db.close()).catch(() => undefined);
+        dbPromise = null;
       },
     });
   }

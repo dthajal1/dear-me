@@ -1,6 +1,7 @@
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 export const DB_NAME = "dear-me";
 export const STORE_MEMOS = "memos";
+export const STORE_INSIGHT_THREADS = "insight_threads";
 
 export type MemoStatus = "draft" | "final";
 
@@ -23,6 +24,28 @@ export type Memo = {
   moods?: string[];
   analysisStatus?: AnalysisStatus;
   analysisError?: string;
+  createdAt: number;
+  updatedAt: number;
+};
+
+export type InsightRole = "user" | "assistant";
+
+export type InsightAssistantStatus = "streaming" | "ok" | "error";
+
+export type InsightMessage = {
+  id: string;
+  role: InsightRole;
+  text: string;
+  citedMemoIds?: string[];
+  status?: InsightAssistantStatus;
+  errorNote?: string;
+  createdAt: number;
+};
+
+export type InsightThread = {
+  id: string;
+  title: string;
+  messages: InsightMessage[];
   createdAt: number;
   updatedAt: number;
 };

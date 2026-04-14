@@ -1,20 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { Search, AudioLines } from "lucide-react";
+import { Search, AudioLines, SlidersHorizontal } from "lucide-react";
 import { MemoCard } from "@/components/dear-me/memo-card";
 import { FilterPill } from "@/components/dear-me/filter-pill";
 import { EmptyState } from "@/components/dear-me/empty-state";
+import { GlassIconButton } from "@/components/dear-me/glass-icon-button";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { useMemoList } from "@/lib/hooks/useMemoList";
 import { formatDuration, formatRelativeTime } from "@/lib/format/time";
 
 const TIME_FILTERS = ["This Week", "This Month", "3 Months", "All Time"] as const;
 type TimeFilter = (typeof TIME_FILTERS)[number];
+const DEFAULT_FILTER: TimeFilter = "This Week";
 
 export default function MemoPage() {
-  const [activeFilter, setActiveFilter] = useState<TimeFilter>("This Week");
+  const [activeFilter, setActiveFilter] = useState<TimeFilter>(DEFAULT_FILTER);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [query, setQuery] = useState("");
   const memos = useMemoList({ status: "final" });
+  const isFiltered = activeFilter !== DEFAULT_FILTER;
 
   if (memos === null) {
     return (
@@ -67,27 +79,56 @@ export default function MemoPage() {
         </p>
       </header>
 
-      <label className="flex items-center gap-2 rounded-full border border-[color:var(--color-glass-border)] bg-[var(--color-glass-surface)] px-4 py-2.5 shadow-[var(--shadow-glass)] backdrop-blur focus-within:border-[color:var(--color-primary)]">
-        <Search className="size-4 text-[color:var(--color-muted-foreground)]" />
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search memos…"
-          aria-label="Search memos"
-          className="flex-1 bg-transparent text-sm text-foreground placeholder:text-[color:var(--color-muted-foreground)] focus:outline-none"
-        />
-      </label>
-
-      <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1">
-        {TIME_FILTERS.map((f) => (
-          <FilterPill
-            key={f}
-            label={f}
-            active={f === activeFilter}
-            onClick={() => setActiveFilter(f)}
+      <div className="flex items-center gap-2">
+        <label className="flex min-w-0 flex-1 items-center gap-2 rounded-full border border-[color:var(--color-glass-border)] bg-[var(--color-glass-surface)] px-4 py-2.5 shadow-[var(--shadow-glass)] backdrop-blur focus-within:border-[color:var(--color-primary)]">
+          <Search className="size-4 text-[color:var(--color-muted-foreground)]" />
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search memos…"
+            aria-label="Search memos"
+            className="min-w-0 flex-1 bg-transparent text-sm text-foreground placeholder:text-[color:var(--color-muted-foreground)] focus:outline-none"
           />
-        ))}
+        </label>
+
+        <Drawer open={filterOpen} onOpenChange={setFilterOpen}>
+          <DrawerTrigger asChild>
+            <GlassIconButton
+              aria-label={`Filter memos (current: ${activeFilter})`}
+              className="relative shrink-0"
+            >
+              <SlidersHorizontal className="size-4 text-foreground" />
+              {isFiltered ? (
+                <span
+                  aria-hidden
+                  className="absolute right-2 top-2 size-2 rounded-full bg-[color:var(--color-primary)] ring-2 ring-white"
+                />
+              ) : null}
+            </GlassIconButton>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Filter by time</DrawerTitle>
+              <DrawerDescription>
+                Show memos from a specific window.
+              </DrawerDescription>
+            </DrawerHeader>
+            <div className="flex flex-wrap gap-2 px-4 pb-6">
+              {TIME_FILTERS.map((f) => (
+                <FilterPill
+                  key={f}
+                  label={f}
+                  active={f === activeFilter}
+                  onClick={() => {
+                    setActiveFilter(f);
+                    setFilterOpen(false);
+                  }}
+                />
+              ))}
+            </div>
+          </DrawerContent>
+        </Drawer>
       </div>
 
       <div className="flex flex-col gap-3">

@@ -5,6 +5,8 @@ import {
   type AnalysisStatus,
   type Memo,
   type MemoStatus,
+  type MoodSource,
+  type MoodSourceMap,
   type TranscriptStatus,
 } from "./schema";
 
@@ -30,8 +32,10 @@ export async function updateDraft(
       | "transcriptStatus"
       | "transcriptError"
       | "moods"
+      | "moodSources"
       | "analysisStatus"
       | "analysisError"
+      | "thumbnailFilename"
     >
   >,
 ): Promise<Memo> {
@@ -67,11 +71,22 @@ export async function setTranscriptStatus(
 export async function setAnalysisStatus(
   id: string,
   status: AnalysisStatus,
-  extra?: { moods?: string[]; tags?: string[]; analysisError?: string },
+  extra?: {
+    moods?: string[];
+    tags?: string[];
+    analysisError?: string;
+  },
 ): Promise<Memo> {
+  // Moods set via the analyzer are always source "ai". We build a parallel
+  // moodSources map here so the write path is the single source of truth.
+  const moodSources =
+    extra?.moods !== undefined
+      ? buildMoodSources(extra.moods, "ai")
+      : undefined;
   return updateDraft(id, {
     analysisStatus: status,
     ...(extra?.moods !== undefined ? { moods: extra.moods } : {}),
+    ...(moodSources !== undefined ? { moodSources } : {}),
     ...(extra?.tags !== undefined ? { tags: extra.tags } : {}),
     ...(extra?.analysisError !== undefined
       ? { analysisError: extra.analysisError }
@@ -81,7 +96,11 @@ export async function setAnalysisStatus(
 
 export async function updateMoodsAndTags(
   id: string,
-  patch: { moods?: string[]; tags?: string[] },
+  patch: {
+    moods?: string[];
+    tags?: string[];
+    moodSources?: MoodSourceMap;
+  },
 ): Promise<Memo> {
   const db = await getDb();
   const existing = await db.get(STORE_MEMOS, id);
@@ -89,11 +108,54 @@ export async function updateMoodsAndTags(
   const updated: Memo = {
     ...existing,
     ...(patch.moods !== undefined ? { moods: patch.moods } : {}),
+    ...(patch.moodSources !== undefined
+      ? { moodSources: patch.moodSources }
+      : {}),
     ...(patch.tags !== undefined ? { tags: patch.tags } : {}),
     updatedAt: Date.now(),
   };
   await db.put(STORE_MEMOS, updated);
   return updated;
+}
+
+/**
+ * Persist the thumbnail filename extracted from the video. Separate tiny
+ * helper so the frame-extraction worker doesn't need to know about the
+ * full draft-update machinery.
+ */
+export async function setThumbnailFilename(
+  id: string,
+  filename: string,
+): Promise<Memo> {
+  const db = await getDb();
+  const existing = await db.get(STORE_MEMOS, id);
+  if (!existing) throw new Error(`Memo not found: ${id}`);
+  const updated: Memo = {
+    ...existing,
+    thumbnailFilename: filename,
+    updatedAt: Date.now(),
+  };
+  await db.put(STORE_MEMOS, updated);
+  return updated;
+}
+
+/**
+ * Returns the source for a given mood label on a memo. Legacy memos without
+ * a moodSources map default to "ai" (historically, the only write path was
+ * the analyzer).
+ */
+export function getMoodSource(memo: Memo, mood: string): MoodSource {
+  return memo.moodSources?.[mood] ?? "ai";
+}
+
+/** Build a fresh sources map where every provided mood gets the same source. */
+export function buildMoodSources(
+  moods: string[],
+  source: MoodSource,
+): MoodSourceMap {
+  const out: MoodSourceMap = {};
+  for (const m of moods) out[m] = source;
+  return out;
 }
 
 export async function finalizeDraft(id: string): Promise<Memo> {

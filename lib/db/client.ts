@@ -63,6 +63,12 @@ export function getDb(): Promise<IDBPDatabase<DearMeDB>> {
           checkIns.createIndex("by-createdAt", "createdAt");
           checkIns.createIndex("by-source", "source");
         }
+        if (oldVersion < 4) {
+          // v4 additively introduces `moodSources` and `thumbnailFilename`
+          // on existing Memo records. Both fields are optional on the type
+          // and readers gracefully fall back (legacy moods are treated as
+          // source "ai"), so no data rewrite is required.
+        }
       },
       blocked() {
         console.warn(

@@ -121,9 +121,19 @@ export default function MemoDetailPage({
         <MoodTagsEditor
           moods={memo.moods ?? []}
           tags={memo.tags}
+          moodSources={memo.moodSources}
           onChange={(next) => {
-            setMemo({ ...memo, moods: next.moods, tags: next.tags });
-            void updateMoodsAndTags(memo.id, next).catch((err) => {
+            setMemo({
+              ...memo,
+              moods: next.moods,
+              tags: next.tags,
+              moodSources: next.moodSources,
+            });
+            void updateMoodsAndTags(memo.id, {
+              moods: next.moods,
+              tags: next.tags,
+              moodSources: next.moodSources,
+            }).catch((err) => {
               console.error("[dear-me] updateMoodsAndTags failed", err);
             });
           }}

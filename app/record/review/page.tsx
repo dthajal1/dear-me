@@ -153,8 +153,13 @@ function ReviewContent() {
             <MoodTagsEditor
               moods={memo.moods ?? []}
               tags={memo.tags}
+              moodSources={memo.moodSources}
               onChange={(next) => {
-                void update({ moods: next.moods, tags: next.tags });
+                void update({
+                  moods: next.moods,
+                  tags: next.tags,
+                  moodSources: next.moodSources,
+                });
               }}
             />
           ) : memo.analysisStatus === "failed" ? (

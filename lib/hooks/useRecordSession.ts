@@ -64,8 +64,17 @@ export function useRecordSession() {
         if (current && current.status === "draft") {
           const existing = current.moods ?? [];
           if (!existing.includes(recent.mood)) {
+            // The chip-check-in mood comes from a user tap on Home, so its
+            // provenance is "user" — merge it into the existing sources map
+            // (which was populated as "ai" by the analyzer) without
+            // clobbering anything.
+            const nextSources = {
+              ...(current.moodSources ?? {}),
+              [recent.mood]: "user" as const,
+            };
             await updateMoodsAndTags(id, {
               moods: [...existing, recent.mood],
+              moodSources: nextSources,
             });
           }
         }

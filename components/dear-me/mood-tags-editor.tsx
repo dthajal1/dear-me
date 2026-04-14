@@ -11,6 +11,7 @@ import {
   DrawerClose,
 } from "@/components/ui/drawer";
 import { MOODS } from "@/lib/analysis/moods";
+import type { MoodSourceMap } from "@/lib/db/schema";
 
 const MAX_MOODS = 3;
 const MAX_TAGS = 5;
@@ -19,21 +20,43 @@ const MAX_TAG_LENGTH = 24;
 type Props = {
   moods: string[];
   tags: string[];
-  onChange: (next: { moods: string[]; tags: string[] }) => void;
+  moodSources?: MoodSourceMap;
+  onChange: (next: {
+    moods: string[];
+    tags: string[];
+    moodSources: MoodSourceMap;
+  }) => void;
 };
 
-export function MoodTagsEditor({ moods, tags, onChange }: Props) {
+export function MoodTagsEditor({
+  moods,
+  tags,
+  moodSources,
+  onChange,
+}: Props) {
   const [tagInput, setTagInput] = useState("");
   const [tagOpen, setTagOpen] = useState(false);
 
   const moodsAtCap = moods.length >= MAX_MOODS;
   const tagsAtCap = tags.length >= MAX_TAGS;
 
+  const currentSources: MoodSourceMap = moodSources ?? {};
+
+  function withoutMood(m: string): MoodSourceMap {
+    const next: MoodSourceMap = { ...currentSources };
+    delete next[m];
+    return next;
+  }
+
   function removeMood(m: string) {
-    onChange({ moods: moods.filter((x) => x !== m), tags });
+    onChange({
+      moods: moods.filter((x) => x !== m),
+      tags,
+      moodSources: withoutMood(m),
+    });
   }
   function removeTag(t: string) {
-    onChange({ moods, tags: tags.filter((x) => x !== t) });
+    onChange({ moods, tags: tags.filter((x) => x !== t), moodSources: currentSources });
   }
   function toggleMood(m: string) {
     if (moods.includes(m)) {
@@ -41,7 +64,12 @@ export function MoodTagsEditor({ moods, tags, onChange }: Props) {
       return;
     }
     if (moodsAtCap) return;
-    onChange({ moods: [...moods, m], tags });
+    // User-added via the drawer → source "user".
+    onChange({
+      moods: [...moods, m],
+      tags,
+      moodSources: { ...currentSources, [m]: "user" },
+    });
   }
   function addTag() {
     const next = tagInput.trim().toLowerCase().slice(0, MAX_TAG_LENGTH);
@@ -51,7 +79,7 @@ export function MoodTagsEditor({ moods, tags, onChange }: Props) {
       return;
     }
     if (tagsAtCap) return;
-    onChange({ moods, tags: [...tags, next] });
+    onChange({ moods, tags: [...tags, next], moodSources: currentSources });
     setTagInput("");
     setTagOpen(false);
   }

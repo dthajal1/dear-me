@@ -27,7 +27,7 @@ export function FilterPill({ label, active, onClick, className }: FilterPillProp
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "inline-flex items-center justify-center whitespace-nowrap",
+        "inline-flex min-h-11 items-center justify-center whitespace-nowrap",
         "rounded-[var(--radius-lg)] border px-4 py-2",
         "text-[13px] transition-colors",
         active

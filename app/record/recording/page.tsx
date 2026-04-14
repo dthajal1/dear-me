@@ -108,7 +108,7 @@ export default function RecordRecordingPage() {
           type="button"
           onClick={handleClose}
           aria-label="Stop recording and go back"
-          className="flex size-9 items-center justify-center rounded-full bg-white/53 backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B18] transition-opacity active:opacity-70"
+          className="flex size-11 items-center justify-center rounded-full bg-white/53 backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B18] transition-opacity active:opacity-70"
           style={{ boxShadow: "0 2px 6px rgba(92,107,58,0.031)" }}
         >
           <X size={16} strokeWidth={2.5} className="text-[#2C331EBB]" aria-hidden />

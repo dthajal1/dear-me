@@ -64,7 +64,7 @@ export function MoodTagsEditor({ moods, tags, onChange }: Props) {
           type="button"
           onClick={() => removeMood(m)}
           aria-label={`Remove mood ${m}`}
-          className="flex items-center gap-1 rounded-full border px-2.5 py-1.5 transition-opacity active:opacity-60"
+          className="flex min-h-11 items-center gap-1 rounded-full border px-2.5 py-1.5 transition-opacity active:opacity-60"
           style={{
             background: "rgba(92,107,58,0.082)",
             borderColor: "rgba(92,107,58,0.133)",
@@ -87,7 +87,7 @@ export function MoodTagsEditor({ moods, tags, onChange }: Props) {
           type="button"
           onClick={() => removeTag(t)}
           aria-label={`Remove tag ${t}`}
-          className="flex items-center gap-1 rounded-full border px-2.5 py-1.5 transition-opacity active:opacity-60"
+          className="flex min-h-11 items-center gap-1 rounded-full border px-2.5 py-1.5 transition-opacity active:opacity-60"
           style={{
             background: "transparent",
             borderColor: "rgba(92,107,58,0.188)",
@@ -106,7 +106,7 @@ export function MoodTagsEditor({ moods, tags, onChange }: Props) {
       <Drawer>
         <DrawerTrigger
           disabled={moodsAtCap}
-          className="flex items-center gap-1 rounded-full border border-dashed px-2.5 py-1.5 transition-opacity active:opacity-60 disabled:opacity-40"
+          className="flex min-h-11 items-center gap-1 rounded-full border border-dashed px-2.5 py-1.5 transition-opacity active:opacity-60 disabled:opacity-40"
           style={{
             background: "transparent",
             borderColor: "rgba(92,107,58,0.3)",
@@ -141,7 +141,7 @@ export function MoodTagsEditor({ moods, tags, onChange }: Props) {
                   type="button"
                   disabled={disabled}
                   onClick={() => toggleMood(m)}
-                  className="flex items-center gap-1 rounded-full border px-3 py-2 transition-opacity active:opacity-60 disabled:opacity-30"
+                  className="flex min-h-11 items-center gap-1 rounded-full border px-3 py-2 transition-opacity active:opacity-60 disabled:opacity-30"
                   style={
                     selected
                       ? {
@@ -173,7 +173,7 @@ export function MoodTagsEditor({ moods, tags, onChange }: Props) {
       <Drawer open={tagOpen} onOpenChange={setTagOpen}>
         <DrawerTrigger
           disabled={tagsAtCap}
-          className="flex items-center gap-1 rounded-full border border-dashed px-2.5 py-1.5 transition-opacity active:opacity-60 disabled:opacity-40"
+          className="flex min-h-11 items-center gap-1 rounded-full border border-dashed px-2.5 py-1.5 transition-opacity active:opacity-60 disabled:opacity-40"
           style={{
             background: "transparent",
             borderColor: "rgba(92,107,58,0.3)",

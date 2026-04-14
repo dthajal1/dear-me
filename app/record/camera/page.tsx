@@ -87,7 +87,7 @@ export default function RecordCameraPage() {
           type="button"
           onClick={handleClose}
           aria-label="Close camera"
-          className="flex size-9 items-center justify-center rounded-full bg-white/53 backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B18] transition-opacity active:opacity-70"
+          className="flex size-11 items-center justify-center rounded-full bg-white/53 backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B18] transition-opacity active:opacity-70"
           style={{ boxShadow: "0 2px 6px rgba(92,107,58,0.031)" }}
         >
           <X size={16} strokeWidth={2.5} className="text-[#2C331EBB]" aria-hidden />
@@ -97,7 +97,7 @@ export default function RecordCameraPage() {
           type="button"
           onClick={handleFlip}
           aria-label="Flip camera"
-          className="flex size-9 items-center justify-center rounded-full bg-white/53 backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B18] transition-opacity active:opacity-70"
+          className="flex size-11 items-center justify-center rounded-full bg-white/53 backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B18] transition-opacity active:opacity-70"
           style={{ boxShadow: "0 2px 6px rgba(92,107,58,0.031)" }}
         >
           <RefreshCw size={15} strokeWidth={2.5} className="text-[#2C331EBB]" aria-hidden />

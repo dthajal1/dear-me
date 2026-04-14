@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { X, Pause, RefreshCw } from "lucide-react";
 import { RecordButton } from "@/components/dear-me/record-button";
+import { GlassIconButton } from "@/components/dear-me/glass-icon-button";
 import { createRecorder, type Recorder } from "@/lib/recording/recorder";
 import { pickSupportedMimeType } from "@/lib/recording/mime";
 import { getStream, setRecording, clearStream } from "@/lib/recording/session";
@@ -104,27 +105,19 @@ export default function RecordRecordingPage() {
       />
 
       <div className="absolute left-0 right-0 top-14 flex items-center justify-between px-5">
-        <button
-          type="button"
-          onClick={handleClose}
-          aria-label="Stop recording and go back"
-          className="flex size-11 items-center justify-center rounded-full bg-white/53 backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B18] transition-opacity active:opacity-70"
-          style={{ boxShadow: "0 2px 6px rgba(92,107,58,0.031)" }}
-        >
-          <X size={16} strokeWidth={2.5} className="text-[#2C331EBB]" aria-hidden />
-        </button>
+        <GlassIconButton onClick={handleClose} aria-label="Stop recording and go back">
+          <X size={16} strokeWidth={2.5} className="text-foreground/75" aria-hidden />
+        </GlassIconButton>
 
         <div
-          className="flex items-center gap-[7px] rounded-[20px] bg-white/53 px-3 py-[7px] backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B18]"
-          style={{ boxShadow: "0 2px 6px rgba(92,107,58,0.031)" }}
+          className="flex min-h-11 items-center gap-1.5 rounded-[var(--radius-lg)] bg-white/53 px-3 py-1.5 backdrop-blur-md ring-[0.5px] ring-inset ring-[color:var(--color-glass-border)] shadow-[0_2px_6px_rgba(92,107,58,0.031)]"
           aria-label={`Recording — elapsed time ${formatDuration(elapsedMs)}`}
         >
           <span
-            className="block size-2 rounded-full bg-[#E53E3E]"
-            style={{ boxShadow: "0 0 6px rgba(229,62,62,0.333)" }}
+            className="block size-2 rounded-full bg-[#E53E3E] shadow-[0_0_6px_rgba(229,62,62,0.333)]"
             aria-hidden
           />
-          <span className="font-['Geist',sans-serif] text-[13px] font-semibold text-[#2C331EBB]">
+          <span className="text-[13px] font-semibold text-foreground/75">
             {formatDuration(elapsedMs)}
           </span>
         </div>
@@ -132,25 +125,15 @@ export default function RecordRecordingPage() {
 
       <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center gap-5 px-6 pb-10 pt-4">
         <div className="flex w-full items-center justify-center gap-12">
-          <button
-            type="button"
-            aria-label="Pause recording"
-            className="flex size-11 items-center justify-center rounded-[22px] bg-white/53 backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B20] transition-opacity active:opacity-70"
-            style={{ boxShadow: "0 2px 6px rgba(92,107,58,0.039)" }}
-          >
-            <Pause size={18} strokeWidth={2} className="text-[#2C331EBB]" aria-hidden />
-          </button>
+          <GlassIconButton shape="square" aria-label="Pause recording">
+            <Pause size={18} strokeWidth={2} className="text-foreground/75" aria-hidden />
+          </GlassIconButton>
 
           <RecordButton onPress={handleStop} state="recording" size="lg" />
 
-          <button
-            type="button"
-            aria-label="Flip camera"
-            className="flex size-11 items-center justify-center rounded-[22px] bg-white/53 backdrop-blur-md ring-[0.5px] ring-inset ring-[#8A9A5B20] transition-opacity active:opacity-70"
-            style={{ boxShadow: "0 2px 6px rgba(92,107,58,0.039)" }}
-          >
-            <RefreshCw size={15} strokeWidth={2.5} className="text-[#2C331EBB]" aria-hidden />
-          </button>
+          <GlassIconButton shape="square" aria-label="Flip camera">
+            <RefreshCw size={15} strokeWidth={2.5} className="text-foreground/75" aria-hidden />
+          </GlassIconButton>
         </div>
       </div>
     </div>

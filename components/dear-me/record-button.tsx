@@ -38,16 +38,10 @@ export function RecordButton({
   const innerSquareSize = size === "lg" ? "size-[30px]" : "size-[24px]";
 
   const outerClasses = cn(
-    // Layout
     "flex items-center justify-center rounded-full",
-    // Glass fill + stroke — from design.pen #FFFFFF99 fill + #FFFFFF66 3px stroke
-    "bg-[#FFFFFF99]",
-    "ring-[3px] ring-[#FFFFFF66] ring-inset",
-    // Backdrop blur (design: background_blur radius 20)
+    "bg-white/60 ring-[3px] ring-white/40 ring-inset",
     "backdrop-blur-xl",
-    // Shadow (design: blur 12, color #5C6B3A15, offset 0 4)
     "shadow-[0_4px_12px_rgba(92,107,58,0.083)]",
-    // Press feedback
     "transition-transform active:scale-95",
     outerSize,
     className,
@@ -56,23 +50,19 @@ export function RecordButton({
   // Inner element: red circle (idle) or red rounded square (recording)
   const innerContent =
     state === "recording" ? (
-      // Stop square: 30×30, cornerRadius 7 (design: stopSquare)
       <span
-        className={cn(innerSquareSize, "rounded-[7px]")}
-        style={{
-          backgroundColor: "#E53E3E",
-          boxShadow: "0 2px 8px rgba(229,62,62,0.133)",
-        }}
+        className={cn(
+          innerSquareSize,
+          "rounded-[7px] bg-[color:var(--color-record-red)] shadow-[var(--shadow-record-red)]",
+        )}
         aria-hidden
       />
     ) : (
-      // Idle circle: 60×60 red ellipse (design: recordInner)
       <span
-        className={cn(innerCircleSize, "rounded-full")}
-        style={{
-          backgroundColor: "#E53E3E",
-          boxShadow: "0 2px 8px rgba(229,62,62,0.133)",
-        }}
+        className={cn(
+          innerCircleSize,
+          "rounded-full bg-[color:var(--color-record-red)] shadow-[var(--shadow-record-red)]",
+        )}
         aria-hidden
       />
     );

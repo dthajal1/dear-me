@@ -50,8 +50,8 @@ export function EmptyState({
       <div
         className={cn(
           "flex size-20 items-center justify-center rounded-full",
-          "border border-[#8A9A5B18]",
-          "bg-[#8A9A5B10]",
+          "border border-[color:var(--color-glass-border)]",
+          "bg-[color:var(--color-muted)]",
           "text-[color:var(--color-tab-icon-inactive)]",
         )}
       >
@@ -74,11 +74,11 @@ export function EmptyState({
           href={cta.href}
           className={cn(
             "mt-1 inline-flex items-center justify-center gap-2",
-            "rounded-xl px-6 py-3",
-            "border border-[#8A9A5B25]",
-            "bg-[#8A9A5B15]",
+            "rounded-[var(--radius-md)] px-6 py-3",
+            "border border-[color:var(--color-glass-border)]",
+            "bg-[color:var(--color-muted)]",
             "text-sm font-medium text-[color:var(--color-tab-icon-inactive)]",
-            "transition-colors hover:bg-[#8A9A5B20]",
+            "transition-colors hover:bg-[color:var(--color-mood-chip-bg)]",
           )}
         >
           {cta.icon}

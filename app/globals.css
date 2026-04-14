@@ -68,6 +68,11 @@
   --radius-mobile-frame: 32px;
   --shadow-mobile-frame: 0 40px 120px -30px rgba(0, 0, 0, 0.25);
 
+  /* ---- Brand red (record indicator only — outside the olive palette) ---- */
+  --color-record-red: #E53E3E;
+  --shadow-record-red: 0 2px 8px rgba(229, 62, 62, 0.133);
+  --shadow-record-red-glow: 0 0 6px rgba(229, 62, 62, 0.333);
+
   /* ---- Type scale (semantic, 6 steps for the whole app) ----
      display:  hero (Dear Me, Coming Soon)              28px
      title:    page heading (Insights, Add Notes)       26px

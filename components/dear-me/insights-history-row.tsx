@@ -43,27 +43,27 @@ export function InsightsHistoryRow({
       <Link
         href={`/insights/${thread.id}`}
         className={cn(
-          "flex flex-1 items-center gap-3 rounded-[14px] p-3.5",
-          "bg-white/63 backdrop-blur-[20px]",
-          "border border-[#8A9A5B20]",
-          "shadow-[0_2px_8px_#00000012]",
+          "flex flex-1 items-center gap-3 rounded-[var(--radius-md)] p-3.5",
+          "bg-[color:var(--color-glass-surface)] backdrop-blur-[20px]",
+          "border border-[color:var(--color-glass-border)]",
+          "shadow-[var(--shadow-transcript)]",
           "transition-opacity active:opacity-80",
         )}
       >
         <div className="flex flex-1 flex-col gap-1 overflow-hidden">
           <div className="flex items-center gap-2">
-            <p className="flex-1 truncate text-[14px] font-semibold text-[#2C331EDD]">
+            <p className="flex-1 truncate text-sm font-semibold text-foreground">
               {thread.title}
             </p>
-            <span className="shrink-0 text-[11px] text-[#6B7A48AA]">
+            <span className="shrink-0 text-[length:var(--text-caption)] text-[color:var(--color-muted-foreground)]">
               {formatRelativeTime(thread.updatedAt)}
             </span>
           </div>
-          <p className="line-clamp-2 text-[12px] leading-[1.45] text-[#4D5A35BB]">
+          <p className="line-clamp-2 text-xs leading-snug text-foreground/75">
             {lastAssistantSnippet(thread)}
           </p>
         </div>
-        <ChevronRight className="size-4 shrink-0 text-[#6B7A48AA]" />
+        <ChevronRight className="size-4 shrink-0 text-[color:var(--color-muted-foreground)]" />
       </Link>
 
       <button
@@ -71,12 +71,12 @@ export function InsightsHistoryRow({
         onClick={handleDelete}
         aria-label={`Delete ${thread.title}`}
         className={cn(
-          "flex size-[44px] shrink-0 items-center justify-center rounded-[14px]",
-          "border border-[#8A9A5B20] bg-white/63 backdrop-blur-[12px]",
+          "flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-md)]",
+          "border border-[color:var(--color-glass-border)] bg-[color:var(--color-glass-surface)] backdrop-blur-[12px]",
           "transition-opacity active:opacity-60",
         )}
       >
-        <Trash2 className="size-[18px] text-[#B45544AA]" />
+        <Trash2 className="size-[18px] text-[#B45544]/70" />
       </button>
     </div>
   );

@@ -13,14 +13,8 @@ export function ScreenBackground() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-0 -z-10"
-      style={{
-        backgroundColor: "var(--color-background)",
-        backgroundImage: [
-          "radial-gradient(140% 100% at 25% 15%, color-mix(in srgb, #D8E0C4 50%, transparent) 0%, transparent 100%)",
-          "radial-gradient(100% 80% at 80% 75%, color-mix(in srgb, #D0DCC0 40%, transparent) 0%, transparent 100%)",
-        ].join(", "),
-      }}
+      className="pointer-events-none absolute inset-0 -z-10 bg-background"
+      style={{ backgroundImage: "var(--gradient-brand)" }}
     />
   );
 }

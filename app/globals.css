@@ -57,23 +57,18 @@
   --shadow-floating: 0 4px 12px rgba(92,107,58,0.188);
   --shadow-tab-bar: 0 -1px 12px rgba(0,0,0,0.063);
   --shadow-transcript: 0 2px 8px rgba(0,0,0,0.063);
+
+  /* ---- Brand gradient (used by body + MobileFrame column via ScreenBackground) ---- */
+  --gradient-brand:
+    radial-gradient(140% 100% at 25% 15%, color-mix(in srgb, #D8E0C4 50%, transparent) 0%, transparent 100%),
+    radial-gradient(100% 80% at 80% 75%, color-mix(in srgb, #D0DCC0 40%, transparent) 0%, transparent 100%);
 }
 
 /* ---- Body background with radial-gradient overlays from the Home frame ---- */
 @layer base {
   body {
     background-color: var(--color-background);
-    background-image:
-      radial-gradient(
-        140% 100% at 25% 15%,
-        color-mix(in srgb, #D8E0C4 50%, transparent) 0%,
-        transparent 100%
-      ),
-      radial-gradient(
-        100% 80% at 80% 75%,
-        color-mix(in srgb, #D0DCC0 40%, transparent) 0%,
-        transparent 100%
-      );
+    background-image: var(--gradient-brand);
     background-attachment: fixed;
     color: var(--color-foreground);
     -webkit-font-smoothing: antialiased;

@@ -108,6 +108,7 @@ export default function MemoPage() {
               }
               duration={formatDuration(memo.durationMs)}
               timestamp={formatRelativeTime(memo.createdAt)}
+              thumbnailFilename={memo.thumbnailFilename}
             />
           ))
         )}

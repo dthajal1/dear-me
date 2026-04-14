@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Play, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { glassSurfaceClasses } from "@/components/dear-me/glass-card";
+import { readBlob } from "@/lib/db/opfs";
+import { useBlobUrl } from "@/lib/hooks/useBlobUrl";
 
 interface MemoCardProps {
   title: string;
@@ -10,6 +15,7 @@ interface MemoCardProps {
   timestamp: string; // e.g. "2h ago" or "Yesterday"
   mood?: string;     // emoji or text label
   href: string;
+  thumbnailFilename?: string;
   className?: string;
 }
 
@@ -19,7 +25,10 @@ interface MemoCardProps {
  * Design spec (from design.pen Memo Card 1, node 0CSqr):
  *   - Card: padding 12px all sides, gap 12px, cornerRadius 16px
  *   - Fill: #FFFFFFA0 (glass surface), border #8A9A5B28, backdrop-blur
- *   - Left: 90×110px thumbnail with waveform placeholder and centered play button overlay
+ *   - Left: 90×110px thumbnail. When a thumbnailFilename is present we load
+ *     the JPEG out of OPFS and render it as a cover-fit image; otherwise
+ *     we fall back to a waveform placeholder. Either way, the play button
+ *     pill is overlaid on top.
  *   - Play button: 28×28px circle, fill #5C6B3ABB, play icon 14px white
  *   - Right column: vertical, gap 8px
  *     - Top row: title (14px/600/#2C331EDD) + duration badge with timer icon
@@ -37,6 +46,7 @@ export function MemoCard({
   timestamp,
   mood,
   href,
+  thumbnailFilename,
   className,
 }: MemoCardProps) {
   return (
@@ -51,16 +61,7 @@ export function MemoCard({
     >
       {/* Thumbnail with play button overlay */}
       <div className="relative h-[110px] w-[90px] shrink-0 overflow-hidden rounded-xl">
-        {/* Waveform placeholder background */}
-        <div className="absolute inset-0 flex items-end justify-center gap-[2px] bg-[color:var(--color-mood-chip-bg)] px-2 pb-3">
-          {[18, 32, 48, 36, 54, 40, 26, 44, 30, 20].map((h, i) => (
-            <div
-              key={i}
-              className="w-[3px] rounded-full bg-[color:var(--color-primary)]/35"
-              style={{ height: h }}
-            />
-          ))}
-        </div>
+        <MemoCardThumbnail filename={thumbnailFilename} />
 
         {/* Play button overlay */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -110,5 +111,71 @@ export function MemoCard({
         </div>
       </div>
     </Link>
+  );
+}
+
+function WaveformPlaceholder() {
+  return (
+    <div className="absolute inset-0 flex items-end justify-center gap-[2px] bg-[color:var(--color-mood-chip-bg)] px-2 pb-3">
+      {[18, 32, 48, 36, 54, 40, 26, 44, 30, 20].map((h, i) => (
+        <div
+          key={i}
+          className="w-[3px] rounded-full bg-[color:var(--color-primary)]/35"
+          style={{ height: h }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function MemoCardThumbnail({ filename }: { filename?: string }) {
+  const [blob, setBlob] = useState<Blob | null>(null);
+  const [failed, setFailed] = useState(false);
+  const url = useBlobUrl(blob);
+
+  useEffect(() => {
+    if (!filename) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setBlob(null);
+      setFailed(false);
+      return;
+    }
+    let cancelled = false;
+    setFailed(false);
+    readBlob(filename)
+      .then((b) => {
+        if (cancelled) return;
+        setBlob(b);
+      })
+      .catch((err) => {
+        console.error("[dear-me] failed to read memo thumbnail", err);
+        if (cancelled) return;
+        setFailed(true);
+        setBlob(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [filename]);
+
+  if (!filename || failed) {
+    return <WaveformPlaceholder />;
+  }
+
+  if (!url) {
+    // Loading: keep the waveform placeholder visible so the card never
+    // flashes an empty box while the OPFS read resolves.
+    return <WaveformPlaceholder />;
+  }
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={url}
+      alt=""
+      aria-hidden
+      className="size-full object-cover"
+      draggable={false}
+    />
   );
 }

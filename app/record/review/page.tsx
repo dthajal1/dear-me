@@ -98,15 +98,11 @@ function ReviewContent() {
       <div className="flex flex-1 flex-col gap-4 px-5 pb-8 pt-0">
         <div className="flex flex-col gap-1 px-1">
           <h1
-            className="text-[26px] font-bold leading-tight text-[#2C331EDD]"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
+            className="text-[26px] font-bold leading-tight text-[#2C331EDD]"          >
             Review &amp; Save
           </h1>
           <p
-            className="text-[13px] text-[#6B7A48AA]"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
+            className="text-[13px] text-[#6B7A48AA]"          >
             Here&apos;s what we captured
           </p>
         </div>
@@ -135,9 +131,7 @@ function ReviewContent() {
           >
             <span className="size-2 rounded-full bg-[#E53E3E]" aria-hidden />
             <span
-              className="text-[10px] font-bold text-white"
-              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-            >
+              className="text-[10px] font-bold text-white"            >
               REC
             </span>
           </div>
@@ -147,9 +141,7 @@ function ReviewContent() {
             style={{ background: "rgba(0,0,0,0.4)" }}
           >
             <span
-              className="text-[11px] font-semibold text-white"
-              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-            >
+              className="text-[11px] font-semibold text-white"            >
               {formatDuration(memo.durationMs)}
             </span>
           </div>
@@ -164,9 +156,7 @@ function ReviewContent() {
         >
           <CheckCircle className="size-4 shrink-0 text-[#5C6B3ABB]" aria-hidden />
           <p
-            className="text-[12px] font-medium text-[#4D5A35FF]"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
+            className="text-[12px] font-medium text-[#4D5A35FF]"          >
             We heard you — here&apos;s what stood out
           </p>
         </div>
@@ -175,9 +165,7 @@ function ReviewContent() {
           <div className="flex items-center gap-1.5">
             <Heart className="size-3.5 text-[#5C6B3ABB]" aria-hidden />
             <span
-              className="text-[14px] font-semibold text-[#2C331EDD]"
-              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-            >
+              className="text-[14px] font-semibold text-[#2C331EDD]"            >
               Moods &amp; tags
             </span>
           </div>
@@ -192,17 +180,13 @@ function ReviewContent() {
             />
           ) : memo.analysisStatus === "failed" ? (
             <p
-              className="text-[12px] text-[#B44]"
-              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-            >
+              className="text-[12px] text-[#B44]"            >
               Couldn&apos;t analyze this memo.
               {memo.analysisError ? ` ${memo.analysisError}` : ""}
             </p>
           ) : (
             <p
-              className="text-[12px] italic text-[#6B7A48AA]"
-              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-            >
+              className="text-[12px] italic text-[#6B7A48AA]"            >
               {memo.transcriptStatus === "ready"
                 ? "Analyzing…"
                 : "Waiting for transcript…"}
@@ -214,31 +198,23 @@ function ReviewContent() {
           <div className="flex items-center gap-1.5">
             <FileText className="size-3.5 text-[#5C6B3ABB]" aria-hidden />
             <span
-              className="text-[14px] font-semibold text-[#2C331EDD]"
-              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-            >
+              className="text-[14px] font-semibold text-[#2C331EDD]"            >
               Transcript
             </span>
           </div>
           {memo.transcriptStatus === "ready" && memo.transcript ? (
             <p
-              className="text-[13px] italic leading-relaxed text-[#4D5A35FF]"
-              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-            >
+              className="text-[13px] italic leading-relaxed text-[#4D5A35FF]"            >
               &ldquo;{memo.transcript}&rdquo;
             </p>
           ) : memo.transcriptStatus === "failed" ? (
             <p
-              className="text-[13px] leading-relaxed text-[#B44]"
-              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-            >
+              className="text-[13px] leading-relaxed text-[#B44]"            >
               Couldn&apos;t transcribe this memo. {memo.transcriptError ?? ""}
             </p>
           ) : (
             <p
-              className="text-[13px] italic leading-relaxed text-[#6B7A48AA]"
-              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-            >
+              className="text-[13px] italic leading-relaxed text-[#6B7A48AA]"            >
               Transcribing…
             </p>
           )}
@@ -248,32 +224,24 @@ function ReviewContent() {
           <div className="flex items-center gap-1.5">
             <PencilLine className="size-3.5 text-[#5C6B3ABB]" aria-hidden />
             <span
-              className="text-[14px] font-semibold text-[#2C331EDD]"
-              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-            >
+              className="text-[14px] font-semibold text-[#2C331EDD]"            >
               Your note
             </span>
           </div>
           {memo.notes ? (
             <p
-              className="text-[13px] leading-relaxed text-[#4D5A35FF]"
-              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-            >
+              className="text-[13px] leading-relaxed text-[#4D5A35FF]"            >
               {memo.notes}
             </p>
           ) : (
             <p
-              className="text-[13px] italic leading-relaxed text-[#6B7A48AA]"
-              style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-            >
+              className="text-[13px] italic leading-relaxed text-[#6B7A48AA]"            >
               No note yet — tap Edit to add one.
             </p>
           )}
           <Link
             href={`/record/add-notes?id=${id}`}
-            className="text-[13px] font-semibold text-[#5C6B3AFF]"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
+            className="text-[13px] font-semibold text-[#5C6B3AFF]"          >
             Edit note
           </Link>
         </GlassCard>
@@ -291,9 +259,7 @@ function ReviewContent() {
           <button
             type="button"
             onClick={handleStartOver}
-            className="text-[13px] font-medium text-[#6B7A48AA] transition-opacity active:opacity-60"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
+            className="text-[13px] font-medium text-[#6B7A48AA] transition-opacity active:opacity-60"          >
             Start over
           </button>
         </div>
@@ -301,9 +267,7 @@ function ReviewContent() {
         <div className="flex items-center justify-center gap-1.5">
           <Lock className="size-3 text-[#8A9A5B55]" aria-hidden />
           <span
-            className="text-[11px] text-[#8A9A5B55]"
-            style={{ fontFamily: "var(--font-geist-sans, Geist, sans-serif)" }}
-          >
+            className="text-[11px] text-[#8A9A5B55]"          >
             Only you can see these — always
           </span>
         </div>

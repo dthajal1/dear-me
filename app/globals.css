@@ -67,6 +67,21 @@
   --width-mobile-frame: 430px;
   --radius-mobile-frame: 32px;
   --shadow-mobile-frame: 0 40px 120px -30px rgba(0, 0, 0, 0.25);
+
+  /* ---- Type scale (semantic, 6 steps for the whole app) ----
+     display:  hero (Dear Me, Coming Soon)              28px
+     title:    page heading (Insights, Add Notes)       26px
+     subtitle: section title inside a card              19px
+     body:     primary copy                             15px
+     small:    secondary copy, button labels            13px
+     caption:  micro labels (REC, "Captured just now")  11px
+  */
+  --text-display: 28px;
+  --text-title:   26px;
+  --text-subtitle:19px;
+  --text-body:    15px;
+  --text-small:   13px;
+  --text-caption: 11px;
 }
 
 /* ---- Body background with radial-gradient overlays from the Home frame ---- */

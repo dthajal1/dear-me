@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Type } from "lucide-react";
 
 import { BackHeader } from "@/components/dear-me/back-header";
-import { GlassCard } from "@/components/dear-me/glass-card";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useRecordSession } from "@/lib/hooks/useRecordSession";
@@ -165,28 +164,30 @@ function AddNotesContent() {
           </div>
         </div>
 
-        <GlassCard className="flex flex-col gap-3 !rounded-2xl">
+        <div className="flex flex-col gap-2 px-1 pt-1">
           <label
             htmlFor="notes-input"
-            className="text-sm font-semibold text-foreground"
+            className="font-[family-name:var(--font-display)] text-[length:var(--text-body)] italic text-[color:var(--color-muted-foreground)]"
           >
-            A note for future you
+            What did you want to tell your future self?
           </label>
           <Textarea
             id="notes-input"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            placeholder="Anything you want to remember? (optional)"
+            placeholder="Start writing…"
             className="
-              min-h-[120px] resize-none
-              border-[color:var(--color-glass-border)]
-              bg-[var(--color-glass-surface)]
-              shadow-[var(--shadow-glass)]
-              backdrop-blur
-              text-sm leading-relaxed
+              min-h-[140px] resize-none
+              rounded-none border-0 border-b border-[color:var(--color-mood-chip-border)]
+              bg-transparent
+              px-0 py-3
+              text-base leading-loose text-foreground
+              placeholder:italic placeholder:text-[color:var(--color-muted-foreground)]/60
+              shadow-none
+              focus-visible:border-[color:var(--color-primary)]/50 focus-visible:ring-0
             "
           />
-        </GlassCard>
+        </div>
 
         <div className="flex h-11 items-center gap-2 rounded-[var(--radius-md)] border border-[color:var(--color-mood-chip-border)] bg-[color:var(--color-mood-chip-bg)] px-3.5">
           <Type className="size-4 shrink-0 text-[color:var(--color-muted-foreground)]" aria-hidden />

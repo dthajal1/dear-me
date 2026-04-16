@@ -4,6 +4,18 @@ A private video journal that resurfaces your own voice when you need it most.
 
 Inspired by the gratitude jar — writing down one thing you're grateful for each day, then pulling out a note when times get rough. Dear Me digitizes that idea with video, because the most powerful voice is often your own.
 
+Why video? Text captures thoughts. Video captures *you* — your tone, your face, the raw emotion in the moment. When future-you watches past-you talk through a hard day, it hits differently than reading words on a screen.
+
+<p align="center">
+  <img src="assets/home.png" width="180" alt="Home" />
+  &nbsp;
+  <img src="assets/memo-detail.png" width="180" alt="Memo detail" />
+  &nbsp;
+  <img src="assets/insights.png" width="180" alt="Insights" />
+  &nbsp;
+  <img src="assets/insights-chat.png" width="180" alt="Insights conversation" />
+</p>
+
 ## What it does
 
 **Record** — Capture short video memos to your future self. The app transcribes your words and detects your mood automatically.

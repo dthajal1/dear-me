@@ -52,6 +52,11 @@ export async function getTodayCheckIns(): Promise<CheckIn[]> {
   return listCheckIns({ since: startOfToday() });
 }
 
+export async function deleteCheckIn(id: string): Promise<void> {
+  const db = await getDb();
+  await db.delete(STORE_CHECK_INS, id);
+}
+
 export async function findRecentChipCheckIn(
   withinMs: number,
 ): Promise<CheckIn | undefined> {

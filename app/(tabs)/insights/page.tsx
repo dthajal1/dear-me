@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { MessageCircleHeart, CloudSun, Sun, TrendingUp, Heart, History } from "lucide-react";
+import { CloudSun, Sun, TrendingUp, Heart, PanelRight } from "lucide-react";
 import { ChatInput } from "@/components/dear-me/chat-input";
 import { GlassIconButton } from "@/components/dear-me/glass-icon-button";
 import { InsightsHistorySheet } from "@/components/dear-me/insights-history-sheet";
@@ -41,7 +41,7 @@ export default function InsightsPage() {
           </div>
           <InsightsHistorySheet>
             <GlassIconButton aria-label="Open conversation history">
-              <History className="size-[18px] text-[color:var(--color-primary)]" />
+              <PanelRight className="size-[18px] text-[color:var(--color-primary)]" />
             </GlassIconButton>
           </InsightsHistorySheet>
         </header>
@@ -49,15 +49,12 @@ export default function InsightsPage() {
         {/* Centered illustration + prompts grid */}
         <div className="flex flex-1 flex-col items-center justify-center gap-6">
           <div className="flex flex-col items-center gap-5">
-            <div className="flex size-[104px] items-center justify-center rounded-full bg-[color:var(--color-muted)]">
-              <MessageCircleHeart className="size-11 text-[color:var(--color-tab-icon-inactive)]" />
-            </div>
             <div className="flex w-[280px] flex-col items-center gap-2 text-center">
               <h2 className="text-[length:var(--text-subtitle)] font-semibold text-foreground">
                 What&apos;s on your mind?
               </h2>
               <p className="text-sm leading-relaxed text-[color:var(--color-accent)]">
-                I&apos;ll look through your entries and reflections to help you see patterns and find perspective.
+                I&apos;ll look through your entries to find patterns.
               </p>
             </div>
           </div>

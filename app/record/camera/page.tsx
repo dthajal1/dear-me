@@ -69,7 +69,7 @@ export default function RecordCameraPage() {
   function handleClose() {
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
-    router.push("/record/trigger");
+    router.push("/");
   }
 
   return (

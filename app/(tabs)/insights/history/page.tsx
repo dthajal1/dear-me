@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { MessageCircleHeart, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { BackHeader } from "@/components/dear-me/back-header";
 import { InsightsHistoryRow } from "@/components/dear-me/insights-history-row";
 import { deleteThread, listThreads } from "@/lib/db/insightThreads";
@@ -61,9 +61,6 @@ export default function InsightsHistoryPage() {
           </div>
         ) : threads.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
-            <div className="flex size-[104px] items-center justify-center rounded-full bg-[color:var(--color-muted)]">
-              <MessageCircleHeart className="size-11 text-[color:var(--color-tab-icon-inactive)]" />
-            </div>
             <div className="flex w-[280px] flex-col items-center gap-2">
               <h2 className="text-[length:var(--text-subtitle)] font-semibold text-foreground">
                 No conversations yet

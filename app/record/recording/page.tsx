@@ -90,7 +90,7 @@ export default function RecordRecordingPage() {
     }
     streamRef.current?.getTracks().forEach((t) => t.stop());
     clearStream();
-    router.push("/record/trigger");
+    router.push("/");
   }
 
   return (

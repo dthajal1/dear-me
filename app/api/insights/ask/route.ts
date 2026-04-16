@@ -153,7 +153,7 @@ export async function POST(request: Request): Promise<Response> {
   if (memos.length === 0) {
     return NextResponse.json({
       prose:
-        "I don't see any finalized memos yet. Record one and come back — I'll be here.",
+        "I'd love to reflect with you, but I don't have any memos to draw from yet. Record one whenever you're ready — I'll be right here waiting.",
       citedMemoIds: [],
     } satisfies AskResult);
   }

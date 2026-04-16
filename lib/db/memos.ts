@@ -99,6 +99,32 @@ export async function setAnalysisStatus(
   });
 }
 
+export async function updateTitle(id: string, title: string): Promise<Memo> {
+  const db = await getDb();
+  const existing = await db.get(STORE_MEMOS, id);
+  if (!existing) throw new Error(`Memo not found: ${id}`);
+  const updated: Memo = {
+    ...existing,
+    title,
+    updatedAt: Date.now(),
+  };
+  await db.put(STORE_MEMOS, updated);
+  return updated;
+}
+
+export async function updateNote(id: string, notes: string): Promise<Memo> {
+  const db = await getDb();
+  const existing = await db.get(STORE_MEMOS, id);
+  if (!existing) throw new Error(`Memo not found: ${id}`);
+  const updated: Memo = {
+    ...existing,
+    notes,
+    updatedAt: Date.now(),
+  };
+  await db.put(STORE_MEMOS, updated);
+  return updated;
+}
+
 export async function updateMoodsAndTags(
   id: string,
   patch: {
@@ -224,7 +250,11 @@ export async function cleanupOrphanedDrafts(): Promise<{
 
   const filesOnDisk = await listFilenames();
   const liveMemos = await db.getAll(STORE_MEMOS);
-  const liveFilenames = new Set(liveMemos.map((m) => m.filename));
+  const liveFilenames = new Set<string>();
+  for (const m of liveMemos) {
+    liveFilenames.add(m.filename);
+    if (m.thumbnailFilename) liveFilenames.add(m.thumbnailFilename);
+  }
   let orphanFilesDeleted = 0;
   for (const name of filesOnDisk) {
     if (!liveFilenames.has(name)) {

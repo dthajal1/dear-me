@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { MobileFrame } from "@/components/dear-me/mobile-frame";
 import { AppBootstrap } from "@/lib/bootstrap/app-bootstrap";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -46,6 +47,7 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <AppBootstrap />
         <MobileFrame>{children}</MobileFrame>
+        <Toaster position="top-center" />
       </body>
     </html>
   );

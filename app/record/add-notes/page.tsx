@@ -2,30 +2,27 @@
 
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Type } from "lucide-react";
+import { CheckCircle } from "lucide-react";
+import { toast } from "sonner";
 
 import { BackHeader } from "@/components/dear-me/back-header";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
+import { MemoStack } from "@/components/dear-me/memo-stack";
 import { useRecordSession } from "@/lib/hooks/useRecordSession";
-import { formatClockTime, formatDuration } from "@/lib/format/time";
 import { readBlob } from "@/lib/db/opfs";
-import { setAnalysisStatus, setTranscriptStatus } from "@/lib/db/memos";
+import {
+  deleteMemo,
+  setAnalysisStatus,
+  setTranscriptStatus,
+} from "@/lib/db/memos";
 import { transcribeBlob } from "@/lib/transcription/transcribe";
 import { analyzeTranscript } from "@/lib/analysis/analyze";
 
 function AddNotesContent() {
   const router = useRouter();
-  const { state, update, id } = useRecordSession();
-  const [title, setTitle] = useState("");
-  const [notes, setNotes] = useState("");
+  const { state, update, refresh, finalize } = useRecordSession();
   const [submitting, setSubmitting] = useState(false);
-  // True once the user has actively edited the title input. While this is
-  // false we mirror the analyzer's suggested title into the input so the
-  // user sees a live default. As soon as they type (or backspace), we lock
-  // the input to their value.
-  const titleDirtyRef = useRef(false);
   const transcribeStartedRef = useRef(false);
+  const savingRef = useRef(false);
 
   useEffect(() => {
     if (state.status !== "ready") return;
@@ -57,6 +54,7 @@ function AddNotesContent() {
           });
         } catch {}
       }
+      await refresh();
 
       if (transcript === null) return;
 
@@ -83,20 +81,12 @@ function AddNotesContent() {
           });
         } catch {}
       }
+      await refresh();
     })();
-  }, [state]);
-
-  // Mirror the analyzer's suggested title into the input whenever a newer
-  // one arrives, so long as the user hasn't started typing their own.
-  useEffect(() => {
-    if (state.status !== "ready") return;
-    if (titleDirtyRef.current) return;
-    const suggested = state.memo.suggestedTitle ?? "";
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTitle((prev) => (prev === suggested ? prev : suggested));
-  }, [state]);
+  }, [state, refresh]);
 
   useEffect(() => {
+    if (savingRef.current) return;
     if (state.status === "not-found") {
       router.replace("/");
     } else if (state.status === "ready" && state.memo.status === "final") {
@@ -117,114 +107,80 @@ function AddNotesContent() {
 
   const memo = state.memo;
 
-  async function handleContinue() {
+  async function handleStartOver() {
+    await deleteMemo(memo.id);
+    router.replace("/record/camera");
+  }
+
+  async function handleSave() {
     if (submitting) return;
     setSubmitting(true);
-    const finalTitle =
-      title.trim() ||
-      memo.suggestedTitle?.trim() ||
-      `Memo · ${formatClockTime(memo.createdAt)}`;
+    savingRef.current = true;
     try {
-      await update({ title: finalTitle, notes });
-      router.push(`/record/review?id=${id}`);
+      if (!memo.title.trim()) {
+        const fallback = memo.suggestedTitle?.trim() || "Untitled";
+        await update({ title: fallback });
+      }
+      const finalized = await finalize();
+      router.replace("/");
+      toast.success("Memo saved", {
+        description: finalized.title,
+        duration: 3500,
+      });
     } catch (err) {
-      console.error("[dear-me] updateDraft failed", err);
+      console.error("[dear-me] finalize failed", err);
+      savingRef.current = false;
       setSubmitting(false);
     }
   }
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <BackHeader backHref={`/record/review?id=${id}`} title="" />
+      <BackHeader backHref="/" title="" />
 
-      <div className="flex flex-1 flex-col gap-5 px-5 pb-8 pt-0">
-        <div className="flex flex-col gap-1 px-1">
-          <h1 className="text-[length:var(--text-title)] font-bold leading-tight text-foreground">
-            Add Notes
-          </h1>
-          <p className="text-sm text-[color:var(--color-muted-foreground)]">
-            Anything you&apos;d tell your future self?
-          </p>
-        </div>
+      <div className="flex flex-1 flex-col gap-6 px-5 pb-8 pt-0">
+        <MemoStack
+          memo={memo}
+          mode="draft"
+          onTitleSave={(next) => {
+            void update({ title: next }).catch((err) => {
+              console.error("[dear-me] update title failed", err);
+            });
+          }}
+          onNoteSave={(next) => {
+            void update({ notes: next }).catch((err) => {
+              console.error("[dear-me] update note failed", err);
+            });
+          }}
+          onMoodsChange={(next) => {
+            void update({
+              moods: next.moods,
+              tags: next.tags,
+              moodSources: next.moodSources,
+            }).catch((err) => {
+              console.error("[dear-me] update moods failed", err);
+            });
+          }}
+        />
 
-        <div
-          className="relative flex h-[88px] items-center gap-3 rounded-[var(--radius-lg)] border border-[color:var(--color-mood-chip-border)] bg-[color:var(--color-mood-chip-bg)] px-4"
-          aria-label="Memo summary"
-        >
-          <div className="flex size-14 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-black/80 text-[length:var(--text-caption)] font-semibold text-white">
-            {formatDuration(memo.durationMs)}
-          </div>
-          <div className="flex flex-col gap-0.5">
-            <span className="text-[length:var(--text-small)] font-semibold text-foreground">
-              {`Memo · ${formatClockTime(memo.createdAt)}`}
-            </span>
-            <span className="text-[length:var(--text-caption)] text-[color:var(--color-muted-foreground)]">
-              Captured just now
-            </span>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2 px-1 pt-1">
-          <label
-            htmlFor="notes-input"
-            className="font-[family-name:var(--font-display)] text-[length:var(--text-body)] italic text-[color:var(--color-muted-foreground)]"
+        <div className="mt-2 flex flex-col items-center gap-3">
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={submitting}
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3.5 text-[15px] font-semibold text-[color:var(--color-primary-foreground)] shadow-[var(--shadow-floating)] transition-opacity active:opacity-80 disabled:opacity-60"
           >
-            What did you want to tell your future self?
-          </label>
-          <Textarea
-            id="notes-input"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            placeholder="Start writing…"
-            className="
-              min-h-[140px] resize-none
-              rounded-none border-0 border-b border-[color:var(--color-mood-chip-border)]
-              bg-transparent
-              px-0 py-3
-              text-base leading-loose text-foreground
-              placeholder:italic placeholder:text-[color:var(--color-muted-foreground)]/60
-              shadow-none
-              focus-visible:border-[color:var(--color-primary)]/50 focus-visible:ring-0
-            "
-          />
+            <CheckCircle className="size-4" aria-hidden />
+            {submitting ? "Saving…" : "Save Memo"}
+          </button>
+          <button
+            type="button"
+            onClick={handleStartOver}
+            className="text-[length:var(--text-small)] text-[color:var(--color-muted-foreground)] transition-opacity active:opacity-60"
+          >
+            Start over
+          </button>
         </div>
-
-        <div className="flex h-11 items-center gap-2 rounded-[var(--radius-md)] border border-[color:var(--color-mood-chip-border)] bg-[color:var(--color-mood-chip-bg)] px-3.5">
-          <Type className="size-4 shrink-0 text-[color:var(--color-muted-foreground)]" aria-hidden />
-          <Input
-            id="title-input"
-            value={title}
-            onChange={(e) => {
-              titleDirtyRef.current = true;
-              setTitle(e.target.value);
-            }}
-            placeholder={
-              memo.analysisStatus === "ready"
-                ? "Add a title (optional)"
-                : "Writing a title for you…"
-            }
-            className="border-0 bg-transparent p-0 text-sm text-foreground shadow-none focus-visible:ring-0"
-          />
-        </div>
-
-        <button
-          type="button"
-          onClick={handleContinue}
-          disabled={submitting}
-          className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3.5 text-[15px] font-semibold text-[color:var(--color-primary-foreground)] shadow-[var(--shadow-floating)] transition-opacity active:opacity-80 disabled:opacity-60"
-        >
-          {submitting ? "Saving…" : "Continue"}
-          <ArrowRight className="size-4" aria-hidden />
-        </button>
-
-        <button
-          type="button"
-          onClick={handleContinue}
-          disabled={submitting}
-          className="text-center text-[length:var(--text-small)] text-[color:var(--color-muted-foreground)] transition-opacity active:opacity-60"
-        >
-          Maybe later
-        </button>
       </div>
     </div>
   );

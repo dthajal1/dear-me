@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, type ReactElement } from "react";
 import Link from "next/link";
-import { MessageCircleHeart, Plus, X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog";
 import { cn } from "@/lib/utils";
 import { InsightsHistoryRow } from "@/components/dear-me/insights-history-row";
@@ -78,47 +78,53 @@ export function InsightsHistorySheet({ children }: InsightsHistorySheetProps) {
           )}
         />
         <SheetPrimitive.Popup
+          id="insights-history-sheet-popup"
           className={cn(
             "absolute inset-y-0 right-0 z-50 flex h-full w-full flex-col",
-            "bg-background text-foreground shadow-[var(--shadow-mobile-frame)]",
-            "border-l border-[color:var(--color-glass-border)]",
+            "bg-background text-foreground",
             "transition-transform duration-250 ease-out",
             "data-starting-style:translate-x-full data-ending-style:translate-x-full",
           )}
         >
           {/* Header */}
           <div
-            className="flex items-center justify-between gap-3 px-5 pt-6 pb-4"
+            className="flex items-start justify-between gap-3 px-5 pt-6 pb-4"
             style={{ paddingTop: "calc(env(safe-area-inset-top) + 1.5rem)" }}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-1">
+              <SheetPrimitive.Title className="text-[length:var(--text-display)] font-bold text-foreground">
+                History
+              </SheetPrimitive.Title>
+              <p className="text-sm text-[color:var(--color-accent)]">
+                Your past conversations
+              </p>
+            </div>
+            <div
+              className={cn(
+                "flex h-11 items-center overflow-hidden rounded-full",
+                "border border-[color:var(--color-glass-border)]",
+                "bg-[color:var(--color-glass-surface)] backdrop-blur-[12px]",
+                "shadow-[var(--shadow-glass)]",
+              )}
+            >
+              <SheetPrimitive.Close
+                aria-label="New conversation"
+                onClick={() => setOpen(false)}
+                className="flex h-full w-11 items-center justify-center transition-opacity active:opacity-60"
+              >
+                <Plus className="size-[18px] text-[color:var(--color-primary)]" />
+              </SheetPrimitive.Close>
+              <span
+                aria-hidden
+                className="h-5 w-px bg-[color:var(--color-glass-border)]"
+              />
               <SheetPrimitive.Close
                 aria-label="Close history"
-                className={cn(
-                  "flex size-11 items-center justify-center rounded-full",
-                  "border border-[color:var(--color-glass-border)]",
-                  "bg-[color:var(--color-glass-surface)] backdrop-blur-[12px]",
-                  "transition-opacity active:opacity-70",
-                )}
+                className="flex h-full w-11 items-center justify-center transition-opacity active:opacity-60"
               >
                 <X className="size-[18px] text-[color:var(--color-primary)]" />
               </SheetPrimitive.Close>
-              <SheetPrimitive.Title className="text-[length:var(--text-subtitle)] font-semibold text-foreground">
-                History
-              </SheetPrimitive.Title>
             </div>
-            <SheetPrimitive.Close
-              aria-label="New conversation"
-              onClick={() => setOpen(false)}
-              className={cn(
-                "flex size-11 items-center justify-center rounded-full",
-                "border border-[color:var(--color-glass-border)]",
-                "bg-[color:var(--color-glass-surface)] backdrop-blur-[12px]",
-                "transition-opacity active:opacity-70",
-              )}
-            >
-              <Plus className="size-[18px] text-[color:var(--color-primary)]" />
-            </SheetPrimitive.Close>
           </div>
 
           {/* Scrollable body */}
@@ -132,9 +138,6 @@ export function InsightsHistorySheet({ children }: InsightsHistorySheetProps) {
               </div>
             ) : threads.length === 0 ? (
               <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
-                <div className="flex size-[104px] items-center justify-center rounded-full bg-[color:var(--color-muted)]">
-                  <MessageCircleHeart className="size-11 text-[color:var(--color-tab-icon-inactive)]" />
-                </div>
                 <div className="flex w-[280px] flex-col items-center gap-2">
                   <h2 className="text-[length:var(--text-subtitle)] font-semibold text-foreground">
                     No conversations yet

@@ -7,8 +7,10 @@ import { PrivacyNote } from "@/components/dear-me/privacy-note";
 /**
  * Record Trigger screen — "Memo Trigger v2" (BJyMw)
  *
- * Shows an emotional prompt with a past memo card, nudging the user to
- * record by first listening to their past self.
+ * PARKED 2026-04-14: not linked from any flow. Bring back as a post-analysis
+ * interstitial once we can (1) detect a heavy mood from the just-finished
+ * memo's analyzer output, (2) query a real past memo with overlapping moods,
+ * and (3) wire the CTA to actually play that memo instead of re-recording.
  *
  * Route: /record/trigger
  * Layout: record/layout.tsx provides ScreenBackground

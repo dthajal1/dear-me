@@ -5,10 +5,14 @@ import { useEffect, useState } from "react";
 import { Play, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { glassSurfaceClasses } from "@/components/dear-me/glass-card";
-import { readBlob } from "@/lib/db/opfs";
+import { readBlob, writeBlob } from "@/lib/db/opfs";
 import { useBlobUrl } from "@/lib/hooks/useBlobUrl";
+import { extractVideoThumbnail } from "@/lib/recording/thumbnail";
+import { setThumbnailFilename } from "@/lib/db/memos";
 
 interface MemoCardProps {
+  memoId?: string;
+  videoFilename?: string;
   title: string;
   preview: string;
   duration: string;  // e.g. "2:34"
@@ -40,6 +44,8 @@ interface MemoCardProps {
  * The whole card is a <Link> so the entire row is tappable.
  */
 export function MemoCard({
+  memoId,
+  videoFilename,
   title,
   preview,
   duration,
@@ -61,7 +67,11 @@ export function MemoCard({
     >
       {/* Thumbnail with play button overlay */}
       <div className="relative h-[110px] w-[90px] shrink-0 overflow-hidden rounded-xl">
-        <MemoCardThumbnail filename={thumbnailFilename} />
+        <MemoCardThumbnail
+          memoId={memoId}
+          videoFilename={videoFilename}
+          filename={thumbnailFilename}
+        />
 
         {/* Play button overlay */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -128,43 +138,67 @@ function WaveformPlaceholder() {
   );
 }
 
-function MemoCardThumbnail({ filename }: { filename?: string }) {
+function MemoCardThumbnail({
+  memoId,
+  videoFilename,
+  filename,
+}: {
+  memoId?: string;
+  videoFilename?: string;
+  filename?: string;
+}) {
   const [blob, setBlob] = useState<Blob | null>(null);
   const [failed, setFailed] = useState(false);
   const url = useBlobUrl(blob);
 
   useEffect(() => {
-    if (!filename) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setBlob(null);
-      setFailed(false);
-      return;
-    }
     let cancelled = false;
-    setFailed(false);
-    readBlob(filename)
-      .then((b) => {
-        if (cancelled) return;
-        setBlob(b);
-      })
-      .catch((err) => {
-        console.error("[dear-me] failed to read memo thumbnail", err);
-        if (cancelled) return;
-        setFailed(true);
-        setBlob(null);
-      });
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setBlob(null);
+
+    async function load() {
+      setFailed(false);
+      // Try the persisted thumbnail first. If the file is missing on disk
+      // (e.g. cleanupOrphanedDrafts deleted it), fall through to backfill
+      // instead of giving up — the IDB row still points at a stale name.
+      if (filename) {
+        try {
+          const b = await readBlob(filename);
+          if (!cancelled) setBlob(b);
+          return;
+        } catch (err) {
+          console.warn(
+            "[dear-me] thumbnail file missing, will re-extract",
+            err,
+          );
+        }
+      }
+      if (!memoId || !videoFilename) {
+        if (!cancelled) setFailed(true);
+        return;
+      }
+      try {
+        const video = await readBlob(videoFilename);
+        const thumb = await extractVideoThumbnail(video);
+        const newName = `thumb-${memoId}.jpg`;
+        await writeBlob(newName, thumb);
+        await setThumbnailFilename(memoId, newName);
+        if (!cancelled) setBlob(thumb);
+      } catch (err) {
+        console.error("[dear-me] failed to backfill memo thumbnail", err);
+        if (!cancelled) setFailed(true);
+      }
+    }
+    void load();
+
     return () => {
       cancelled = true;
     };
-  }, [filename]);
+  }, [filename, memoId, videoFilename]);
 
-  if (!filename || failed) {
-    return <WaveformPlaceholder />;
-  }
-
-  if (!url) {
-    // Loading: keep the waveform placeholder visible so the card never
-    // flashes an empty box while the OPFS read resolves.
+  if (failed || !url) {
+    // Loading or fallback: keep the waveform placeholder visible so the
+    // card never flashes an empty box while the OPFS read resolves.
     return <WaveformPlaceholder />;
   }
 

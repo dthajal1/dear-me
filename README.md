@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dear Me
 
-## Getting Started
+A private video journal that resurfaces your own voice when you need it most.
 
-First, run the development server:
+Inspired by the gratitude jar — writing down one thing you're grateful for each day, then pulling out a note when times get rough. Dear Me digitizes that idea with video, because the most powerful voice is often your own.
+
+## What it does
+
+**Record** — Capture short video memos to your future self. The app transcribes your words and detects your mood automatically.
+
+**Resurface** — The home screen brings back a past memo on meaningful days (a year ago today, a month ago, etc.). Past-you recorded it; future-you gets to watch. Today this runs on fixed timelines — the real goal is to surface the right memo *when you need to hear it*.
+
+**Reflect** — Ask AI questions about your journal ("What's been stressing me out?" / "What am I grateful for?"). The more you journal, the better the insights.
+
+Everything is stored locally on your device.
+
+## Setup
+
+Requires [Bun](https://bun.sh) and a [Groq API key](https://console.groq.com).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local   # add your GROQ_API_KEY
+bun install
+bun run dev                   # localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Next.js 16, React 19, Tailwind v4, IndexedDB + OPFS (local storage), Groq (transcription + analysis).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Contributing
 
-## Learn More
+This is a personal project. If you want to take it further — clone it, swap local storage for cloud, and make it yours.
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT

@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * BackPill — a small pill-shaped back navigation button.
  *
@@ -10,10 +12,12 @@
  *   icon:         arrow-left, 18×18, #2C331EDD (foreground)
  *   label font:   14px / 500 / #2C331EDD
  *
- * Renders as <Link> when `href` is set, otherwise as <button>.
+ * Renders as <Link> when `href` is set, otherwise as <button> that
+ * calls `onClick` or falls back to browser history back.
  */
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +35,7 @@ const pillClasses =
   "inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-[var(--radius-sm)] bg-[var(--color-muted)] px-3 py-2 text-sm font-medium text-foreground border border-[var(--color-glass-border)] transition-opacity hover:opacity-80 active:opacity-60";
 
 export function BackPill({ href, label, onClick, className }: BackPillProps) {
+  const router = useRouter();
   const content = (
     <>
       <ChevronLeft size={18} strokeWidth={2} aria-hidden />
@@ -53,7 +58,7 @@ export function BackPill({ href, label, onClick, className }: BackPillProps) {
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={onClick ?? (() => router.back())}
       className={cn(pillClasses, className)}
       aria-label={label ? undefined : "Back"}
     >

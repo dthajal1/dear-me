@@ -1,15 +1,20 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
-import Link from "next/link";
-import { FileText, Sparkles, Heart } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
+
 import { BackHeader } from "@/components/dear-me/back-header";
-import { GlassCard } from "@/components/dear-me/glass-card";
+import { ConfirmDialog } from "@/components/dear-me/confirm-dialog";
+import { MemoStack } from "@/components/dear-me/memo-stack";
 import { ScreenBackground } from "@/components/dear-me/screen-background";
-import { getMemo } from "@/lib/db/memos";
-import { readBlob } from "@/lib/db/opfs";
-import { useBlobUrl } from "@/lib/hooks/useBlobUrl";
-import { formatDuration, formatRelativeTime } from "@/lib/format/time";
+import {
+  deleteMemo,
+  getMemo,
+  updateMoodsAndTags,
+  updateNote,
+  updateTitle,
+} from "@/lib/db/memos";
 import type { Memo } from "@/lib/db/schema";
 
 export default function PlaybackPage({
@@ -18,9 +23,9 @@ export default function PlaybackPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const router = useRouter();
   const [memo, setMemo] = useState<Memo | null | undefined>(undefined);
-  const [blob, setBlob] = useState<Blob | null>(null);
-  const blobUrl = useBlobUrl(blob);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -32,12 +37,6 @@ export default function PlaybackPage({
         return;
       }
       setMemo(m);
-      try {
-        const b = await readBlob(m.filename);
-        if (!cancelled) setBlob(b);
-      } catch (err) {
-        console.error("[dear-me] failed to read blob", err);
-      }
     })();
     return () => {
       cancelled = true;
@@ -56,8 +55,20 @@ export default function PlaybackPage({
       <div className="relative flex min-h-dvh flex-col">
         <ScreenBackground />
         <BackHeader title="Playing" backHref="/memo" />
-        <div className="relative flex flex-1 items-center justify-center text-sm text-[color:var(--color-muted-foreground)]">
-          Memo not found
+        <div className="relative flex flex-1 flex-col items-center justify-center gap-3 px-8 text-center">
+          <p className="text-base font-semibold text-foreground">
+            Memo not found
+          </p>
+          <p className="text-sm text-[color:var(--color-muted-foreground)]">
+            It may have been deleted.
+          </p>
+          <button
+            type="button"
+            onClick={() => router.push("/memo")}
+            className="mt-2 rounded-full bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-[color:var(--color-primary-foreground)]"
+          >
+            Back to memos
+          </button>
         </div>
       </div>
     );
@@ -66,64 +77,67 @@ export default function PlaybackPage({
   return (
     <div className="relative flex min-h-dvh flex-col">
       <ScreenBackground />
-      <BackHeader title="Playing" backHref={`/memo/${memo.id}`} />
+      <BackHeader title="Playing" />
 
-      <div className="relative flex flex-1 flex-col gap-5 px-5 pt-2 pb-6">
-        <GlassCard padding="lg" className="flex flex-col gap-3">
-          {blobUrl ? (
-            <video
-              src={blobUrl}
-              controls
-              playsInline
-              className="w-full rounded-2xl bg-black"
-            />
-          ) : (
-            <div className="flex h-48 items-center justify-center rounded-2xl bg-black/40 text-xs text-white/70">
-              Loading…
-            </div>
-          )}
-          <div className="flex justify-between text-xs text-[color:var(--color-muted-foreground)]">
-            <span>{formatRelativeTime(memo.createdAt)}</span>
-            <span>{formatDuration(memo.durationMs)}</span>
-          </div>
-        </GlassCard>
+      <div className="relative flex flex-1 flex-col gap-6 px-5 pb-8 pt-0">
+        <MemoStack
+          memo={memo}
+          mode="final"
+          autoPlayVideo
+          onTitleSave={(next) => {
+            setMemo({ ...memo, title: next });
+            void updateTitle(memo.id, next).catch((err) => {
+              console.error("[dear-me] updateTitle failed", err);
+            });
+          }}
+          onNoteSave={(next) => {
+            setMemo({ ...memo, notes: next });
+            void updateNote(memo.id, next).catch((err) => {
+              console.error("[dear-me] updateNote failed", err);
+            });
+          }}
+          onMoodsChange={(next) => {
+            setMemo({
+              ...memo,
+              moods: next.moods,
+              tags: next.tags,
+              moodSources: next.moodSources,
+            });
+            void updateMoodsAndTags(memo.id, next).catch((err) => {
+              console.error("[dear-me] updateMoodsAndTags failed", err);
+            });
+          }}
+        />
 
-        <GlassCard className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <p className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-wide text-[color:var(--color-muted-foreground)]">
-              <FileText className="size-3.5" />
-              Transcript
-            </p>
-            <Link
-              href={`/transcript/${memo.id}`}
-              className="text-xs font-semibold text-[color:var(--color-primary)]"
-            >
-              View full
-            </Link>
-          </div>
-          <p className="text-sm leading-relaxed text-foreground">
-            Transcripts will appear here when transcript support lands.
-          </p>
-        </GlassCard>
-
-        <GlassCard className="border-[color:var(--color-encouragement-border)] bg-[var(--color-encouragement-bg)]">
-          <p className="flex items-center gap-2 text-[13px] font-semibold text-[color:var(--color-accent)]">
-            <Sparkles className="size-3.5" />
-            A gentle reminder
-          </p>
-          <p className="mt-2 text-sm italic leading-relaxed text-[color:var(--color-accent)]">
-            Reflections will appear here in a future update.
-          </p>
-        </GlassCard>
-
-        <button
-          type="button"
-          className="mt-2 flex items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-5 py-3 text-sm font-semibold text-[color:var(--color-primary-foreground)] shadow-[var(--shadow-floating)]"
-        >
-          <Heart className="size-4" />
-          I needed this
-        </button>
+        <div className="mt-2 flex flex-col items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setConfirmOpen(true)}
+            aria-label="Delete memo"
+            className="flex items-center gap-1.5 text-[length:var(--text-small)] text-[color:var(--color-muted-foreground)] transition-opacity active:opacity-60"
+          >
+            <Trash2 className="size-3.5" />
+            Delete
+          </button>
+        </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title="Delete this memo?"
+        description="This memo and its recording will be removed from your device. This can't be undone."
+        confirmLabel="Delete"
+        destructive
+        onConfirm={async () => {
+          try {
+            await deleteMemo(memo.id);
+            router.replace("/memo");
+          } catch (err) {
+            console.error("[dear-me] deleteMemo failed", err);
+          }
+        }}
+      />
     </div>
   );
 }
